@@ -1,0 +1,47 @@
+name: "Tarefa / Task"
+description: Para atividades técnicas, manutenção ou documentação.
+title: "Tarefa X.X: [Título Curto]"
+labels: ["geral"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 🏗️ Detalhes da Atividade
+        Descreva a necessidade técnica ou de infraestrutura.
+  - type: dropdown
+    id: area-labels
+    attributes:
+      label: Área Responsável
+      options:
+        - Energia
+        - Estrutura
+        - Hardware
+        - Software
+    validations:
+      required: true
+  - type: dropdown
+    id: type-labels
+    attributes:
+      label: Tipo de Tarefa
+      options:
+        - "Software (Desenvolvimento geral)"
+        - "Firmware (Código embarcado)"
+        - "Hardware (Circuitos)"
+        - "Mecânica (Projeto estrutural)"
+        - "CAD (Modelagem 3D)"
+        - "Esquemático (Diagramas elétricos)"
+        - "Simulação"
+        - "Orçamento"
+        - "Prototipagem"
+        - "Documentação (Relatório LATEX)"
+    validations:
+      required: true
+  - type: textarea
+    id: technical-check
+    attributes:
+      label: "Passos / Critérios de Conclusão"
+      value: |
+        - [ ] Passo 1
+        - [ ] Passo 2
+    validations:
+      required: true
