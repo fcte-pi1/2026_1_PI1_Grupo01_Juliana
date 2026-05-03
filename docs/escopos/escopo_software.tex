@@ -1,0 +1,151 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+
+\geometry{margin=2.5cm}
+
+\title{Escopo – Subgrupo de Software}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Frentes de Trabalho}
+
+\subsection{Software Embarcado}
+
+\begin{itemize}
+    \item Leitura e interpretação dos sensores de distância (detectar paredes nas células adjacentes);
+    \item Monitoramento da posição atual no labirinto (odometria e controle de orientação);
+    \item Construção incremental do mapa do labirinto em tempo de execução;
+    \item Tomada de decisão de rota com algoritmo de exploração (Flood Fill ou similar);
+    \item Detecção da chegada na área objetivo (sala central do labirinto);
+    \item Transmissão dos dados de telemetria para o sistema web via comunicação sem fio.
+\end{itemize}
+
+\subsection{Sistema Web de Telemetria}
+
+\begin{itemize}
+    \item Receber dados em tempo real via WebSocket ou protocolo MQTT;
+    \item Exibir em tempo real os seguintes dados de telemetria:
+    \begin{itemize}
+        \item Tipo do labirinto (4×4, 8×8 ou 16×16);
+        \item Trajeto percorrido, visualizado sobre o mapa do labirinto;
+        \item Consumo de bateria;
+        \item Velocidade média;
+        \item Tempo de conclusão;
+        \item Desafio cumprido (Sim / Não).
+    \end{itemize}
+    \item Persistir os dados finais em banco de dados ao término de cada corrida;
+    \item Permitir consultas históricas por labirinto individual ou por todos os labirintos;
+    \item Exibir os dados armazenados em tela de histórico com filtros.
+\end{itemize}
+
+\section{Entregáveis por Marco}
+
+\begin{longtable}{|p{4cm}|p{7cm}|p{2cm}|}
+\hline
+\textbf{Entregável} & \textbf{Descrição} & \textbf{Marco} \\
+\hline
+Algoritmo de exploração (embarcado) & Código funcional de navegação com Flood Fill & PC2 \\
+\hline
+Módulo de sensoriamento & Leitura e interpretação dos sensores de distância & PC2 \\
+\hline
+Módulo de odometria & Monitoramento de posição e orientação do robô & PC2 \\
+\hline
+Transmissor de telemetria & Envio dos dados do embarcado para o servidor web & PC2 \\
+\hline
+Backend da aplicação web & API que recebe, processa e persiste os dados & PC2 \\
+\hline
+Frontend de telemetria & Interface web com dados ao vivo durante a corrida & IPP \\
+\hline
+Banco de dados e histórico & Persistência e consulta dos dados finais & IPP \\
+\hline
+Sistema integrado e testado & Todos os módulos integrados nos três labirintos & APT \\
+\hline
+Documentação técnica (UML) & Diagramas de casos de uso, classes, sequência e arquitetura & Por entrega \\
+\hline
+\end{longtable}
+
+\section{Fora do Escopo}
+
+Os itens abaixo não são responsabilidade do subgrupo de Software:
+
+\begin{itemize}
+    \item Projeto e montagem da estrutura física do micromouse (Subgrupo de Estrutura);
+    \item Seleção, aquisição e conexão dos componentes eletrônicos (Subgrupo de Hardware);
+    \item Cálculo e gerenciamento do consumo energético e da bateria (Subgrupo de Energia);
+    \item Construção física do labirinto de testes 4×4 (responsabilidade coletiva do grupo).
+\end{itemize}
+
+\section{Premissas e Dependências}
+
+\begin{itemize}
+    \item O microcontrolador escolhido pelo Subgrupo de Hardware suporta comunicação sem fio e permite programação em Python;
+    \item O Subgrupo de Hardware fornecerá interface de acesso aos sensores e encoders com documentação mínima;
+    \item A apresentação final ocorrerá em ambiente com acesso a rede local (Wi-Fi);
+    \item O grupo terá acesso a pelo menos um labirinto 4×4 para testes de integração antes do PC2.
+\end{itemize}
+
+\section{Restrições}
+
+\begin{itemize}
+    \item Nenhuma solução de software pronta pode substituir o desenvolvimento próprio;
+    \item Ferramentas de inteligência artificial generativa não podem ser usadas nas atividades avaliativas;
+    \item O código-fonte e a memória do labirinto não podem ser alterados durante a resolução de um trajeto;
+    \item Cada issue no GitHub deve ter no máximo dois responsáveis.
+\end{itemize}
+
+\section{Critérios de Aceitação}
+
+\begin{longtable}{|p{7cm}|p{6cm}|}
+\hline
+\textbf{Critério} & \textbf{Como será verificado} \\
+\hline
+Micromouse navega autonomamente no labirinto 4×4 & Demonstração na Inspeção Prévia (IPP) \\
+\hline
+Micromouse navega nos labirintos 8×8 e 16×16 & Demonstração na Apresentação Final (APT) \\
+\hline
+Dados de telemetria aparecem em tempo real no site & Observação direta durante a demonstração \\
+\hline
+Dados são armazenados no banco após cada corrida & Consulta na interface de histórico \\
+\hline
+Interface permite filtrar por labirinto ou por todos & Teste funcional na tela de histórico \\
+\hline
+Diagramas UML coerentes com o sistema implementado & Revisão no relatório técnico por Ponto de Controle \\
+\hline
+\end{longtable}
+
+\section{Tecnologias Previstas}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|p{3.5cm}|p{4cm}|p{6.5cm}|}
+\hline
+\textbf{Camada} & \textbf{Tecnologia} & \textbf{Justificativa} \\
+\hline
+Embarcado & Python libESP\_IDF / C/C++ & Padrão para microcontroladores com suporte a bibliotecas de hardware \\
+\hline
+Comunicação & Wi-Fi + MQTT ou WebSocket & Protocolo leve para transmissão de dados em tempo real \\
+\hline
+Backend & Python (FastAPI) ou Node.js & Frameworks leves para APIs REST e WebSocket \\
+\hline
+Banco de dados & SQLite ou PostgreSQL & SQLite para testes locais; PostgreSQL para maior robustez \\
+\hline
+Frontend & HTML + JS ou React & Interface web acessível por navegador sem instalação \\
+\hline
+Versionamento & Git + GitHub & Exigido pelo Plano de Ensino com issues e sub-issues \\
+\hline
+Modelagem & Draw.io / Lucidchart & Criação dos diagramas UML exigidos nos Pontos de Controle \\
+\hline
+\end{tabular}
+\end{table}
+
+\end{document}

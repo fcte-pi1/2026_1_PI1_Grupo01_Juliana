@@ -74,3 +74,15 @@ Os itens abaixo não são responsabilidade do subgrupo de Software:
 | Dados são armazenados no banco após cada corrida | Consulta na interface de histórico |
 | Interface permite filtrar por labirinto ou por todos | Teste funcional na tela de histórico |
 | Diagramas UML coerentes com o sistema implementado | Revisão no relatório técnico por Ponto de Controle |
+
+### Tecnologias Previstas
+
+| Camada           | Tecnologia                     | Justificativa                                                                 |
+|------------------|--------------------------------|------------------------------------------------------------------------------|
+| Embarcado        | Python libESP\_IDF / C/C++     | Padrão para microcontroladores com suporte a bibliotecas de hardware        |
+| Comunicação      | Wi-Fi + MQTT ou WebSocket      | Protocolo leve para transmissão de dados em tempo real                       |
+| Backend          | Python (FastAPI) ou Node.js    | Frameworks leves para APIs REST e WebSocket                                  |
+| Banco de dados   | SQLite ou PostgreSQL           | SQLite para testes locais; PostgreSQL para maior robustez                    |
+| Frontend         | HTML + JS ou React             | Interface web acessível por navegador sem instalação                         |
+| Versionamento    | Git + GitHub                   | Exigido pelo Plano de Ensino com issues e sub-issues                         |
+| Modelagem        | Draw.io / Lucidchart           | Criação dos diagramas UML exigidos nos Pontos de Controle                    |
