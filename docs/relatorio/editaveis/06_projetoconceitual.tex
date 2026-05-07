@@ -66,7 +66,7 @@ O subgrupo de software é responsável por dois componentes principais e interde
 
 \subsubsection*{Backlog do Produto}
  
-O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionais (RNF) definidos no Capítulo~\ref{chap:tap}, priorizados pela classificação MoSCoW.
+O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionais (RNF) definidos no Capítulo 2, priorizados pela classificação MoSCoW.
 
 \paragraph{Histórias de Usuário (Requisitos Funcionais)}
  
@@ -109,65 +109,8 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
     \item \textbf{RNF06} [\textit{Should have}] – Ferramentas de inteligência artificial generativa não podem ser utilizadas nas atividades avaliativas do subgrupo.
 \end{itemize}
 
-\subsubsection*{Arquitetura da Solução de Software}
- 
-A arquitetura do sistema segue uma abordagem de \textbf{microsserviços desacoplados}, separando o software embarcado do sistema web. O embarcado atua como produtor de dados, enquanto o backend web consome, processa e persiste as informações. A Fig.~\ref{fig:arquitetura} ilustra as camadas e os fluxos de comunicação entre os componentes.
- 
-\textbf{Propósito:} o software embarcado é responsável pela navegação autônoma e pelo envio de telemetria; o sistema web é responsável pela visualização em tempo real e pelo armazenamento histórico.
- 
-\textbf{Padrão adotado:} para o sistema web, adota-se o padrão \textit{MVC} (Model-View-Controller), separando a lógica de negócio (processamento dos dados de telemetria), a interface (frontend) e a persistência (banco de dados). A escolha se justifica pela clareza de responsabilidades e pela facilidade de manutenção em equipe.
- 
-\textbf{Linguagens de programação:} C++ (software embarcado), Python (backend) e JavaScript/HTML (frontend).
- 
-\textbf{Frameworks e bibliotecas:} FastAPI ou Node.js para o backend; React ou HTML+JS puro para o frontend; bibliotecas nativas do ESP-IDF ou MicroPython para o embarcado.
- 
-\textbf{Comunicação:} protocolo MQTT ou WebSocket para transmissão dos dados de telemetria entre o ESP32 e o servidor backend.
-
-\textbf{Versionamento:} Git com repositório no GitHub, utilizando \textit{issues} e \textit{sub-issues} conforme exigido pelo Plano de Ensino, com no máximo dois responsáveis por \textit{issue}.
-
-\subsubsection*{Roteiro de Testes Funcionais}
- 
-Os casos de teste abaixo cobrem as histórias de usuário prioritárias (\textit{Must have}) e guiarão a automação E2E nas entregas seguintes.
-\begin{table}[ht]
-\centering
-\caption{Roteiro de testes funcionais do sistema web.}
-\label{tab:testes-funcionais}
-\begin{tabular}{|p{1.5cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
-\hline
-\textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-TF01 & Exibição de telemetria ao vivo & Verificar atualização do painel em tempo real & Iniciar corrida simulada e observar painel web & Dados de posição, tempo e bateria atualizam sem recarga de página \\ \hline
-TF02 & Persistência ao término da corrida & Verificar gravação dos dados finais no banco & Concluir corrida e consultar tela de histórico & Registro da corrida aparece na listagem com dados corretos \\ \hline
-TF03 & Filtro por labirinto no histórico & Verificar funcionamento do filtro de consulta & Selecionar filtro ``4×4'' na tela de histórico & Apenas corridas do labirinto 4×4 são exibidas \\ \hline
-TF04 & Indicador de desafio cumprido & Verificar preenchimento automático do campo de resultado & Simular chegada ao centro e consultar histórico & Campo ``Desafio cumprido'' exibe ``Sim'' para a corrida concluída \\ \hline
-TF05 & Exibição do nível de bateria & Verificar leitura e transmissão do nível de carga & Monitorar painel durante corrida com bateria carregada & Percentual de bateria exibido condiz com leitura do divisor de tensão \\ \hline
-\end{tabular}
-\end{table}
-
-
-\textcolor{red}{Itens fundamentais:}
-
-
-    \textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
-    \begin{itemize}
-        \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;}
-        \item \textcolor{red}{ as atividades de negócio realizadas por cada ator ou pelo próprio sistema;}
-        \item \textcolor{red}{ os insumos (entradas) necessários para a execução das atividades;}
-        \item \textcolor{red}{ os resultados (saídas) gerados ao longo do fluxo;}
-        \item \textcolor{red}{ os pontos de decisão, paralelismo e sincronização das atividades;}
-        \item \textcolor{red}{ Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
-
-    \item \textcolor{red}{\textbf{\textit{Backlog} do Produto}}
-    \begin{itemize}
-        \item \textcolor{red}{ Descrever os   requisitos funcionais (RF) com a técnica de documentação e especificação de história de usuário (HU);}
-        \item \textcolor{red}{ Descrever os requisitos não-funcionais (RNF) de forma objetiva; Mais facilmente, mais rapidamente, mais responsivo, de fácil uso, são descrições subjetivas não-válidas. Um exemplo de requisito não-funcional de desempenho: ``a página deve carregar em até 5s quando em conexão 4G''. }
-        \item \textcolor{red}{ Ao descrever os requisitos (RF e RNF), usar a  classificação MoSCoW (\textit{Must have}, \textit{Should have} e \textit{Could have}),  para auxiliar a priorização dos itens do backlog.}
-        \item \textcolor{red}{ Protótipos de interfafe gráfica do \textit{software} em alta fidelidade.}
-        \begin{itemize}
-            \item \textcolor{red}{\textbf{ Todas HUs devem conter sua descrição (Eu-Como-Para), critérios de aceitação e protótipos de interface, documentadas no github. }}
-            \end{itemize} 
-
-        \end{itemize}
-
+\begin{itemize}
+    
     \item \textcolor{red}{ \textbf{Descrição da arquitetura da solução de \textit{software} proposta:}}
     \begin{itemize}
     
@@ -190,4 +133,5 @@ TF05 & Exibição do nível de bateria & Verificar leitura e transmissão do ní
         \item \textcolor{red}{ Descrição dos procedimentos a serem executados para o teste;}
         \item \textcolor{red}{ Resultado esperado para o teste ser aprovado (pós-condição após realizado o teste);}
     \end{itemize}
-\end{itemize}
+    \end{itemize}
+
