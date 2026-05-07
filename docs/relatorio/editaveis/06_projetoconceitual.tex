@@ -49,19 +49,123 @@
 
 \section{Descrição de \textit{software}}
 
+O subgrupo de software é responsável por dois componentes principais e interdependentes: o \textbf{software embarcado}, executado no microcontrolador ESP32 do robô, e o \textbf{sistema web de telemetria}, responsável pela visualização e armazenamento dos dados de cada corrida.
+
 \textcolor{red}{Itens fundamentais:}
 
-\begin{itemize}
-    \item \textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
+\textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
 
+\begin{itemize}
+    \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;
+    \item as atividades de negócio realizadas por cada ator ou pelo próprio sistema;
+    \item os insumos (entradas) necessários para a execução das atividades;
+    \item os resultados (saídas) gerados ao longo do fluxo;
+    \item os pontos de decisão, paralelismo e sincronização das atividades;
+    \item Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
+\end{itemize}
+
+\subsubsection*{Backlog do Produto}
+ 
+O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionais (RNF) definidos no Capítulo~\ref{chap:tap}, priorizados pela classificação MoSCoW.
+
+\paragraph{Histórias de Usuário (Requisitos Funcionais)}
+ 
+\begin{itemize}
+ 
+    \item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
+    \textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
+    \textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa.
+ 
+    \item \textbf{HU02 – Mapeamento incremental do labirinto} [\textit{Must have}]\\
+    \textit{Eu, como} desenvolvedor do sistema embarcado, \textit{quero} que o robô detecte e registre paredes à medida que explora, \textit{para} construir o mapa do labirinto em tempo de execução.\\
+    \textbf{Critérios de aceitação:} após a primeira corrida em um labirinto 4×4, ao menos 80\% das células devem ter sido corretamente mapeadas.
+ 
+    \item \textbf{HU03 – Telemetria em tempo real} [\textit{Must have}]\\
+    \textit{Eu, como} observador da corrida, \textit{quero} visualizar no painel web o trajeto percorrido, o tempo, a velocidade média e o nível de bateria em tempo real, \textit{para} acompanhar o desempenho do robô durante a tentativa.\\
+    \textbf{Critérios de aceitação:} os dados devem ser atualizados no painel com latência máxima estipulada pela equipe, sem gargalos visuais perceptíveis.
+ 
+    \item \textbf{HU04 – Persistência e consulta de histórico} [\textit{Must have}]\\
+    \textit{Eu, como} professor avaliador, \textit{quero} consultar os resultados de corridas anteriores filtradas por labirinto, \textit{para} comparar o desempenho do robô ao longo do projeto.\\
+    \textbf{Critérios de aceitação:} os dados finais de cada corrida concluída devem ser gravados no banco de dados e recuperáveis pela interface de histórico com filtro por tamanho de labirinto.
+ 
+    \item \textbf{HU05 – Monitoramento de bateria} [\textit{Should have}]\\
+    \textit{Eu, como} operador do robô, \textit{quero} visualizar no painel web o nível percentual de carga da bateria enviado pelo sistema embarcado, \textit{para} evitar interrupções inesperadas durante as corridas.\\
+    \textbf{Critérios de aceitação:} o nível de bateria deve ser lido via divisor de tensão pelo ESP32 e exibido no painel web com atualização a cada ciclo de telemetria.
+ 
+    \item \textbf{HU06 – Indicador de desafio cumprido} [\textit{Could have}]\\
+    \textit{Eu, como} usuário do sistema web, \textit{quero} visualizar se o desafio foi cumprido (Sim/Não) ao término de cada corrida, \textit{para} identificar rapidamente o resultado no histórico.\\
+    \textbf{Critérios de aceitação:} ao final de cada corrida, o campo ``Desafio cumprido'' deve ser preenchido automaticamente com base na detecção da chegada ao centro.
+ 
+\end{itemize}
+ 
+\paragraph{Requisitos Não Funcionais}
+ 
+\begin{itemize}
+    \item \textbf{RNF01} [\textit{Must have}] – O código-fonte embarcado e a memória do labirinto não podem ser alterados durante a execução de uma tentativa na pista.
+    \item \textbf{RNF02} [\textit{Must have}] – O sistema embarcado deve operar com o microcontrolador ESP32 como unidade central de processamento.
+    \item \textbf{RNF03} [\textit{Must have}] – A latência da telemetria deve ser estipulada e estabilizada de modo que a atualização do painel ocorra sem gargalos perceptíveis em tempo real.
+    \item \textbf{RNF04} [\textit{Must have}] – Nenhuma solução de software pronta pode substituir o desenvolvimento próprio dos módulos exigidos pelo escopo.
+    \item \textbf{RNF05} [\textit{Should have}] – Cada \textit{issue} no GitHub deve ter no máximo dois responsáveis, garantindo rastreabilidade individual das contribuições.
+    \item \textbf{RNF06} [\textit{Should have}] – Ferramentas de inteligência artificial generativa não podem ser utilizadas nas atividades avaliativas do subgrupo.
+\end{itemize}
+
+\subsubsection*{Arquitetura da Solução de Software}
+ 
+A arquitetura do sistema segue uma abordagem de \textbf{microsserviços desacoplados}, separando o software embarcado do sistema web. O embarcado atua como produtor de dados, enquanto o backend web consome, processa e persiste as informações. A Fig.~\ref{fig:arquitetura} ilustra as camadas e os fluxos de comunicação entre os componentes.
+ 
+\textbf{Propósito:} o software embarcado é responsável pela navegação autônoma e pelo envio de telemetria; o sistema web é responsável pela visualização em tempo real e pelo armazenamento histórico.
+ 
+\textbf{Padrão adotado:} para o sistema web, adota-se o padrão \textit{MVC} (Model-View-Controller), separando a lógica de negócio (processamento dos dados de telemetria), a interface (frontend) e a persistência (banco de dados). A escolha se justifica pela clareza de responsabilidades e pela facilidade de manutenção em equipe.
+ 
+\textbf{Linguagens de programação:} C++ (software embarcado), Python (backend) e JavaScript/HTML (frontend).
+ 
+\textbf{Frameworks e bibliotecas:} FastAPI ou Node.js para o backend; React ou HTML+JS puro para o frontend; bibliotecas nativas do ESP-IDF ou MicroPython para o embarcado.
+ 
+\textbf{Comunicação:} protocolo MQTT ou WebSocket para transmissão dos dados de telemetria entre o ESP32 e o servidor backend.
+ 
+\textbf{Banco de dados:} SQLite para desenvolvimento e testes locais; PostgreSQL como opção para maior robustez na apresentação final. A escolha entre banco relacional ou não-relacional será definida conforme o volume e a estrutura dos dados coletados.
+ 
+\textbf{Persistência – Modelo Entidade-Relacionamento:} as principais entidades do sistema são \texttt{Labirinto} (tipo, dimensão), \texttt{Corrida} (data, tempo, velocidade média, resultado) e \texttt{Telemetria} (posição, nível de bateria, timestamp). A corrida está associada a um labirinto e agrega múltiplos registros de telemetria ao longo de sua execução, como mostrado na Figura~\ref{fig:der}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/Conceitual_MicroMouse.png}
+    \caption{\textcolor{black}{Diagrama Entidade-Relacionamento do sistema.}}
+    \label{fig:der}
+\end{figure}
+
+\textbf{Versionamento:} Git com repositório no GitHub, utilizando \textit{issues} e \textit{sub-issues} conforme exigido pelo Plano de Ensino, com no máximo dois responsáveis por \textit{issue}.
+
+\subsubsection*{Roteiro de Testes Funcionais}
+ 
+Os casos de teste abaixo cobrem as histórias de usuário prioritárias (\textit{Must have}) e guiarão a automação E2E nas entregas seguintes.
+\begin{table}[ht]
+\centering
+\caption{Roteiro de testes funcionais do sistema web.}
+\label{tab:testes-funcionais}
+\begin{tabular}{|p{1.5cm}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+\textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+TF01 & Exibição de telemetria ao vivo & Verificar atualização do painel em tempo real & Iniciar corrida simulada e observar painel web & Dados de posição, tempo e bateria atualizam sem recarga de página \\ \hline
+TF02 & Persistência ao término da corrida & Verificar gravação dos dados finais no banco & Concluir corrida e consultar tela de histórico & Registro da corrida aparece na listagem com dados corretos \\ \hline
+TF03 & Filtro por labirinto no histórico & Verificar funcionamento do filtro de consulta & Selecionar filtro ``4×4'' na tela de histórico & Apenas corridas do labirinto 4×4 são exibidas \\ \hline
+TF04 & Indicador de desafio cumprido & Verificar preenchimento automático do campo de resultado & Simular chegada ao centro e consultar histórico & Campo ``Desafio cumprido'' exibe ``Sim'' para a corrida concluída \\ \hline
+TF05 & Exibição do nível de bateria & Verificar leitura e transmissão do nível de carga & Monitorar painel durante corrida com bateria carregada & Percentual de bateria exibido condiz com leitura do divisor de tensão \\ \hline
+\end{tabular}
+\end{table}
+
+
+\textcolor{red}{Itens fundamentais:}
+
+
+    \textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
     \begin{itemize}
-        \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;
-        \item as atividades de negócio realizadas por cada ator ou pelo próprio sistema;
-        \item os insumos (entradas) necessários para a execução das atividades;
-        \item os resultados (saídas) gerados ao longo do fluxo;
-        \item os pontos de decisão, paralelismo e sincronização das atividades;
-        \item Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
-        \end{itemize}
+        \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;}
+        \item \textcolor{red}{ as atividades de negócio realizadas por cada ator ou pelo próprio sistema;}
+        \item \textcolor{red}{ os insumos (entradas) necessários para a execução das atividades;}
+        \item \textcolor{red}{ os resultados (saídas) gerados ao longo do fluxo;}
+        \item \textcolor{red}{ os pontos de decisão, paralelismo e sincronização das atividades;}
+        \item \textcolor{red}{ Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
 
     \item \textcolor{red}{\textbf{\textit{Backlog} do Produto}}
     \begin{itemize}
