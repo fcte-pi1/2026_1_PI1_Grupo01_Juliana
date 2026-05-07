@@ -122,17 +122,6 @@ A arquitetura do sistema segue uma abordagem de \textbf{microsserviços desacopl
 \textbf{Frameworks e bibliotecas:} FastAPI ou Node.js para o backend; React ou HTML+JS puro para o frontend; bibliotecas nativas do ESP-IDF ou MicroPython para o embarcado.
  
 \textbf{Comunicação:} protocolo MQTT ou WebSocket para transmissão dos dados de telemetria entre o ESP32 e o servidor backend.
- 
-\textbf{Banco de dados:} SQLite para desenvolvimento e testes locais; PostgreSQL como opção para maior robustez na apresentação final. A escolha entre banco relacional ou não-relacional será definida conforme o volume e a estrutura dos dados coletados.
- 
-\textbf{Persistência – Modelo Entidade-Relacionamento:} as principais entidades do sistema são \texttt{Labirinto} (tipo, dimensão), \texttt{Corrida} (data, tempo, velocidade média, resultado) e \texttt{Telemetria} (posição, nível de bateria, timestamp). A corrida está associada a um labirinto e agrega múltiplos registros de telemetria ao longo de sua execução, como mostrado na Figura~\ref{fig:der}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Conceitual_MicroMouse.png}
-    \caption{\textcolor{black}{Diagrama Entidade-Relacionamento do sistema.}}
-    \label{fig:der}
-\end{figure}
 
 \textbf{Versionamento:} Git com repositório no GitHub, utilizando \textit{issues} e \textit{sub-issues} conforme exigido pelo Plano de Ensino, com no máximo dois responsáveis por \textit{issue}.
 
