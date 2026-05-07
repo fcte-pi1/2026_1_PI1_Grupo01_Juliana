@@ -51,18 +51,19 @@
 
 O subgrupo de software é responsável por dois componentes principais e interdependentes: o \textbf{software embarcado}, executado no microcontrolador ESP32 do robô, e o \textbf{sistema web de telemetria}, responsável pela visualização e armazenamento dos dados de cada corrida.
 
-\textcolor{red}{Itens fundamentais:}
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.8\textheight,
+    keepaspectratio
+]{figuras/diagrama_atividades_uml.jpg}
 
-\textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
+\small{Figura 1 -- Diagrama de Atividades UML.}
+\end{center}
 
-\begin{itemize}
-    \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;
-    \item as atividades de negócio realizadas por cada ator ou pelo próprio sistema;
-    \item os insumos (entradas) necessários para a execução das atividades;
-    \item os resultados (saídas) gerados ao longo do fluxo;
-    \item os pontos de decisão, paralelismo e sincronização das atividades;
-    \item Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
-\end{itemize}
+O fluxo está dividido em três raias (\textit{swimlanes}): Operador/Usuário, Micromouse (ESP32) e Sistema Web. O processo começa com o operador posicionando o robô e disparando o início da corrida. A partir daí, uma barra de bifurcação (\textit{fork}) representa o paralelismo: o ESP32 inicializa seus sensores ao mesmo tempo que o sistema web abre a sessão de telemetria. Uma barra de junção (\textit{join}) sincroniza as duas trilhas antes do loop principal.
+
+O ciclo de exploração repete: leitura dos sensores IR $\rightarrow$ detecção de paredes $\rightarrow$ atualização do mapa $\rightarrow$ algoritmo Flood Fill $\rightarrow$ movimentação. A cada passo, a telemetria é enviada ao sistema web em paralelo (velocidade, trajeto, bateria). Dois nós de decisão controlam a saída do loop: ``centro atingido?'' e ``bateria crítica?''. O alerta de bateria deriva para o operador e reintegra o fluxo. Ao atingir o centro, o robô calcula as estatísticas finais, envia ao sistema web, que persiste no banco e marca o campo ``Desafio cumprido''.
 
 \subsubsection*{Backlog do Produto}
  
