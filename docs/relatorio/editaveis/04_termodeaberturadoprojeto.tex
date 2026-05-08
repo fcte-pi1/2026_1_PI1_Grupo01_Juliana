@@ -37,14 +37,12 @@ Além disso, o projeto possui potencial expressivo de uso como plataforma didát
 
 \section{Requisitos}
 
-Os requisitos foram analisados e revisados a partir da priorização de itens indispensáveis ao sucesso do Micromouse, de acordo com o escopo e as regras da competição simulada.
+Os requisitos do sistema foram analisados, revisados e divididos em categorias funcionais e não funcionais. A priorização adotada reflete o nível de criticidade de cada item para o funcinamento do Micromouse, garantindo o alinhamento com o escopo e as regras da competição simulada.
 
 \begin{landscape}
-    % Força a tabela a ignorar recuos laterais e ocupar o centro/largura total
     \setlength{\LTleft}{0pt}
     \setlength{\LTright}{0pt}
 
-    % O @{\extracolsep{\fill}} faz com que a tabela se estique até a margem
     \begin{longtable}{@{\extracolsep{\fill}}|l|p{14.5cm}|l|l|}
         
         \caption{Requisitos Funcionais e Não Funcionais} \label{tab:requisitos} \\
@@ -53,19 +51,16 @@ Os requisitos foram analisados e revisados a partir da priorização de itens in
         \textbf{ID} & \textbf{Requisito} & \textbf{Categoria} & \textbf{Prioridade} \\ \hline
         \endfirsthead
 
-        % Cabeçalho repetido (sem texto "continuação")
         \hline
         \textbf{ID} & \textbf{Requisito} & \textbf{Categoria} & \textbf{Prioridade} \\ \hline
         \endhead
 
-        % Rodapé simples (apenas a linha, sem texto "continua")
         \hline
         \endfoot
 
         \hline
         \endlastfoot
 
-        % --- REQUISITOS FUNCIONAIS ---
         \multicolumn{4}{|c|}{\textbf{REQUISITOS FUNCIONAIS (RF)}} \\ \hline
         RF01 & O sistema deve navegar de forma autônoma em labirintos 4x4, 8x8 e 16x16 após a ativação. & Navegação & Must have \\ \hline
         RF02 & O sistema deve detectar paredes e mapear o ambiente progressivamente em tempo real. & Navegação & Must have \\ \hline
