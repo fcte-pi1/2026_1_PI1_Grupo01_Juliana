@@ -14,21 +14,58 @@ Fim do projeto          & xx/xx/20xx        & xx/xx/20xx         \\ \hline
 \end{center}
 \end{table}
 
-\begin{table}[htpb]
 \begin{center}
-\caption{Cronograma por atividade.}
-\begin{tabular}{|c|c|c|c|c|c|c|}
+\begin{longtable}{|l|c|c|c|c|c|l|}
+\caption{Cronograma por atividade.} \label{tab:cronograma} \\
+
 \hline
-& \textbf{Início} & \textbf{Início} & \textbf{Fim} & \textbf{Fim} & \textbf{Atividades} & \\
-\textbf{Atividade} & \textbf{Previsto} & \textbf{Realizado} & \textbf{Previsto} & \textbf{Realizado} & \textbf{Predecessoras} & \textbf{Responsáveis}\\ \hline
-1 - ABC                       & DD/MM/AAAA               & DD/MM/AAAA                & DD/MM/AAAA               & DD/MM/AAAA                & ---                               & Fulano \\ \hline
-2 - DEF                       & DD/MM/AAAA               & DD/MM/AAAA                & DD/MM/AAAA               & DD/MM/AAAA                & 1                                 & Fulano \\ \hline
-3 - GHI                       & DD/MM/AAAA               & DD/MM/AAAA                & DD/MM/AAAA               & DD/MM/AAAA                & 1, 2                              & Beltrano \\ \hline
-4 - JKL                       & DD/MM/AAAA               & DD/MM/AAAA                & DD/MM/AAAA               & DD/MM/AAAA                & 3                                 & Beltrano \\ \hline
-5 - MNO                       & DD/MM/AAAA               & DD/MM/AAAA                & DD/MM/AAAA               & DD/MM/AAAA                & 1, 3, 4                           & Ciclano \\ \hline
-\end{tabular}
+\textbf{Atividade} & \textbf{Início Prev.} & \textbf{Início Real.} & \textbf{Fim Prev.} & \textbf{Fim Real.} & \textbf{Predec.} & \textbf{Responsáveis} \\ \hline
+\endfirsthead
+
+\multicolumn{7}{c}%
+{{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
+\hline
+\textbf{Atividade} & \textbf{Início Prev.} & \textbf{Início Real.} & \textbf{Fim Prev.} & \textbf{Fim Real.} & \textbf{Predec.} & \textbf{Responsáveis} \\ \hline
+\endhead
+
+\hline \multicolumn{7}{|r|}{{Continua na próxima página...}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+SW - 1.1 - Docs iniciais do projeto & 15/04/2026 & 01/05/2026 & 27/04/2026 & 02/05/2026 & --- & Thales, Victor \\ \hline
+SW - 1.2 - Definição do escopo & 15/04/2026 & 02/05/2026 & 27/04/2026 & 09/05/2026 & 1.1 & Thales, Manoela \\ \hline
+SW - 1.3 - Configuração GitHub & 15/04/2026 & 01/05/2026 & 27/04/2026 & 02/05/2026 & 1.1 & Thales, Manoela \\ \hline
+SW - 1.4 - Definição da arquitetura & 15/04/2026 & 04/05/2026 & 27/04/2026 & -- & 1.2 & Gustavo, Guilherme \\ \hline
+SW - 1.5 - Setup embarcado & 15/04/2026 & -- & 27/04/2026 & 07/05/2026 & --- & Victor, Gustavo \\ \hline
+SW - 1.6 - Flood Fill simulador & 15/04/2026 & -- & 27/04/2026 & -- & --- & Guilherme, Gustavo \\ \hline
+SW - 1.7 - Setup do backend & 15/04/2026 & 07/05/2026 & 27/04/2026 & 08/05/2026 & --- & Guilherme, Victor \\ \hline
+SW - 2.1 - Leitura de sensores & 30/04/2026 & -- & 11/05/2026 & -- & 1.5 & Thales, Manoela \\ \hline
+SW - 2.2 - Odometria e orientação & 30/04/2026 & -- & 11/05/2026 & -- & 1.5 & Gustavo, Victor \\ \hline
+SW - 2.3 - BPMN e Casos de Uso & 30/04/2026 & -- & 11/05/2026 & -- & 1.2, 1.4 & Guilherme, Manoela \\ \hline
+SW - 2.4 - Endpoint telemetria & 30/04/2026 & -- & 11/05/2026 & -- & 1.7 & Thales, Gustavo \\ \hline
+SW - 2.5 - Modelagem do banco & 30/04/2026 & 07/05/2026 & 11/05/2026 & -- & 1.7 & Guilherme, Victor \\ \hline
+SW - 3.1 - Flood Fill robô real & 14/05/2026 & -- & 25/05/2026 & -- & 1.6, 2.1, 2.2 & Gustavo, Victor \\ \hline
+SW - 3.2 - Ajuste de limiar & 14/05/2026 & -- & 25/05/2026 & -- & 2.1 & Thales, Manoela \\ \hline
+SW - 3.3 - Transmissão Wi-Fi & 14/05/2026 & -- & 25/05/2026 & -- & 1.5, 2.4 & Thales, Victor \\ \hline
+SW - 3.4 - Persistência corridas & 14/05/2026 & -- & 25/05/2026 & -- & 2.4, 2.5 & Guilherme, Gustavo \\ \hline
+SW - 3.5 - Estrutura frontend & 14/05/2026 & -- & 25/05/2026 & -- & 1.4 & Manoela, Victor \\ \hline
+SW - 4.1 - Detecção área objetivo & 28/05/2026 & -- & 08/06/2026 & -- & 3.1 & Guilherme, Manoela \\ \hline
+SW - 4.2 - Tela telemetria & 28/05/2026 & -- & 08/06/2026 & -- & 3.3, 3.5 & Thales, Gustavo \\ \hline
+SW - 4.3 - Histórico com filtros & 28/05/2026 & -- & 08/06/2026 & -- & 3.4, 3.5 & Manoela, Victor \\ \hline
+SW - 4.4 - Diagramas UML & 28/05/2026 & -- & 08/06/2026 & -- & 2.3, 3.1, 3.3, 3.4 & Guilherme, Gustavo \\ \hline
+SW - 5.1 - Integração 4x4 & 11/06/2026 & -- & 22/06/2026 & -- & 3.1, 3.2, 3.3, 4.1 & Thales, Gustavo \\ \hline
+SW - 5.2 - Integração 8x8 & 11/06/2026 & -- & 22/06/2026 & -- & 5.1 & Guilherme, Victor \\ \hline
+SW - 5.3 - Testes de robustez & 11/06/2026 & -- & 22/06/2026 & -- & 3.3, 4.2 & Thales, Manoela \\ \hline
+SW - 5.4 - Refinamento de UI & 11/06/2026 & -- & 22/06/2026 & -- & 4.2, 4.3 & Gustavo, Manoela \\ \hline
+SW - 6.1 - Integração labirinto & 25/06/2026 & -- & 06/07/2026 & -- & 5.1, 5.2 & Thales, Victor \\ \hline
+SW - 6.2 - Testes critérios & 25/06/2026 & -- & 06/07/2026 & -- & 5.1, 5.2, 5.3 & Guilherme, Gustavo \\ \hline
+SW - 6.3 - Doc. técnica final & 25/06/2026 & -- & 06/07/2026 & -- & 4.4, 6.2 & Manoela, Victor \\ \hline
+SW - 6.4 - Ensaio apresentação & 25/06/2026 & -- & 06/07/2026 & -- & 6.1, 6.2, 6.3 & Guilherme, Manoela \\ \hline
+
+\end{longtable}
 \end{center}
-\end{table}
 
 
 
