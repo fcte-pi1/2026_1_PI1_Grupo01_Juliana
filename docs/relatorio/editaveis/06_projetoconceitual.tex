@@ -100,7 +100,7 @@ A partir do cálculo de consumo total do sistema para uma autonomia de aproximad
     \frac{12364,3 [J]}{3600} \approx 3,43 Wh
 \]
 \subsection*{Justificativas e Aplicação da Margem de Segurança}
-É considerada boa prática utilizar uma margem de seguran de cerca de 20\% a 30\%. Essa margem é essencial por três motivos:
+É considerada boa prática utilizar uma margem de segurança de cerca de 20\% a 30\%. Essa margem é essencial por três motivos:
 \begin{enumerate}
     \item \textbf{Corrente de Stall:} No momento em que o robô liga e arranca ou bate em uma parede e fica preso, os motores exigirão uma corrente maior.
     \item \textbf{Perdas térmicas e degradação da tensão:} À medida que a bateria descarrega, a tensão da mesma tende a cair, de modo a exigir mais corrente para manter a mesma potência, e também, o regulador de tensão interno da ESP32 dissipa parte da energia em forma de calor, pode ser uma quantidade insignificativa, porém, como as opções de bateria que serão apresentadas posteriormente estão na faixa mais baixa do limiar mínimo necessário, o grupo acha válido considerar uma margem de segurança mais generosa.
