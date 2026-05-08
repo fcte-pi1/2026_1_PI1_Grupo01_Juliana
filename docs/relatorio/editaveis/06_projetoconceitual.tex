@@ -34,18 +34,84 @@
 
 \section{Análise de consumo energético}
 
-\textcolor{red}{Com relação ao consumo energético do produto desenvolvido, será necessário apresentar cálculos de consumo dos diversos componentes utilizados e explicar as decisões de projeto para atender a estas demandas.}
+O subgrupo de Energia é responsável por garantir a alimentação elétrica do micromouse. O trabalho foca em fornecer energia estável para os motores, sensores e o microcontrolador ESP32.
 
+O grupo realiza o cálculo do gasto energético de cada componente, seleciona a fonte de alimentação (bateria ou pilhas) e projeta os circuitos de regulação de tensão. Além disso, o sistema deve permitir o monitoramento do nível de carga para que o dado seja enviado via telemetria.
 
+\subsection{Frentes de trabalho}
+As atividades estão divididas em:
 \begin{itemize}
-    \item \textcolor{red}{ \textbf{Identificação dos Subsistemas Elétricos:} liste todos os componentes que consumirão energia, como sensores, microcontroladores, atuadores e módulos de armazenamento de dados. Para cada componente, registre a tensão de operação (V), corrente média (mA) e tempo estimado de uso (s).}
-    \item \textcolor{red}{ \textbf{Cálculo da Energia Consumida por Componente:} utilize a fórmula: $E = V I t$, onde $E$ é a energia em joules, $V$ é a tensão em volts, $I$ a corrente em ampères e $t$ o tempo em segundos. Realize esse cálculo para cada componente do sistema.}
-    \item \textcolor{red}{ \textbf{Estimativa do Consumo Total de Energia:} some as energias de todos os componentes para obter o consumo energético total estimado do sistema por lançamento.}
-    \item \textcolor{red}{ \textbf{Escolha da Fonte de Alimentação:} com base no consumo total, converta para watt-hora: 1 Wh = 3600 J. Adicione e justifique uma margem de segurança (pesquisar o que é usual para este tipo de sistema) e selecione uma bateria ou fonte que supra a demanda.}
-    \item \textcolor{red}{ \textbf{Planejamento do Circuito de Alimentação:} analise a necessidade de inclusão de reguladores de tensão, proteções contra sobrecorrente, e isolamento para atuadores. Como as oscilações de tensão serão controladas?}
-    \item \textcolor{red}{ \textbf{Monitoramento via \textit{software}:} implemente, no \textit{software} embarcado, rotinas para medir a tensão da bateria e registrar dados de tempo de operação. Colete os dados para análise.}
-    \item \textcolor{red}{ \textbf{Validação com Testes Reais:} realize testes de campo para comparar o consumo estimado com o real. Ajuste a capacidade da fonte se necessário e refine o software de coleta de dados. Justifique a diferença de resultados (real x teórica), de acordo com a literatura.}
+    \item \textbf{Dimensionamento:} Cálculo da corrente e energia total (Joules e Watt-hora).
+    \item \textbf{Regulação de Tensão:} Conversão da tensão da fonte (7.2V) para os níveis de operação (5V e 3.3V).
+    \item \textbf{Proteção e Segurança:} Gestão térmica e prevenção de danos por picos de corrente.
+    \item \textbf{Monitoramento:} Implementação de divisor de tensão para leitura analógica da carga.
 \end{itemize}
+
+\subsection{Identificação dos subsistemas elétricos}
+Após consulta das datasheets de cada um dos componentes, foram obtidos os seguintes dados de tensão e de corrente estimadas, organizados na seguinte tabela:
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.3} % Aumenta um pouco o espaçamento das linhas para melhor leitura
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Componente} & \textbf{Tensão de Operação (V)} & \textbf{Corrente Estimada (mA)} \\ \hline
+ESP32 (Wi-Fi e Bluetooth)       & 3.3 - 3.6     & 500           \\ \hline
+02 Motores DC (Redução 48:1)    & 3.0 - 6.0     & 800-1000      \\ \hline
+Driver Duplo Ponte H (DRV8833)  & 2.7 - 10.8    & 3             \\ \hline
+Sensor IR (KY-032)              & 3.3 - 5.0     & 20            \\ \hline
+Sensor Óptico ToF (VL53L0X)     & 3.3 - 5.0     & 20            \\ \hline
+IMU (MPU6050 GY521)             & 3.3 - 5.0     & 5             \\ \hline
+Mini Protoboard (170 pontos)    & -             & 0             \\ \hline\hline
+\textbf{Total Necessário} & \textbf{5.0 (Fonte Principal)} & \textbf{$\approx$ 1050} \\ \hline
+\end{tabular}
+\caption{Dimensionamento de Tensão e Corrente dos Componentes do Robô}
+\label{tab:dimensionamento_energia}
+\end{table}
+
+\subsection{Cálculo da energia consumida por componente}
+Para o cáluculo da energia consumida por componente, foi utilizada a fómula:
+\[
+    \ E = V (Volts) \cdot I (A) \cdot \Delta t (s)      [J]
+\]
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Componente} & \textbf{V (Volts)} & \textbf{I (Ampères)} & \textbf{t (Segundos)} & \textbf{E (Joules)} \\ \hline
+ESP32 (Wi-Fi e Bluetooth)           & 3.3 & 0.500 & 1800 & 2970.0   \\ \hline
+02 Motores DC (Redução 48:1)        & 5.0 & 1.000 & 1800 & 9000.0   \\ \hline
+Driver Duplo Ponte H (DRV8833)      & 5.0 & 0.003 & 1800 & 27.0     \\ \hline
+Sensor IR (KY-032)                  & 3.3 & 0.020 & 1800 & 118.8    \\ \hline
+Sensor Óptico ToF (VL53L0X)         & 3.3 & 0.020 & 1800 & 118.8    \\ \hline
+IMU (MPU6050 GY521)                 & 3.3 & 0.005 & 1800 & 29.7     \\ \hline\hline
+\textbf{Total Estimado} & \textbf{-} & \textbf{-} & \textbf{1800} & \textbf{12264.3} \\ \hline
+\end{tabular}
+\caption{Cálculo da Energia Consumida (Autonomia de 30 minutos com valores de pico)}
+\label{tab:energia_componentes_pico}
+\end{table}
+
+\subsection{Escolha da fonte de alimentação}
+\subsection*{Conversão para Watt-hora}
+A partir do cálculo de consumo total do sistema para uma autonomia de aproximadamente 30 minutos, obtivemos uma energia consumida de 8700,3 J. Utilizando a relação de conversão de que 1 Wh=3600 J, temos:
+\[
+    \frac{12364,3 [J]}{3600} \approx 3,43 Wh
+\]
+\subsection*{Justificativas e Aplicação da Margem de Segurança}
+É considerada boa prática utilizar uma margem de seguran de cerca de 20\% a 30\%. Essa margem é essencial por três motivos:
+\begin{enumerate}
+    \item \textbf{Corrente de Stall:} No momento em que o robô liga e arranca ou bate em uma parede e fica preso, os motores exigirão uma corrente maior.
+    \item \textbf{Perdas térmicas e degradação da tensão:} À medida que a bateria descarrega, a tensão da mesma tende a cair, de modo a exigir mais corrente para manter a mesma potência, e também, o regulador de tensão interno da ESP32 dissipa parte da energia em forma de calor, pode ser uma quantidade insignificativa, porém, como as opções de bateria que serão apresentadas posteriormente estão na faixa mais baixa do limiar mínimo necessário, o grupo acha válido considerar uma margem de segurança mais generosa.
+\end{enumerate}
+
+Adotando uma margem de 20\%, o requisito de energia final passa a ser:
+\[
+    E = 3,43 \times 1,20 \approx 4,12 Wh
+\]
+ 
+Para suprir a demanda energética do projeto com margem de segurança (4,79 Wh), optou-se pela opção de alimentação por um banco de 6 pilhas AA recarregáveis (NiMH). Este arranjo fornece uma tensão nominal de 7.2V e capacidade média de 2000 mAh (totalizando cerca de 14,4 Wh), atendendo aos requisitos de energia e mantendo a estabilidade da tensão frente aos picos de corrente de tração. Outra opção viável seria a adaptação de um powerbank de 5V/2A, que já teria um circuito de estabilização de tensão.
 
 \section{Descrição de \textit{software}}
 
