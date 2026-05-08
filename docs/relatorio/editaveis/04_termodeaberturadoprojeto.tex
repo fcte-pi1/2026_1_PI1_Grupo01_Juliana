@@ -1,50 +1,114 @@
 \chapter{Termo de Abertura do Projeto}
 
-\textcolor{red}{Termo de abertura do projeto / Project Charter. Um documento publicado pelo iniciador ou patrocinador do projeto que autoriza formalmente a existência de um projeto e fornece ao gerente do projeto a autoridade para aplicar os recursos organizacionais nas atividades do projeto.}
-
 \section{Dados do projeto}
 \begin{description}
-    \item [Nome do Projeto:] TÍTULO
-    \item [Data de abertura:] DD/MM/AAAA
-    \item [Código:] 1-A
+    \item [Nome do Projeto:] Micromouse - PI1
+    \item [Data de abertura:] 16/03/2026
+    \item [Código:] FGA0303 (Grupo 1 - Juliana)
     \item [Patrocinador:] Universidade de Brasília
-    % \item [Responsável:] ???
-    \item [Gerente:] NOME/MATRÍCULA/E-MAIL/TELEFONE
+    \item [Gerente:] André Cláudio Maia da Cunha
+        \begin{description}
+            \item [Matrícula:] 222037648
+            \item [E-mail:] 222037648@aluno.unb.br
+            \item [Telefone:] (61) 99663-7828
+        \end{description}
 \end{description}
 
 \section{Objetivos}
-\textcolor{red}{O que a empresa pretende obter com a realização do projeto. Descrever o que se pretende realizar para resolver o problema central ou explorar a oportunidade identificada. Para a correta definição do objetivo siga a regra "SMART":
-\begin{description}
-    \item [\textit{Specific} (específico):] Deve ser redigido de forma clara, concisa e compreensiva;
-    \item [\textit{Measurable} (mensurável):] O objetivo específico deve ser mensurável, ou seja, 
-possível de ser medido por meio de um ou mais indicadores;
-    \item [\textit{Agreed} (acordado):] Deve ser acordado com as partes interessadas, ou seja, as áreas envolvidas na empresa: P\&D, Produção, Comercial, Marketing, Financeira, Jurídica, Manutenção, ambiental, entre outras;
-    \item [\textit{Realistic} (realista):] Deve estar centrado na realidade, no que é possível de ser feito considerando as premissas e restrições existentes, como: orçamento e tempo;
-    \item [\textit{Time Bound} (Limitado no tempo):] Deve ter um prazo determinado para sua finalização.
-\end{description}
-}
+
+O projeto tem como principal objetivo desenvolver e construir um robô autônomo com chassi em impressão 3D, capaz de resolver labirintos desconhecidos de dimensões 4x4, 8x8 e 16x16 células. O sistema integrará componentes mecânicos, de hardware embarcado
+e algoritmos de exploração, como o Flood Fill, para detectar paredes, realizar mapeamento incremental e alcançar o centro do trajeto no menor tempo possível sem qualquer tipo de intervenção humana. Além do robô, o projeto engloba a construção de um labirinto
+modular de MDF padronizado para testes e um sistema web de telemetria para visualização de dados de navegação e energia em tempo real.
+
+Para avaliar a eficácia do projeto e atestar a integração multidisciplinar técnica do produto desenvolvido, foram estabelecidos os seguintes indicadores-chave de desempenho (KPIs), os quais irão nortear as entregas acadêmicas do projeto:
+
+\begin{enumerate}
+    \item \textbf{Autonomia e Resolução:} Capacidade do robô de alcançar o objetivo central dos labirintos sem intervenções humanas, mapeando incrementalmente as células usando seus módulos sensoriais.
+    \item \textbf{Eficiência do Algoritmo de Navegação:} Tempo e quantidade de tentativas necessárias para a resolução da rota, atestando o funcionamento de lógica embarcada.
+    \item \textbf{Precisão da Telemetria:} Confiabilidade da comunicação sem fio do ESP32, garantindo o envio, processamento e visualização em tempo real de informações como posição, tempo, velocidade média e bateria com baixa latência. 
+    \item \textbf{Resistência, Escalabilidade e Peso:} Integridade do chassi e obediência à restrição de tamanho máximo de 25 cm x 25 cm para largura e comprimento, de modo a assegurar que não haja danos no contato com as paredes. 
+    \item \textbf{Autonomia Energética:} Duração operacional contínua mínima de 30 minutos em pista, validando o circuito \textit{step-down} construído e o correto dimensionamento das baterias de NiMH mediante margem de segurança contra picos de corrente.
+\end{enumerate}
 
 \section{Mercado-alvo}
 
-\textcolor{red}{Pessoas, empresas, instituições etc. que usufruirão dos produtos, serviços e resultados gerados pelo projeto, cujos requisitos (tópico abaixo) devem atender as suas necessidades. Podem ser internas ou externas à organização, mas, merecem destaque especial, pois, o projeto está sendo feito para atendê-los de forma direta ou indireta.}
+O mercado-alvo deste projeto abrange a comunidade acadêmica e entusiastas das engenharias e robótica competitiva. Trata-se de um sistema direcionado inicialmente a estudantes, professores, pesquisadores das áreas de eletrônica, software, energia, estruturas e participantes de feiras tecnológicas e eventos como competições micromouse.
+Além disso, o projeto possui potencial expressivo de uso como plataforma didática para o ensino em disciplinas de engenharia integrando hardware, software, sensoriamento e controle dinâmico de estruturas físicas.
 
 \section{Requisitos}
 
-\textcolor{red}{Listar os fatos que são essenciais para o consumidor adquirir o produto, exemplo: cor, tamanho, material, tempo de vida-útil, dispositivo de segurança \textbf{x}, entre outros.}
+Os requisitos do sistema foram analisados, revisados e divididos em categorias funcionais e não funcionais. A priorização adotada reflete o nível de criticidade de cada item para o funcinamento do Micromouse, garantindo o alinhamento com o escopo e as regras da competição simulada.
+
+\begin{landscape}
+    \setlength{\LTleft}{0pt}
+    \setlength{\LTright}{0pt}
+
+    \begin{longtable}{@{\extracolsep{\fill}}|l|p{14.5cm}|l|l|}
+        
+        \caption{Requisitos Funcionais e Não Funcionais} \label{tab:requisitos} \\
+        
+        \hline
+        \textbf{ID} & \textbf{Requisito} & \textbf{Categoria} & \textbf{Prioridade} \\ \hline
+        \endfirsthead
+
+        \hline
+        \textbf{ID} & \textbf{Requisito} & \textbf{Categoria} & \textbf{Prioridade} \\ \hline
+        \endhead
+
+        \hline
+        \endfoot
+
+        \hline
+        \endlastfoot
+
+        \multicolumn{4}{|c|}{\textbf{REQUISITOS FUNCIONAIS (RF)}} \\ \hline
+        RF01 & O sistema deve navegar de forma autônoma em labirintos 4x4, 8x8 e 16x16 após a ativação. & Navegação & Must have \\ \hline
+        RF02 & O sistema deve detectar paredes e mapear o ambiente progressivamente em tempo real. & Navegação & Must have \\ \hline
+        RF03 & O sistema deve decidir a rota utilizando algoritmos de resolução de labirintos (ex: Flood Fill). & Navegação & Must have \\ \hline
+        RF04 & O sistema deve identificar o momento em que o robô atinge o centro do labirinto. & Navegação & Must have \\ \hline
+        RF05 & O sistema deve calcular e percorrer a rota mais rápida de retorno à origem após o mapeamento. & Navegação & Could have \\ \hline
+        RF06 & O sistema deve processar dados dos sensores de distância continuamente para detectar obstáculos e paredes. & Sensoriamento & Must have \\ \hline
+        RF07 & O sistema deve monitorar sua posição continuamente via odometria e controle de orientação. & Sensoriamento & Must have \\ \hline
+        RF08 & O sistema deve aferir o nível de bateria via leitura analógica com divisor de tensão. & Sensoriamento & Must have \\ \hline
+        RF09 & O sistema deve transmitir dados de telemetria sem fio para o servidor. & Transmissão de Dados & Must have \\ \hline
+        RF10 & O sistema web deve exibir telemetria em tempo real (tipo de labirinto, velocidade, trajeto, tempo e bateria). & Visualização & Must have \\ \hline
+        RF11 & O sistema web deve exibir um indicador de status atestando o cumprimento da missão. & Visualização & Must have \\ \hline
+        RF12 & O sistema deve armazenar dados de corridas concluídas de forma persistente em banco de dados. & Armazenamento & Must have \\ \hline
+        RF13 & O sistema web deve permitir consulta ao histórico e comparação de desempenho entre execuções. & Visualização & Should have \\ \hline
+        RF14 & O sistema deve identificar as dimensões do labirinto automaticamente ou via seletor físico antes da ativação. & Navegação & Must have \\ \hline
+        RF15 & O sistema web deve permitir filtrar o histórico de dados por dimensões do labirinto ou exibir todos. & Visualização & Should have \\ \hline
+
+        % --- REQUISITOS NÃO FUNCIONAIS ---
+        \multicolumn{4}{|c|}{\textbf{REQUISITOS NÃO FUNCIONAIS (RNF)}} \\ \hline
+        RNF01 & O robô deve possuir no máximo 25 cm de comprimento e de largura. & Restrição Física & Must have \\ \hline
+        RNF02 & O robô não deve usar motores de combustão, voar, pular ou danificar o labirinto. & Restrição Física & Must have \\ \hline
+        RNF03 & O banco de baterias deve representar no máximo 25\% do peso total do robô. & Restrição Física & Should have \\ \hline
+        RNF04 & O processamento do sistema embarcado deve utilizar exclusivamente o microcontrolador ESP32. & Tecnologia & Must have \\ \hline
+        RNF05 & O sistema de alimentação deve prover autonomia mínima de 30 minutos contínuos. & Energia & Must have \\ \hline
+        RNF06 & O sistema deve computar e decidir a rota na célula atual em até 5 segundos. & Desempenho & Must have \\ \hline
+        RNF07 & A interface web deve exibir telemetria com latência máxima de 500 ms. & Desempenho & Must have \\ \hline
+        RNF08 & Em parada de emergência, os atuadores devem cessar movimento em no máximo 2 segundos. & Confiabilidade e Segurança & Must have \\ \hline
+        RNF09 & O código-fonte e o mapa não devem sofrer modificações remotas durante a execução na pista. & Segurança e Confiabilidade & Must have \\ \hline
+        RNF10 & O banco de dados para armazenamento de corridas deve possuir arquitetura relacional. & Tecnologia & Should have \\ \hline
+
+    \end{longtable}
+\end{landscape}
 
 \section{Justificativa}
 
-\textcolor{red}{Informar o problema ou a oportunidade (necessidade) que justifica o porquê de o projeto ser realizado. Por exemplo: atende uma demanda específica do consumidor final; supre uma necessidade do mercado comercializador; é um diferencial X para o órgão regulamentador.}
+O desenvolvimento do Micromouse configura-se como um campo de testes real e prático das disciplinas da Faculdade de Ciências e Tecnologias em Engenharia (FCTE), exigindo um corpo de estudantes não apenas o conhecimento teórico, mas habilidades de execução. Assim, a justificativa deste projeto
+se fundamenta na necessidade inerente de preparar futuros profissionais em sistemas interligados de áreas multidisciplinares de hardware, software e estrutural aplicados ao mundo real.
 
 \section{Indicadores}
 
-\textcolor{red}{Listar até 10 indicadores que determinam o mercado consumidor do produto desenvolvido: exemplo: 1) n\textdegree de alunos da FGA que utilizam ônibus às 18:00; 2) n\textdegree de usuários do restaurante universitários, 3) número de idosos classificados como público-alvo no DF e no estado de Goiás, 4) n\textdegree de empresas de segurança registradas no DF etc.}
-% \section{Aprovações}
+A listagem a seguir explicita até dez indicadores numéricos que evidenciam o impacto mercadológico e aplicabilidade prática do sistema como objeto técnico de robótica educacional e competitiva:
 
-% \begin{tabular}{ l l }
-%   \textbf{Patrocinador:} & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
-%   & \\
-%   \textbf{CEO:} & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
-%   & \\
-%   \textbf{Gerente:} & \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ \\
-% \end{tabular}
+\begin{enumerate}
+    \item Percentual de precisão na detecção e mapeamento de paredes do labirinto.
+    \item Número estimado de laboratórios no DF que poderiam usar o modelo para ensino de eletrônica e programação.
+    \item Tempo médio (em milissegundos) de comunicação entre o sistema web de telemetria e o microcontrolador ESP32 na pista.
+    \item Custo total do chassi 3D (PLA) e módulos embarcados comparado a kits proprietários tradicionais do mercado.
+    \item Autonomia média suportada pelo banco de baterias dimensionado frente às atividades dos motores e placas.
+    \item Quantidade de commits e issues de projetos gerados no Github atestando o engajamento dos alunos nas Sprints propostas.
+    \item Índices de sucesso da navegação autônoma em pistas progressivamente mais complexas (4x4 vs 16x16).
+\end{enumerate}
