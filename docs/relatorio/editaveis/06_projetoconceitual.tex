@@ -230,6 +230,8 @@ UC12 & HU04 & Filtrar histórico por tamanho de labirinto & Operador, Avaliador 
 \label{fig:caso_de_uso_fig}
 \end{center}
 
+Os casos de uso foram agrupados por cor: em roxo os do firmware embarcado (UC01–UC08), em rosa os da plataforma web (UC09–UC12). Os três atores são o Avaliador, o Operador e o Micromouse/ESP32 (executa todos os UCs embarcados). Os relacionamentos «include» indicam dependências obrigatórias — por exemplo, UC01 sempre inclui UC02 (mapeamento). O «extend» entre UC11 e UC12 indica que filtrar por labirinto é um comportamento opcional dentro da consulta de histórico.
+
 \begin{itemize}
     
     \item \textcolor{red}{ \textbf{Descrição da arquitetura da solução de \textit{software} proposta:}}
