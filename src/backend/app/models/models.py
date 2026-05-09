@@ -44,5 +44,6 @@ class EventoTelemetria(Base):
     posicao_x = Column(Integer, nullable=False)
     posicao_y = Column(Integer, nullable=False)
     nivel_bateria = Column(Float, nullable=False)  # porcentagem 0-100
+    velocidade = Column(Float, nullable=True)  # m/s
 
     corrida = relationship("Corrida", back_populates="telemetria")
