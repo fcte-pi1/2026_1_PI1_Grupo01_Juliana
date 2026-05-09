@@ -58,7 +58,8 @@ O subgrupo de software é responsável por dois componentes principais e interde
     keepaspectratio
 ]{figuras/diagrama_atividades_uml.jpg}
 
-\small{Figura 1 -- Diagrama de Atividades UML.}
+\captionof{figure}{Diagrama de Atividades UML.}
+\label{fig:diagramauml_fig}
 \end{center}
 
 O fluxo está dividido em três raias (\textit{swimlanes}): Operador/Usuário, Micromouse (ESP32) e Sistema Web. O processo começa com o operador posicionando o robô e disparando o início da corrida. A partir daí, uma barra de bifurcação (\textit{fork}) representa o paralelismo: o ESP32 inicializa seus sensores ao mesmo tempo que o sistema web abre a sessão de telemetria. Uma barra de junção (\textit{join}) sincroniza as duas trilhas antes do loop principal.
@@ -76,26 +77,92 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
     \item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
     \textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
     \textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU01–Execução autônoma.png}
+
+    \captionof{figure}{Protótipo da HU01.}
+    \label{fig:execucaoautonoma_fig}
+    \end{center}
  
     \item \textbf{HU02 – Mapeamento incremental do labirinto} [\textit{Must have}]\\
     \textit{Eu, como} desenvolvedor do sistema embarcado, \textit{quero} que o robô detecte e registre paredes à medida que explora, \textit{para} construir o mapa do labirinto em tempo de execução.\\
     \textbf{Critérios de aceitação:} após a primeira corrida em um labirinto 4×4, ao menos 80\% das células devem ter sido corretamente mapeadas.
- 
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU02–Mapeamento incremental.png}
+
+    \captionof{figure}{Protótipo da HU02.}
+    \label{fig:mapeamento_fig}
+    \end{center}
+
     \item \textbf{HU03 – Telemetria em tempo real} [\textit{Must have}]\\
     \textit{Eu, como} observador da corrida, \textit{quero} visualizar no painel web o trajeto percorrido, o tempo, a velocidade média e o nível de bateria em tempo real, \textit{para} acompanhar o desempenho do robô durante a tentativa.\\
     \textbf{Critérios de aceitação:} os dados devem ser atualizados no painel com latência máxima estipulada pela equipe, sem gargalos visuais perceptíveis.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU03–Telemetria em tempo real.png}
+
+    \captionof{figure}{Protótipo da HU03.}
+    \label{fig:telemetria_fig}
+    \end{center}
  
     \item \textbf{HU04 – Persistência e consulta de histórico} [\textit{Must have}]\\
     \textit{Eu, como} professor avaliador, \textit{quero} consultar os resultados de corridas anteriores filtradas por labirinto, \textit{para} comparar o desempenho do robô ao longo do projeto.\\
     \textbf{Critérios de aceitação:} os dados finais de cada corrida concluída devem ser gravados no banco de dados e recuperáveis pela interface de histórico com filtro por tamanho de labirinto.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU04–Histórico de corridas.png}
+
+    \captionof{figure}{Protótipo da HU04.}
+    \label{fig:historicocorridas_fig}
+    \end{center}
  
     \item \textbf{HU05 – Monitoramento de bateria} [\textit{Should have}]\\
     \textit{Eu, como} operador do robô, \textit{quero} visualizar no painel web o nível percentual de carga da bateria enviado pelo sistema embarcado, \textit{para} evitar interrupções inesperadas durante as corridas.\\
     \textbf{Critérios de aceitação:} o nível de bateria deve ser lido via divisor de tensão pelo ESP32 e exibido no painel web com atualização a cada ciclo de telemetria.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU05–Monitoramento de bateria.png}
+
+    \captionof{figure}{Protótipo da HU05.}
+    \label{fig:monitoramentobateria_fig}
+    \end{center}
  
     \item \textbf{HU06 – Indicador de desafio cumprido} [\textit{Could have}]\\
     \textit{Eu, como} usuário do sistema web, \textit{quero} visualizar se o desafio foi cumprido (Sim/Não) ao término de cada corrida, \textit{para} identificar rapidamente o resultado no histórico.\\
     \textbf{Critérios de aceitação:} ao final de cada corrida, o campo ``Desafio cumprido'' deve ser preenchido automaticamente com base na detecção da chegada ao centro.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU06–Desafio cumprido.png}
+
+    \captionof{figure}{Protótipo da HU06.}
+    \label{fig:desafiocumprido_fig}
+    \end{center}
  
 \end{itemize}
  
