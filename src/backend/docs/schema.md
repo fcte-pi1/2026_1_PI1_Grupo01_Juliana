@@ -185,6 +185,16 @@ src/backend/
 
 # Como Rodar
 
+## Navegar até a pasta do backend
+```bash
+cd src/backend
+```
+
+## Criar a venv
+```bash
+python -m venv venv
+```
+
 ## Ativar a venv
 
 Linux/macOS:
