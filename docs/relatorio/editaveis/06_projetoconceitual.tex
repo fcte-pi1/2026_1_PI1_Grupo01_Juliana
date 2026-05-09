@@ -73,7 +73,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 \paragraph{Histórias de Usuário (Requisitos Funcionais)}
  
 \begin{itemize}
- 
+
     \item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
     \textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
     \textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa.
@@ -176,6 +176,59 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
     \item \textbf{RNF05} [\textit{Should have}] – Cada \textit{issue} no GitHub deve ter no máximo dois responsáveis, garantindo rastreabilidade individual das contribuições.
     \item \textbf{RNF06} [\textit{Should have}] – Ferramentas de inteligência artificial generativa não podem ser utilizadas nas atividades avaliativas do subgrupo.
 \end{itemize}
+
+\paragraph{Casos de Uso}
+
+\begin{center}
+\begin{longtable}{|l|c|p{5.5cm}|p{3cm}|c|}
+\caption{Casos de uso funcionais -- Backlog do Micromouse.} \label{tab:backlog-uc} \\
+
+\hline
+\textbf{ID} & \textbf{HU orig.} & \textbf{Caso de uso} & \textbf{Atores} & \textbf{Prioridade} \\ \hline
+\endfirsthead
+
+\multicolumn{5}{c}%
+{{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
+\hline
+\textbf{ID} & \textbf{HU orig.} & \textbf{Caso de uso} & \textbf{Atores} & \textbf{Prioridade} \\ \hline
+\endhead
+
+\hline \multicolumn{5}{|r|}{{Continua na próxima página...}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\multicolumn{5}{|l|}{\textit{Módulo embarcado -- ESP32}} \\ \hline
+
+UC01 & HU01 & Resolver labirinto autonomamente & Micromouse & Must have \\ \hline
+UC02 & HU02 & Mapear labirinto incrementalmente & Micromouse & Must have \\ \hline
+UC03 & HU02 & Ler sensores IR de distância & Micromouse & Must have \\ \hline
+UC04 & HU01 & Executar algoritmo de navegação & Micromouse & Must have \\ \hline
+UC05 & HU05 & Monitorar nível de bateria & Micromouse & Should have \\ \hline
+UC06 & HU03 & Transmitir dados de telemetria & Micromouse & Must have \\ \hline
+UC07 & HU01 & Registrar chegada ao centro & Micromouse & Must have \\ \hline
+UC08 & HU01 & Calcular estatísticas finais & Micromouse & Must have \\ \hline
+
+\multicolumn{5}{|l|}{\textit{Módulo web -- painel de telemetria}} \\ \hline
+
+UC09 & HU03 & Visualizar telemetria & Operador, Avaliador & Must have \\ \hline
+UC10 & HU05 & Exibir nível de bateria no painel & Operador & Should have \\ \hline
+UC11 & HU04 & Consultar histórico de corridas & Operador, Avaliador & Must have \\ \hline
+UC12 & HU04 & Filtrar histórico por tamanho de labirinto & Operador, Avaliador & Must have \\ \hline
+
+\end{longtable}
+\end{center}
+
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.8\textheight,
+    keepaspectratio
+]{figuras/diagrama_caso_de_uso.jpg}
+\captionof{figure}{Diagrama de Casos de Uso}
+\label{fig:caso_de_uso_fig}
+\end{center}
 
 \begin{itemize}
     
