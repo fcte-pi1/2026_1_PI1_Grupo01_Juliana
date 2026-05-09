@@ -197,6 +197,11 @@ Windows (Git Bash):
 source venv/Scripts/activate
 ```
 
+## Instalar dependências
+```bash
+pip install -r requirements.txt
+```
+
 ## Aplicar migrations
 ```bash
 PYTHONPATH=. alembic upgrade head
