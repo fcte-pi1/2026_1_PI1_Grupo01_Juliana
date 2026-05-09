@@ -179,18 +179,130 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
 \begin{itemize}
     
-    \item \textcolor{red}{ \textbf{Descrição da arquitetura da solução de \textit{software} proposta:}}
-    \begin{itemize}
+    \item \textbf{Descrição da arquitetura da solução de \textit{software} proposta}
     
-        \item \textcolor{red}{ Esta subseção deve contemplar o documento de arquitetura do sistema e deve ser estruturado segundo as visões (4+1) previstas no processo unificado (UP): lógica, de processos;  implementação, implantação e dados (substuirá a visão de casos de uso).}
-        
-        \item \textcolor{red}{ Propósito do \textit{software} (qual o seu papel no sistema);}
-        \item \textcolor{red}{ Padrão adotado: MVC, MVP, Microsserviços, Monolítico, etc (Justificar);}
-        \item \textcolor{red}{ Linguagens de programação: Java, Python, C\#, JavaScript, etc.}
-        \item \textcolor{red}{ \textit{Frameworks} e bibliotecas: Spring Boot, .NET Core, React, Angular, Django, etc.}
-            \item \textcolor{red}{ Banco de dados: Relacional (PostgreSQL, MySQL, etc) X NãoSQL (MongoDB,etc). }
-        \item \textcolor{red}{Persistência de dados: Modelo Entidade‑Relacionamento (MER) e seu respectivo Diagrama Entidade‑Relacionamento (DER), aplicáveis quando a solução utiliza banco de dados relacional; alternativamente, diagrama de estrutura de documentos, empregado nos casos em que a arquitetura adota banco de dados não relacional.}
-         \end{itemize}     
+    A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:arquitetura_sistema} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
+
+    \par
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[
+            node distance=2.4cm and 1.6cm,
+            box/.style={rectangle, rounded corners, minimum width=3.2cm, minimum height=1cm, text centered, font=\small\bfseries, drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.3}},
+            arrow/.style={-{Stealth[length=2.5mm]}, thick},
+            labelstyle/.style={font=\scriptsize, align=center}
+        ]
+            % Cores por camada
+            \definecolor{corEmbarcado}{RGB}{52, 152, 219}
+            \definecolor{corComunicacao}{RGB}{241, 196, 15}
+            \definecolor{corBackend}{RGB}{46, 204, 113}
+            \definecolor{corBD}{RGB}{155, 89, 182}
+            \definecolor{corFrontend}{RGB}{231, 76, 60}
+
+            % Nós
+            \node[box, fill=corEmbarcado!20, draw=corEmbarcado!60] (esp) {\makecell{ESP32\\(Firmware)}};
+            \node[box, fill=corComunicacao!20, draw=corComunicacao!60, right=of esp] (comm) {Wi-Fi / MQTT};
+            \node[box, fill=corBackend!20, draw=corBackend!60, right=of comm] (api) {\makecell{FastAPI\\(Backend)}};
+            \node[box, fill=corBD!20, draw=corBD!60, below=of api] (db) {SQLite / PostgreSQL};
+            \node[box, fill=corFrontend!20, draw=corFrontend!60, above=of api] (front) {Frontend Web};
+
+            % Setas
+            \draw[arrow, corComunicacao!80!black] (esp) -- node[above, labelstyle] {MQTT} (comm);
+            \draw[arrow, corComunicacao!80!black] (comm) -- node[above, labelstyle] {MQTT} (api);
+            \draw[arrow, corBD!80!black] (api) -- node[right, labelstyle] {SQLAlchemy\\Alembic} (db);
+            \draw[arrow, corFrontend!80!black] (front) -- node[left, labelstyle] {HTTP/REST\\WebSocket} (api);
+
+            % Agrupamentos
+            \begin{scope}[on background layer]
+                \node[fill=corEmbarcado!10, rounded corners, draw=corEmbarcado!40, dashed, fit=(esp), inner sep=6pt, label={[font=\scriptsize\bfseries, corEmbarcado!80!black]above:Camada Embarcada}] {};
+                \node[fill=corComunicacao!10, rounded corners, draw=corComunicacao!40, dashed, fit=(comm), inner sep=6pt, label={[font=\scriptsize\bfseries, corComunicacao!80!black]above:Comunicação}] {};
+                \node[fill=corBackend!10, rounded corners, draw=corBackend!40, dashed, fit=(api), inner sep=6pt, label={[font=\scriptsize\bfseries, corBackend!80!black]below:Camada de Aplicação}] {};
+                \node[fill=corBD!10, rounded corners, draw=corBD!40, dashed, fit=(db), inner sep=6pt, label={[font=\scriptsize\bfseries, corBD!80!black]below:Persistência}] {};
+                \node[fill=corFrontend!10, rounded corners, draw=corFrontend!40, dashed, fit=(front), inner sep=6pt, label={[font=\scriptsize\bfseries, corFrontend!80!black]above:Apresentação}] {};
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Diagrama de arquitetura do sistema Micromouse.}
+        \label{fig:arquitetura_sistema}
+    \end{figure}
+
+    A Tabela~\ref{tab:camadas_arquitetura} resume as camadas, as tecnologias adotadas em cada uma e as respectivas justificativas técnicas.
+
+    \begin{table}[H]
+        \centering
+        \caption{Camadas, tecnologias e justificativas da arquitetura.}
+        \label{tab:camadas_arquitetura}
+        \begin{tabular}{p{2.8cm}p{3.5cm}p{7cm}}
+            \toprule
+            \textbf{Camada} & \textbf{Tecnologia} & \textbf{Justificativa Técnica} \\
+            \midrule
+            Embarcada & ESP32, ESP-IDF, FreeRTOS, C & O ESP32 oferece processamento dual-core, Wi-Fi integrado e baixo consumo energético, atendendo às restrições de um robô autônomo. O ESP-IDF é o \textit{framework} oficial da Espressif, com suporte nativo a periféricos, \textit{threads} (FreeRTOS) e pilha de rede. A linguagem C garante controle direto de \textit{hardware} e desempenho previsível, essencial para o algoritmo Flood Fill e o controle em tempo real dos motores. \\
+            \midrule
+            Comunicação & Wi-Fi 802.11b/g/n, MQTT / HTTP & O módulo Wi-Fi nativo do ESP32 elimina a necessidade de circuitos adicionais de comunicação. O protocolo MQTT foi escolhido para telemetria em tempo real por ser leve, orientado a eventos e com baixa latência sobre TCP. O broker MQTT recebe os dados do robô e os encaminha ao backend; o frontend consome esses dados via WebSocket para atualização em tempo real. Requisições HTTP/REST complementam para consultas de histórico e filtros. \\
+            \midrule
+            Backend & Python 3, FastAPI, Uvicorn & FastAPI é um \textit{framework} assíncrono de alta performance para APIs REST, com validação automática via Pydantic e documentação interativa (OpenAPI/Swagger). A escolha do Python acelera o desenvolvimento e integra-se naturalmente com bibliotecas de ciência de dados, caso seja necessária análise preditiva de desempenho. \\
+            \midrule
+            Banco de Dados & SQLite (dev) / PostgreSQL (prod), SQLAlchemy, Alembic & Banco relacional foi preferido pela consistência ACID e pelo modelo de dados bem estruturado (labirintos, corridas, telemetria). SQLite viabiliza protótipos rápidos sem infraestrutura; PostgreSQL pode ser adotado em produção para concorrência e volume elevado. SQLAlchemy (ORM) e Alembic (migrations) garantem portabilidade e versionamento do schema. \\
+            \midrule
+            Frontend Web & HTML5, CSS3, JavaScript (React em avaliação) & A camada de apresentação será desenvolvida como aplicação web responsiva, consumindo a API REST do backend para consultas de histórico e filtros, e WebSocket para telemetria em tempo real. A escolha inicial por tecnologias web puras reduz a curva de aprendizado; a adoção do React será avaliada conforme a evolução dos protótipos de interface. \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \textbf{Visão Lógica.} O sistema é organizado em domínios bem definidos: (i) Navegação Autônoma, responsável pelo algoritmo Flood Fill, mapeamento de paredes e controle de trajetória; (ii) Telemetria e Comunicação, que encapsula a publicação unidirecional de dados via MQTT do robô para o backend; (iii) Gestão de Corridas, que persiste configurações de labirinto, resultados e estatísticas; e (iv) Visualização, que consome os dados persistidos para dashboards e relatórios.
+
+    \textbf{Visão de Processos.} O firmware embarcado executa múltiplas tarefas concorrentes sob o FreeRTOS: uma tarefa de alta prioridade para leitura de sensores e controle PID dos motores; uma tarefa de média prioridade para execução do algoritmo Flood Fill; e uma tarefa de baixa prioridade para transmissão de telemetria via Wi-Fi. O backend FastAPI opera de forma assíncrona, processando requisições HTTP e mensagens MQTT em event loops independentes, garantindo que a ingestão de telemetria não bloqueie consultas do frontend.
+
+    \textbf{Visão de Implementação.} O repositório está dividido em três diretórios principais: \texttt{src/firmware/} (código em C para ESP-IDF, incluindo o simulador Flood Fill em ambiente desktop); \texttt{src/backend/} (aplicação Python com FastAPI, models SQLAlchemy e migrations Alembic); e \texttt{src/frontend/} (aplicação web). Essa separação física reflete a independência das camadas e permite que diferentes subgrupos trabalhem em paralelo.
+
+    \textbf{Visão de Implantação.} O ESP32 funciona como cliente MQTT, conectando-se à rede local (Wi-Fi) ou a um \textit{hotspot} móvel. O backend pode ser executado localmente durante os testes de bancada ou implantado em serviços de hospedagem gratuita (ex.: Railway, Render) para acesso remoto, conforme previsto no orçamento do projeto. O frontend é servido como aplicação estática ou via servidor web integrado.
+
+    \textbf{Visão de Dados.} O modelo relacional é composto por três entidades principais: \texttt{Labirinto} (dimensão 4x4, 8x8 ou 16x16), \texttt{Corrida} (data, duração, velocidade média, resultado) e \texttt{EventoTelemetria} (posição X/Y, nível de bateria, timestamp). A Fig.~\ref{fig:der_micromouse} apresenta o diagrama entidade-relacionamento preliminar.
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[
+            entity/.style={rectangle, draw, fill=gray!10, minimum width=2.8cm, minimum height=0.9cm, font=\small\bfseries},
+            relation/.style={diamond, draw, fill=gray!20, aspect=2, font=\scriptsize},
+            attribute/.style={ellipse, draw, fill=gray!5, font=\scriptsize},
+            arrow/.style={-Stealth, thick},
+            label/.style={font=\scriptsize, midway, fill=white, inner sep=1pt}
+        ]
+            % Entidades
+            \node[entity] (lab) at (0,0) {Labirinto};
+            \node[entity] (corr) at (5,0) {Corrida};
+            \node[entity] (tel) at (10,0) {EventoTelemetria};
+
+            % Relacionamentos
+            \draw[arrow] (lab) -- node[above, label] {1} node[below, label] {N} (corr);
+            \draw[arrow] (corr) -- node[above, label] {1} node[below, label] {N} (tel);
+
+            % Atributos Labirinto
+            \node[attribute, below=0.6cm of lab] (dim) {dimensão};
+            \draw[-] (lab) -- (dim);
+
+            % Atributos Corrida
+            \node[attribute, above=0.6cm of corr] (data) {data};
+            \node[attribute, above left=0.5cm of corr] (dur) {duração};
+            \node[attribute, above right=0.5cm of corr] (res) {resultado};
+            \draw[-] (corr) -- (data);
+            \draw[-] (corr) -- (dur);
+            \draw[-] (corr) -- (res);
+
+            % Atributos Telemetria
+            \node[attribute, below=0.6cm of tel] (ts) {timestamp};
+            \node[attribute, below left=0.5cm of tel] (pos) {posição X/Y};
+            \node[attribute, below right=0.5cm of tel] (bat) {nível bateria};
+            \draw[-] (tel) -- (ts);
+            \draw[-] (tel) -- (pos);
+            \draw[-] (tel) -- (bat);
+        \end{tikzpicture}
+        \caption{Diagrama Entidade-Relacionamento preliminar do sistema Micromouse.}
+        \label{fig:der_micromouse}
+    \end{figure}
+
+    \textbf{Padrão Arquitetural.} Adotou-se o padrão em camadas (\textit{Layered Architecture}), variante cliente-servidor, por ser amplamente compreendido, de baixa complexidade para equipes acadêmicas e suficiente para os requisitos de escalabilidade do projeto. Não há necessidade de microsserviços dado o escopo reduzido e a equipe enxuta; um monolito bem modularizado atende às demandas com menor sobrecarga operacional.
+
+    \textbf{Alinhamento com Hardware.} A arquitetura de software foi validada em conjunto com o subgrupo de hardware. Os pinos de GPIO do ESP32 foram mapeados para os drivers de motor (DRV8833) e sensores de distância (infravermelhos), garantindo que os módulos de software de controle e leitura correspondam ao esquemático elétrico. A tabela de alocação de pinos e os valores específicos de temporização (frequência do PWM para motores, taxa de amostragem dos sensores) serão definidos em conjunto com o subgrupo de Hardware na Sprint 3 e refletidos nas configurações das tarefas do FreeRTOS.     
     
     \item \textcolor{red}{\textbf{ Roteiro de testes funcionais:} }
     \begin{itemize}
