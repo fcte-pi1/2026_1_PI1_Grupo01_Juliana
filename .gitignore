@@ -341,3 +341,7 @@ TSWLatexianTemp*
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# Banco de dados
+*.db
+*.sqlite
