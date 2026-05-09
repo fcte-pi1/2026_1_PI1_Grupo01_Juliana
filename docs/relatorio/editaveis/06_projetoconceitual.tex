@@ -49,32 +49,136 @@
 
 \section{Descrição de \textit{software}}
 
-\textcolor{red}{Itens fundamentais:}
+O subgrupo de software é responsável por dois componentes principais e interdependentes: o \textbf{software embarcado}, executado no microcontrolador ESP32 do robô, e o \textbf{sistema web de telemetria}, responsável pela visualização e armazenamento dos dados de cada corrida.
+
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.8\textheight,
+    keepaspectratio
+]{figuras/diagrama_atividades_uml.jpg}
+
+\captionof{figure}{Diagrama de Atividades UML.}
+\label{fig:diagramauml_fig}
+\end{center}
+
+O fluxo está dividido em três raias (\textit{swimlanes}): Operador/Usuário, Micromouse (ESP32) e Sistema Web. O processo começa com o operador posicionando o robô e disparando o início da corrida. A partir daí, uma barra de bifurcação (\textit{fork}) representa o paralelismo: o ESP32 inicializa seus sensores ao mesmo tempo que o sistema web abre a sessão de telemetria. Uma barra de junção (\textit{join}) sincroniza as duas trilhas antes do loop principal.
+
+O ciclo de exploração repete: leitura dos sensores IR $\rightarrow$ detecção de paredes $\rightarrow$ atualização do mapa $\rightarrow$ algoritmo Flood Fill $\rightarrow$ movimentação. A cada passo, a telemetria é enviada ao sistema web em paralelo (velocidade, trajeto, bateria). Dois nós de decisão controlam a saída do loop: ``centro atingido?'' e ``bateria crítica?''. O alerta de bateria deriva para o operador e reintegra o fluxo. Ao atingir o centro, o robô calcula as estatísticas finais, envia ao sistema web, que persiste no banco e marca o campo ``Desafio cumprido''.
+
+\subsubsection*{Backlog do Produto}
+ 
+O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionais (RNF) definidos no Capítulo 2, priorizados pela classificação MoSCoW.
+
+\paragraph{Histórias de Usuário (Requisitos Funcionais)}
+ 
+\begin{itemize}
+ 
+    \item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
+    \textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
+    \textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU01–Execução autônoma.png}
+
+    \captionof{figure}{Protótipo da HU01.}
+    \label{fig:execucaoautonoma_fig}
+    \end{center}
+ 
+    \item \textbf{HU02 – Mapeamento incremental do labirinto} [\textit{Must have}]\\
+    \textit{Eu, como} desenvolvedor do sistema embarcado, \textit{quero} que o robô detecte e registre paredes à medida que explora, \textit{para} construir o mapa do labirinto em tempo de execução.\\
+    \textbf{Critérios de aceitação:} após a primeira corrida em um labirinto 4×4, ao menos 80\% das células devem ter sido corretamente mapeadas.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU02–Mapeamento incremental.png}
+
+    \captionof{figure}{Protótipo da HU02.}
+    \label{fig:mapeamento_fig}
+    \end{center}
+
+    \item \textbf{HU03 – Telemetria em tempo real} [\textit{Must have}]\\
+    \textit{Eu, como} observador da corrida, \textit{quero} visualizar no painel web o trajeto percorrido, o tempo, a velocidade média e o nível de bateria em tempo real, \textit{para} acompanhar o desempenho do robô durante a tentativa.\\
+    \textbf{Critérios de aceitação:} os dados devem ser atualizados no painel com latência máxima estipulada pela equipe, sem gargalos visuais perceptíveis.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU03–Telemetria em tempo real.png}
+
+    \captionof{figure}{Protótipo da HU03.}
+    \label{fig:telemetria_fig}
+    \end{center}
+ 
+    \item \textbf{HU04 – Persistência e consulta de histórico} [\textit{Must have}]\\
+    \textit{Eu, como} professor avaliador, \textit{quero} consultar os resultados de corridas anteriores filtradas por labirinto, \textit{para} comparar o desempenho do robô ao longo do projeto.\\
+    \textbf{Critérios de aceitação:} os dados finais de cada corrida concluída devem ser gravados no banco de dados e recuperáveis pela interface de histórico com filtro por tamanho de labirinto.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU04–Histórico de corridas.png}
+
+    \captionof{figure}{Protótipo da HU04.}
+    \label{fig:historicocorridas_fig}
+    \end{center}
+ 
+    \item \textbf{HU05 – Monitoramento de bateria} [\textit{Should have}]\\
+    \textit{Eu, como} operador do robô, \textit{quero} visualizar no painel web o nível percentual de carga da bateria enviado pelo sistema embarcado, \textit{para} evitar interrupções inesperadas durante as corridas.\\
+    \textbf{Critérios de aceitação:} o nível de bateria deve ser lido via divisor de tensão pelo ESP32 e exibido no painel web com atualização a cada ciclo de telemetria.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU05–Monitoramento de bateria.png}
+
+    \captionof{figure}{Protótipo da HU05.}
+    \label{fig:monitoramentobateria_fig}
+    \end{center}
+ 
+    \item \textbf{HU06 – Indicador de desafio cumprido} [\textit{Could have}]\\
+    \textit{Eu, como} usuário do sistema web, \textit{quero} visualizar se o desafio foi cumprido (Sim/Não) ao término de cada corrida, \textit{para} identificar rapidamente o resultado no histórico.\\
+    \textbf{Critérios de aceitação:} ao final de cada corrida, o campo ``Desafio cumprido'' deve ser preenchido automaticamente com base na detecção da chegada ao centro.
+
+    \begin{center}
+    \includegraphics[
+        width=0.95\textwidth,
+        height=0.8\textheight,
+        keepaspectratio
+    ]{figuras/HU06–Desafio cumprido.png}
+
+    \captionof{figure}{Protótipo da HU06.}
+    \label{fig:desafiocumprido_fig}
+    \end{center}
+ 
+\end{itemize}
+ 
+\paragraph{Requisitos Não Funcionais}
+ 
+\begin{itemize}
+    \item \textbf{RNF01} [\textit{Must have}] – O código-fonte embarcado e a memória do labirinto não podem ser alterados durante a execução de uma tentativa na pista.
+    \item \textbf{RNF02} [\textit{Must have}] – O sistema embarcado deve operar com o microcontrolador ESP32 como unidade central de processamento.
+    \item \textbf{RNF03} [\textit{Must have}] – A latência da telemetria deve ser estipulada e estabilizada de modo que a atualização do painel ocorra sem gargalos perceptíveis em tempo real.
+    \item \textbf{RNF04} [\textit{Must have}] – Nenhuma solução de software pronta pode substituir o desenvolvimento próprio dos módulos exigidos pelo escopo.
+    \item \textbf{RNF05} [\textit{Should have}] – Cada \textit{issue} no GitHub deve ter no máximo dois responsáveis, garantindo rastreabilidade individual das contribuições.
+    \item \textbf{RNF06} [\textit{Should have}] – Ferramentas de inteligência artificial generativa não podem ser utilizadas nas atividades avaliativas do subgrupo.
+\end{itemize}
 
 \begin{itemize}
-    \item \textcolor{red}{ \textbf{Diagrama Atividades UML:}  descrever e explicar o fluxo do comportamento funcional do produto proposto, evidenciando, de forma clara e estruturada, como as atividades são executadas, em que ordem e sob quais condições. Esse diagrama permite compreender o funcionamento dinâmico do sistema, destacando:}
-
-    \begin{itemize}
-        \item \textcolor{red}{ os principais atores (usuários ou sistemas externos) envolvidos no processo;
-        \item as atividades de negócio realizadas por cada ator ou pelo próprio sistema;
-        \item os insumos (entradas) necessários para a execução das atividades;
-        \item os resultados (saídas) gerados ao longo do fluxo;
-        \item os pontos de decisão, paralelismo e sincronização das atividades;
-        \item Entre as notações mais relevantes, destacam-se o estado iniciail e final, atividades, nós de decisão e junção, barras de bifurcação, Raias (\textit{swimlanes}) e Fluxos de controle. }
-        \end{itemize}
-
-    \item \textcolor{red}{\textbf{\textit{Backlog} do Produto}}
-    \begin{itemize}
-        \item \textcolor{red}{ Descrever os   requisitos funcionais (RF) com a técnica de documentação e especificação de história de usuário (HU);}
-        \item \textcolor{red}{ Descrever os requisitos não-funcionais (RNF) de forma objetiva; Mais facilmente, mais rapidamente, mais responsivo, de fácil uso, são descrições subjetivas não-válidas. Um exemplo de requisito não-funcional de desempenho: ``a página deve carregar em até 5s quando em conexão 4G''. }
-        \item \textcolor{red}{ Ao descrever os requisitos (RF e RNF), usar a  classificação MoSCoW (\textit{Must have}, \textit{Should have} e \textit{Could have}),  para auxiliar a priorização dos itens do backlog.}
-        \item \textcolor{red}{ Protótipos de interfafe gráfica do \textit{software} em alta fidelidade.}
-        \begin{itemize}
-            \item \textcolor{red}{\textbf{ Todas HUs devem conter sua descrição (Eu-Como-Para), critérios de aceitação e protótipos de interface, documentadas no github. }}
-            \end{itemize} 
-
-        \end{itemize}
-
+    
     \item \textcolor{red}{ \textbf{Descrição da arquitetura da solução de \textit{software} proposta:}}
     \begin{itemize}
     
@@ -97,4 +201,5 @@
         \item \textcolor{red}{ Descrição dos procedimentos a serem executados para o teste;}
         \item \textcolor{red}{ Resultado esperado para o teste ser aprovado (pós-condição após realizado o teste);}
     \end{itemize}
-\end{itemize}
+    \end{itemize}
+
