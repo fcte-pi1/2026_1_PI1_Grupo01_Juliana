@@ -174,10 +174,39 @@ src/backend/
 │       └── models.py
 │
 ├── migrations/
-│   └── versions/
+|    ├── env.py
+│    └── versions/
 │       └── 001_initial_schema.py
 │
 ├── seed.py
 ├── alembic.ini
 └── micromouse.db
+```
+
+# Como Rodar
+
+## Ativar a venv
+
+Linux/macOS:
+```bash
+source venv/bin/activate
+```
+
+Windows (Git Bash):
+```bash
+source venv/Scripts/activate
+```
+
+## Aplicar migrations
+```bash
+PYTHONPATH=. alembic upgrade head
+```
+
+## Popular com dados de teste
+```bash
+PYTHONPATH=. python seed.py
+```
+ou
+```bash
+python seed.py
 ```
