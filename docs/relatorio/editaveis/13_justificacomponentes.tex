@@ -1,0 +1,64 @@
+\section{Justificativa da escolha dos componentes de \textit{hardware}}
+\label{sec:justificativa-componentes}
+
+Esta seção apresenta a justificativa técnica para a seleção de cada componente utilizado no projeto, considerando requisitos funcionais, disponibilidade, custo e compatibilidade com a arquitetura geral do sistema.
+
+\subsection{ESP32-WROOM-32E}
+
+O microcontrolador ESP32-WROOM-32E foi selecionado por oferecer capacidade de processamento adequada para aplicações embarcadas, além de integração nativa com comunicação Wi-Fi e Bluetooth, possibilitando futura expansão do sistema. Segundo o trabalho apresentado no CONICT do IFSP, o ESP32 apresenta boa compatibilidade com sistemas robóticos devido à sua quantidade de portas de entrada e saída, baixo custo e facilidade de integração com sensores e atuadores. Além disso, sua operação em 3,3 V torna o componente compatível com módulos eletrônicos modernos utilizados no projeto.
+
+Artigo base: \cite{oliveira2024_esp32_roboticar}
+
+\subsection{Sensor Infravermelho (LM393)}
+
+O sensor infravermelho LM393 foi selecionado para detecção de paredes e obstáculos do labirinto. Este módulo integra um LED infravermelho, um fototransistor e circuito de pré-processamento de sinais analógicos, oferecendo facilidade de implementação. O LM393 apresenta características técnicas adequadas para a aplicação: baixo consumo de energia (menos de 1 mA), ampla faixa de operação de tensão (2V a 36V), ângulo de difusão de 35° e alcance de 2 a 30 cm. Além disso, o sensor retorna sinais digitais ao microcontrolador, facilitando o processamento de dados. Por ser uma solução econômica e apresentar baixa complexidade de programação, o LM393 é apropriado para contextos educacionais e projetos com orçamento limitado.
+
+Artigo base: \cite{lima2025_micromouse_lm393}
+
+\subsection{Bússola Magnetômetro (GY-271 HMC5883L)}
+
+Justificativa da escolha para orientação e navegação.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
+
+\subsection{Driver Ponte H (DRV8833)}
+
+O driver DRV8833 foi escolhido por permitir o controle independente de dois motores DC, oferecendo controle de velocidade e direção através de PWM. O componente apresenta baixo consumo energético, suporte a tensões compatíveis com o ESP32 e mecanismos internos de proteção contra sobrecorrente e superaquecimento, aumentando a segurança do sistema. Conforme descrito na documentação técnica da Texas Instruments e em aplicações embarcadas similares, o DRV8833 é amplamente utilizado em robôs móveis compactos devido à sua eficiência energética e tamanho reduzido.
+
+Artigo base: \cite{oliveira2024_esp32_roboticar}
+
+\subsection{Conversor Analógico-Digital (ADS1115)}
+
+Justificativa da escolha para leitura de sensores analógicos.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
+
+\subsection{Regulador de Tensão Step-Down (LM2596)}
+
+O módulo regulador LM2596 foi adotado para garantir estabilidade na alimentação elétrica do sistema, realizando a conversão eficiente da tensão fornecida pela bateria para níveis adequados aos demais componentes eletrônicos. De acordo com o artigo do CONICT do IFSP, o LM2596 é amplamente empregado em sistemas embarcados por apresentar boa eficiência energética, baixo custo e facilidade de integração. Sua utilização contribui para a proteção dos circuitos e para o funcionamento estável do microcontrolador e dos sensores.
+
+Artigo base: \cite{oliveira2024_esp32_roboticar}
+
+\subsection{Sensor de Tensão 0-25V (FZ0430)}
+
+Justificativa da escolha para monitoramento de bateria.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
+
+\subsection{Chave Óptica para Encoder (MOCH22A)}
+
+Justificativa da escolha para detecção de velocidade e posição.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
+
+\subsection{Sensor de Corrente (ACS712)}
+
+Justificativa da escolha para monitoramento do consumo energético.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
+
+\subsection{Buzzer Passivo}
+
+Justificativa da escolha para sinalização sonora.
+
+\textcolor{red}{Artigo base: [Referência bibliográfica]}
