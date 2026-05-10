@@ -18,7 +18,7 @@ export default function History() {
             <th>ID da Corrida</th>
             <th>Tamanho</th>
             <th>Tempo Total</th>
-            <th>Desafio Cumprido? (HU06)</th>
+            <th>Desafio Cumprido?</th>
             <th>Ações</th>
           </tr>
         </thead>
