@@ -1,12 +1,17 @@
-export default function MazeMap() {
+export default function MazeMap({ size = 4 }) {
+  const totalCells = size * size;
+
   return (
     <div style={styles.container}>
-      <h3 style={{ margin: 0, color: '#666' }}>Mapa do Labirinto (Placeholder)</h3>
+      <h3 style={{ margin: 0, color: '#666' }}>Mapa do Labirinto ({size}x{size})</h3>
       <p style={{ fontSize: '14px', color: '#999' }}>Aguardando dados de mapeamento do ESP32...</p>
       
-      {/* Mock de uma grid 4x4 para visualização básica */}
-      <div style={styles.grid}>
-        {Array.from({ length: 16 }).map((_, i) => (
+      {/* Grid dinâmico baseado na prop 'size' */}
+      <div style={{
+        ...styles.grid,
+        gridTemplateColumns: `repeat(${size}, 1fr)`
+      }}>
+        {Array.from({ length: totalCells }).map((_, i) => (
           <div key={i} style={styles.cell}></div>
         ))}
       </div>
@@ -31,7 +36,7 @@ const styles = {
     gridTemplateColumns: 'repeat(4, 1fr)',
     gap: '2px',
     marginTop: '20px',
-    width: '150px',
+    width: '250px',
     height: '150px',
     backgroundColor: '#ddd',
     border: '2px solid #999'
