@@ -6,9 +6,377 @@
 
 \textcolor{red}{Apresentar e explicar a Estrutura Analítica do Projeto (EAP), tomando cuidado com a legibilidade da imagem. Se necessário, coloque a EAP dentro do comando ``\textsf{\textbackslash begin\{landscape\} \textbackslash end\{landscape\}}'' para que ela seja apresentada em uma página deitada.}
 
+% =============================================================
+%  SEÇÃO 4.2 — ESTRUTURA
+%  Projeto Conceitual do Produto | PI1 2026/1
+%  Responsável: Equipe de Estrutura
+%  Issue: Memorial Descritivo — Chassi (CAD) e Labirinto Modular
+% =============================================================
+
 \section{Estrutura}
 
-\textcolor{red}{Apresentar desenho em CAD, indicar dimensões por lado/aresta/cota, indicar materiais utilizados e explicar o desenho e as decisões de projeto.}
+
+Esta seção apresenta o projeto estrutural do \textit{micromouse} e do
+labirinto de testes 4×4 desenvolvido pela equipe. São descritos os
+critérios de dimensionamento, a escolha de materiais e as decisões de
+projeto que orientaram os modelos em CAD.
+
+% ==================================================================
+%  4.2.1  CHASSI DO MICROMOUSE
+% ==================================================================
+
+\subsection{Chassi do \textit{Micromouse}}
+
+% ------------------------------------------------------------------
+% TEXTO — Visão geral do chassi
+% Explique brevemente o que é o chassi, sua função no sistema e
+% como ele foi concebido (requisitos de tamanho: ≤ 25 × 25 cm).
+% ------------------------------------------------------------------
+
+% >>> ESCREVA AQUI: visão geral do chassi (3–5 linhas) <<<
+% Exemplo orientativo (apague e substitua pelo texto da equipe):
+%
+% O chassi foi projetado para abrigar os componentes eletrônicos e
+% mecânicos do \textit{micromouse} dentro do limite dimensional
+% estipulado pelas regras da competição (máximo de 25 cm de
+% comprimento e 25 cm de largura). O design prioriza ...
+
+
+% ------------------------------------------------------------------
+% FIGURA — Vista isométrica / renderização do chassi em CAD
+% Substitua "chassi_isometrico" pelo nome real do arquivo em
+% figuras/. Ajuste a largura conforme necessário (0.8\linewidth
+% funciona bem para uma figura principal).
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.80\linewidth]{figuras/chassi_isometrico}
+    \caption{Vista isométrica do chassi do \textit{micromouse} modelado
+             em CAD. Dimensões em milímetros.}
+    \label{fig:chassi_isometrico}
+\end{figure}
+
+% ------------------------------------------------------------------
+% FIGURA — Vistas ortogonais com cotas (frontal, lateral, superior)
+% Se tiver em um único arquivo, use apenas um \includegraphics.
+% Se tiver em arquivos separados, use minipage como abaixo.
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    % --- Vista frontal ---
+    \begin{minipage}[b]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figuras/chassi_frontal}
+        \caption*{(a) Vista frontal}
+    \end{minipage}
+    \hfill
+    % --- Vista lateral ---
+    \begin{minipage}[b]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figuras/chassi_lateral}
+        \caption*{(b) Vista lateral}
+    \end{minipage}
+    \hfill
+    % --- Vista superior ---
+    \begin{minipage}[b]{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figuras/chassi_superior}
+        \caption*{(c) Vista superior}
+    \end{minipage}
+    \caption{Vistas ortogonais do chassi com cotas principais (mm).}
+    \label{fig:chassi_vistas}
+\end{figure}
+
+% ------------------------------------------------------------------
+% FIGURA — Vista explodida (opcional, mas recomendada)
+% Mostra a disposição de todos os componentes fixados ao chassi.
+% Remova o bloco inteiro se não tiver essa vista.
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figuras/chassi_explodido}
+    \caption{Vista explodida do chassi indicando a posição dos
+             principais componentes: motores (1), rodas (2),
+             placa ESP32 (3), bateria (4) e sensores IR (5).
+             % Ajuste a legenda numerando os itens reais do seu projeto.
+             }
+    \label{fig:chassi_explodido}
+\end{figure}
+
+% ------------------------------------------------------------------
+% TABELA — Dimensões principais do chassi
+% Preencha com os valores reais do seu CAD.
+% ------------------------------------------------------------------
+
+\begin{table}[htbp]
+    \centering
+    \caption{Dimensões principais do chassi do \textit{micromouse}.}
+    \label{tab:dimensoes_chassi}
+    \begin{tabular}{lcc}
+        \hline
+        \textbf{Cota / Elemento}          & \textbf{Valor (mm)} & \textbf{Observação}          \\ \hline
+        Comprimento total                 & ???                 & Limite máx. 250 mm           \\
+        Largura total                     & ???                 & Limite máx. 250 mm           \\
+        Altura total (sem componentes)    & ???                 & Sem restrição pela regra     \\
+        Distância entre eixos             & ???                 &                              \\
+        Diâmetro da roda                  & ???                 &                              \\
+        Largura da roda                   & ???                 &                              \\
+        % Adicione ou remova linhas conforme necessário
+        \hline
+    \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------------
+% TEXTO — Disposição dos componentes
+% Descreva onde cada subsistema está posicionado no chassi e
+% por que essa disposição foi escolhida (centro de gravidade,
+% acesso para manutenção, proximidade dos sensores com as paredes etc.)
+% ------------------------------------------------------------------
+
+\subsubsection*{Disposição dos Componentes}
+
+% >>> ESCREVA AQUI: descrição da disposição dos componentes <<<
+% Tópicos sugeridos:
+%  - Posição dos motores e como influencia o giro no lugar
+%  - Posição da bateria (impacta o centro de massa)
+%  - Posição dos sensores IR (frontal, laterais)
+%  - Posição da placa de controle (ESP32)
+%  - Roteamento dos cabos / acesso para manutenção
+
+% ------------------------------------------------------------------
+% TEXTO — Justificativa do material: PLA
+% ------------------------------------------------------------------
+
+\subsubsection*{Justificativa do Material — PLA}
+
+% >>> ESCREVA AQUI: justificativa técnica do PLA <<<
+% Tópicos obrigatórios (conforme critérios da issue):
+%  - Densidade do PLA vs. ABS/PETG (equilíbrio peso × resistência)
+%  - Resistência mecânica suficiente para impactos com as paredes
+%  - Facilidade de impressão 3D (temperatura, aderência)
+%  - Custo e disponibilidade no mercado nacional
+%  - Referências bibliográficas, se houver
+
+O PLA (\textit{Polylactic Acid}) foi selecionado como material de
+fabricação do chassi pelos seguintes motivos:
+
+\begin{itemize}
+    \item \textbf{Relação peso/resistência:}
+          % >>> descreva aqui <<<
+
+    \item \textbf{Processabilidade por impressão 3D (FDM):}
+          % >>> descreva aqui <<<
+
+    \item \textbf{Custo e disponibilidade:}
+          % >>> descreva aqui <<<
+
+    \item \textbf{Limitações conhecidas e mitigações adotadas:}
+          % >>> ex.: fragilidade ao calor — descreva como foi contornado <<<
+\end{itemize}
+
+% ------------------------------------------------------------------
+% TEXTO — Roteiro de testes estruturais do chassi (para PC2)
+% Liste os testes que serão realizados para validar a estrutura.
+% ------------------------------------------------------------------
+
+\subsubsection*{Roteiro de Testes — Chassi}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Roteiro de testes de verificação e validação da estrutura do chassi.}
+    \label{tab:testes_chassi}
+    \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
+        \hline
+        \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+        TE-C01 & Verificação dimensional &
+            Medir comprimento e largura do chassi impresso com paquímetro. &
+            Valores ≤ 250 mm em ambas as dimensões. \\ \hline
+        TE-C02 & Teste de encaixe dos componentes &
+            Montar todos os subsistemas no chassi e verificar folgas. &
+            Nenhum componente solto ou com interferência. \\ \hline
+        TE-C03 & % >>> nome do teste <<< &
+            % >>> procedimento <<< &
+            % >>> resultado esperado <<< \\ \hline
+        % Adicione linhas conforme necessário
+        \hline
+    \end{tabular}
+\end{table}
+
+% ==================================================================
+%  4.2.2  LABIRINTO MODULAR DE TESTES (4×4)
+% ==================================================================
+
+\subsection{Labirinto Modular de Testes (4×4)}
+
+% ------------------------------------------------------------------
+% TEXTO — Visão geral do labirinto de testes
+% Explique o objetivo do labirinto de testes e que ele deve reproduzir
+% as condições da competição (células 18 cm, paredes 5 cm × 1,2 cm,
+% piso preto, paredes brancas com topos vermelhos).
+% ------------------------------------------------------------------
+
+% >>> ESCREVA AQUI: visão geral do labirinto de testes (3–5 linhas) <<<
+
+% ------------------------------------------------------------------
+% FIGURA — Render / foto do labirinto completo montado
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figuras/labirinto_completo}
+    \caption{Labirinto modular 4×4 de testes. Dimensões externas:
+             72 cm × 72 cm. Paredes brancas com topos vermelhos;
+             piso preto.}
+    \label{fig:labirinto_completo}
+\end{figure}
+
+% ------------------------------------------------------------------
+% FIGURA — Detalhe do módulo de parede (peça individual com cotas)
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figuras/labirinto_modulo_cad}
+        \caption*{(a) Modelo CAD do módulo}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figuras/labirinto_modulo_foto}
+        \caption*{(b) Módulo fabricado}
+    \end{minipage}
+    \caption{Módulo de parede do labirinto. Altura: 50 mm;
+             espessura: 12 mm; comprimento: 180 mm.}
+    \label{fig:labirinto_modulo}
+\end{figure}
+
+% ------------------------------------------------------------------
+% FIGURA — Detalhe do sistema de encaixe entre módulos
+% ------------------------------------------------------------------
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.70\linewidth]{figuras/labirinto_encaixe}
+    \caption{Detalhe do sistema de encaixe entre os módulos de parede.
+             A folga projetada de ??? mm garante montagem sem ferramentas
+             e desmontagem rápida para reconfiguração do labirinto.}
+    \label{fig:labirinto_encaixe}
+\end{figure}
+
+% ------------------------------------------------------------------
+% TABELA — Dimensões do labirinto conforme as regras da competição
+% ------------------------------------------------------------------
+
+\begin{table}[htbp]
+    \centering
+    \caption{Dimensões do labirinto de testes e correspondência com
+             as regras da competição.}
+    \label{tab:dimensoes_labirinto}
+    \begin{tabular}{lccc}
+        \hline
+        \textbf{Parâmetro}            & \textbf{Regra (competição)} & \textbf{Projetado} & \textbf{Tolerância} \\ \hline
+        Lado da célula                & 180 mm                       & ??? mm              & ±??? mm              \\
+        Altura da parede              & 50 mm                        & ??? mm              & ±??? mm              \\
+        Espessura da parede           & 12 mm                        & ??? mm              & ±??? mm              \\
+        Dimensão total do labirinto   & 720 mm × 720 mm              & ??? mm × ??? mm     & ±??? mm              \\
+        \hline
+    \end{tabular}
+\end{table}
+
+% ------------------------------------------------------------------
+% TEXTO — Decisões de modularidade
+% Explique o sistema de encaixe, por que as dimensões da parede
+% (1,2 cm de espessura) garantem estabilidade, e como a
+% modularidade permite reconfigurar os labirintos para testes.
+% ------------------------------------------------------------------
+
+\subsubsection*{Decisões de Modularidade}
+
+% >>> ESCREVA AQUI: explicação do sistema de encaixe e modularidade <<<
+% Tópicos sugeridos:
+%  - Tipo de encaixe (macho-fêmea, pinos, ranhuras etc.)
+%  - Como a espessura de 12 mm contribui para a rigidez da parede
+%  - Capacidade de reconfigurar o layout do labirinto para diferentes testes
+%  - Facilidade de transporte e armazenamento
+
+% ------------------------------------------------------------------
+% TEXTO — Justificativa do material: madeira (MDF / compensado / etc.)
+% ------------------------------------------------------------------
+
+\subsubsection*{Justificativa do Material — Madeira (???: MDF / Compensado / Pinus)}
+
+% >>> ESCREVA AQUI: justificativa técnica da madeira escolhida <<<
+% Tópicos obrigatórios (conforme critérios da issue):
+%  - Baixo custo e ampla disponibilidade
+%  - Rigidez e durabilidade suficientes para os testes
+%  - Facilidade de corte (serra, laser) e acabamento (pintura)
+%  - Massa final estimada do labirinto completo
+%  - Comparação breve com alternativas descartadas (alumínio, acrílico etc.)
+
+O material selecionado para as paredes e base do labirinto de testes
+foi \textbf{???} pelos seguintes motivos:
+
+\begin{itemize}
+    \item \textbf{Baixo custo e disponibilidade:}
+          % >>> descreva aqui <<<
+
+    \item \textbf{Rigidez e estabilidade dimensional:}
+          % >>> descreva aqui <<<
+
+    \item \textbf{Facilidade de fabricação e acabamento:}
+          % >>> descreva aqui (corte a laser, lixamento, pintura) <<<
+
+    \item \textbf{Massa e praticidade:}
+          % >>> descreva aqui <<<
+\end{itemize}
+
+% ------------------------------------------------------------------
+% TEXTO — Acabamento superficial (pintura)
+% Explique as cores exigidas pela regra e como foram aplicadas.
+% ------------------------------------------------------------------
+
+\subsubsection*{Acabamento Superficial}
+
+% >>> ESCREVA AQUI: como foram aplicadas as cores (paredes brancas,
+%     topos vermelhos, piso preto) e qual tinta/processo foi utilizado <<<
+
+% ------------------------------------------------------------------
+% TEXTO — Roteiro de testes do labirinto (para PC2)
+% ------------------------------------------------------------------
+
+\subsubsection*{Roteiro de Testes — Labirinto}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Roteiro de testes de verificação e validação do labirinto modular.}
+    \label{tab:testes_labirinto}
+    \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
+        \hline
+        \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+        TE-L01 & Verificação dimensional das células &
+            Medir o lado interno de cada célula com trena. &
+            Valor entre ??? mm e ??? mm (tolerância ±??? mm). \\ \hline
+        TE-L02 & Estabilidade das paredes &
+            Empurrar a parede com força de ??? N e verificar deslocamento. &
+            Deslocamento ≤ ??? mm; parede retorna à posição original. \\ \hline
+        TE-L03 & Reconfiguração do layout &
+            Desmontar e remontar o labirinto em configuração diferente. &
+            Montagem concluída em menos de ??? minutos sem ferramentas. \\ \hline
+        TE-L04 & % >>> nome do teste <<< &
+            % >>> procedimento <<< &
+            % >>> resultado esperado <<< \\ \hline
+        \hline
+    \end{tabular}
+\end{table}
+
+% ==================================================================
+%  FIM DA SEÇÃO 4.2
+% ==================================================================
 
 \section{Descrição de \textit{hardware}}
 
