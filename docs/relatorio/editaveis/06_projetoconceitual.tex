@@ -232,6 +232,29 @@ UC12 & HU04 & Filtrar histórico por tamanho de labirinto & Operador, Avaliador 
 
 Os casos de uso foram agrupados por cor: em roxo os do firmware embarcado (UC01–UC08), em rosa os da plataforma web (UC09–UC12). Os três atores são o Avaliador, o Operador e o Micromouse/ESP32 (executa todos os UCs embarcados). Os relacionamentos «include» indicam dependências obrigatórias — por exemplo, UC01 sempre inclui UC02 (mapeamento). O «extend» entre UC11 e UC12 indica que filtrar por labirinto é um comportamento opcional dentro da consulta de histórico.
 
+\paragraph{BPMN}
+
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.85\textheight,
+    keepaspectratio
+]{figuras/bpmn.png}
+
+\captionof{figure}{Diagrama BPMN.}
+\label{fig:bpmn_fig}
+\end{center}
+
+O diagrama BPMN representa o fluxo completo de execução do sistema Micromouse, desde o início da corrida até a visualização dos dados de telemetria. O modelo foi estruturado utilizando raias para separar as responsabilidades entre Usuário, Micromouse, Backend e Frontend.
+
+O fluxo inicia com o operador posicionando o robô no labirinto e acionando o início da corrida. Em seguida, o Micromouse realiza a inicialização dos sensores e motores, enquanto o frontend inicia a sessão de telemetria. Após a sincronização das etapas iniciais, o robô entra no ciclo principal de exploração do labirinto.
+
+Durante a execução, o ESP32 realiza continuamente a leitura dos sensores infravermelhos, detecta paredes, atualiza o mapa interno do labirinto e executa o algoritmo para definição do próximo movimento. Paralelamente, os dados de telemetria são enviados ao backend, incluindo posição, velocidade média, tempo de execução e nível de bateria.
+
+O backend é responsável por processar os dados da corrida no banco de dados, enquanto o frontend web atualiza o painel de monitoramento em tempo real para o usuário. O fluxo permanece em repetição até que o robô atinja a chegada do labirinto.
+
+Ao final da corrida, o sistema calcula as estatísticas finais, registra o resultado da tentativa e disponibiliza os dados históricos para consulta posterior através da plataforma web.
+
 \begin{itemize}
     
     \item \textcolor{red}{ \textbf{Descrição da arquitetura da solução de \textit{software} proposta:}}
