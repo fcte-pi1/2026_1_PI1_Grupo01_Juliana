@@ -672,14 +672,86 @@ Ao final da corrida, o sistema calcula as estatísticas finais, registra o resul
 
     \textbf{Alinhamento com Hardware.} A arquitetura de software foi validada em conjunto com o subgrupo de hardware. Os pinos de GPIO do ESP32 foram mapeados para os drivers de motor (DRV8833) e sensores de distância (infravermelhos), garantindo que os módulos de software de controle e leitura correspondam ao esquemático elétrico. A tabela de alocação de pinos e os valores específicos de temporização (frequência do PWM para motores, taxa de amostragem dos sensores) serão definidos em conjunto com o subgrupo de Hardware na Sprint 3 e refletidos nas configurações das tarefas do FreeRTOS.     
     
-    \item \textcolor{red}{\textbf{ Roteiro de testes funcionais:} }
-    \begin{itemize}
-        \item \textcolor{red}{Código do caso de teste;}
-        \item \textcolor{red}{Nome do caso de teste;}
-        \item \textcolor{red}{ Objetivo do caso de teste;}
-        \item \textcolor{red}{ Pré-condições do sistema para o teste ser realizado, quando se aplicar;}
-        \item \textcolor{red}{ Descrição dos procedimentos a serem executados para o teste;}
-        \item \textcolor{red}{ Resultado esperado para o teste ser aprovado (pós-condição após realizado o teste);}
-    \end{itemize}
+    \item \textbf{Roteiro de testes funcionais}
+
+    Os casos de teste a seguir cobrem as histórias de usuário do backlog
+    (HU01–HU06), incluindo todas as classificadas como \textit{Must have}, e
+    serão a base para a automação E2E e os testes de bancada do firmware nas
+    entregas seguintes. Cada caso é identificado por um código no formato
+    TF\textit{nn} e indica, quando aplicável, o requisito funcional (RF) e a
+    história de usuário (HU) rastreados.
+
+    \begin{landscape}
+    \begin{small}
+    \begin{longtable}{|p{1.2cm}|p{3cm}|p{3.5cm}|p{4cm}|p{5.5cm}|p{4cm}|}
+        \caption{Roteiro de testes funcionais do sistema Micromouse.}
+        \label{tab:testes-funcionais} \\
+        \hline
+        \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+        \endfirsthead
+
+        \multicolumn{6}{c}%
+        {{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
+        \hline
+        \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+        \endhead
+
+        \hline \multicolumn{6}{|r|}{{Continua na próxima página...}} \\ \hline
+        \endfoot
+
+        \hline
+        \endlastfoot
+
+        TF01 & Resolução autônoma em labirinto 4×4 (HU01, RF01, RF03) &
+        Validar a execução completa da navegação autônoma até o centro do labirinto, sem qualquer intervenção humana. &
+        Labirinto 4×4 montado conforme as dimensões oficiais; bateria com carga $\geq$ 80\%; firmware com o algoritmo Flood Fill gravado; robô posicionado na célula de partida orientado para o norte. &
+        1) Ligar o robô; 2) acionar o botão de início; 3) acompanhar a execução até a parada autônoma; 4) inspecionar visualmente, ao final, se houve contato com paredes durante o trajeto. &
+        Robô alcança a célula central em $\leq$ 60 s sem tocar nas paredes, sinaliza chegada (LED) e não houve qualquer interação humana durante a tentativa. \\ \hline
+
+        TF02 & Mapeamento incremental de paredes (HU02, RF02, RF06) &
+        Verificar que o firmware detecta e registra as paredes do labirinto à medida que explora, construindo o mapa em tempo de execução. &
+        TF01 executado com sucesso; labirinto 4×4 com layout previamente conhecido pela equipe; canal de log (serial ou MQTT) ativo para extração do mapa. &
+        1) Iniciar uma corrida no labirinto 4×4 conhecido; 2) ao final, extrair o mapa gerado (via log serial ou endpoint REST); 3) comparar o mapa célula a célula com o layout físico de referência. &
+        Ao menos 80\% das células do labirinto 4×4 são corretamente mapeadas (critério da HU02), sem falsos positivos de parede registrados. \\ \hline
+
+        TF03 & Telemetria em tempo real no painel web (HU03, RF09) &
+        Verificar a atualização contínua de posição, tempo de corrida e nível de bateria no painel web, com latência aceitável. &
+        Backend FastAPI e broker MQTT em execução; frontend acessível pelo navegador; robô (ou simulador) conectado à rede e publicando telemetria. &
+        1) Abrir o painel web; 2) iniciar uma corrida (real ou simulada); 3) cronometrar o intervalo entre atualizações consecutivas exibidas; 4) confirmar que posição, tempo e bateria atualizam sem recarregar a página. &
+        Os campos de posição, tempo e bateria são atualizados em intervalos $\leq$ 500\,ms durante toda a corrida (mínimo de 60\,s observados) e nenhuma recarga manual da página é necessária. \\ \hline
+
+        TF04 & Persistência da corrida ao término (HU04) &
+        Garantir que os dados finais de cada corrida concluída são gravados no banco e ficam disponíveis para consulta. &
+        Backend e banco de dados (SQLite ou PostgreSQL) operacionais; tela de histórico acessível; corrida em execução prestes a terminar. &
+        1) Concluir a corrida (chegada ao centro ou parada controlada); 2) aguardar o evento de fim; 3) acessar a tela de histórico; 4) inspecionar o registro mais recente. &
+        Aparece um novo registro no histórico contendo, no mínimo, data/hora, duração, velocidade média, tamanho do labirinto e resultado, e o mesmo é recuperável via \texttt{GET /corridas}. \\ \hline
+
+        TF05 & Filtro do histórico por tamanho de labirinto (HU04, UC12) &
+        Verificar que o filtro de consulta exibe apenas corridas do tamanho de labirinto selecionado. &
+        Banco de dados contendo ao menos uma corrida persistida para cada dimensão (4×4, 8×8 e 16×16); tela de histórico aberta. &
+        1) Selecionar a opção ``4×4'' no filtro e conferir a lista; 2) repetir para ``8×8'' e ``16×16''; 3) limpar o filtro e conferir a lista completa. &
+        Em cada seleção, apenas corridas da dimensão escolhida são exibidas; ao limpar o filtro, todas as corridas voltam a ser listadas. \\ \hline
+
+        TF06 & Leitura do nível de bateria via divisor de tensão (HU05, RF08) &
+        Validar a leitura analógica do divisor de tensão pelo ESP32 e a transmissão do percentual de carga para o painel web. &
+        Chassi montado com o divisor de tensão conforme o esquemático; multímetro digital disponível como referência; firmware com módulo de monitoramento de bateria ativo; painel web aberto. &
+        1) Medir a tensão real da bateria com o multímetro; 2) comparar com o percentual exibido no painel; 3) repetir a medição após 10\,min de operação contínua. &
+        O percentual exibido no painel corresponde à leitura do multímetro com erro $\leq$ 5\% e diminui de forma monotônica ao longo do tempo de uso. \\ \hline
+
+        TF07 & Indicador ``Desafio cumprido'' preenchido automaticamente (HU06) &
+        Verificar que o sistema atribui automaticamente ``Sim'' ou ``Não'' ao campo ``Desafio cumprido'' com base na detecção da chegada ao centro. &
+        Backend, frontend e firmware operacionais; lógica de detecção do centro habilitada; tela de histórico acessível. &
+        Cenário A) realizar uma corrida em que o robô atinge o centro e, em seguida, consultar o histórico. Cenário B) interromper manualmente uma corrida antes da chegada e consultar o histórico. &
+        Cenário A: o campo ``Desafio cumprido'' aparece como ``Sim'' para a corrida concluída. Cenário B: o mesmo campo aparece como ``Não'' para a corrida interrompida. \\ \hline
+
+        TF08 & Detecção da chegada ao centro do labirinto (RF04, UC07) &
+        Garantir que a chegada à célula central dispara o encerramento da corrida e o envio das estatísticas finais ao backend. &
+        Labirinto 4×4 montado; firmware com lógica de detecção de centro; comunicação MQTT ativa entre robô e backend. &
+        1) Posicionar o robô na célula de partida; 2) iniciar a corrida; 3) observar o comportamento ao atingir a célula central; 4) confirmar nos logs e via API REST o registro do evento de fim de corrida. &
+        Ao alcançar a célula central, o robô para imediatamente, publica uma mensagem MQTT com as estatísticas finais e a corrida é registrada como concluída no histórico. \\ \hline
+
+    \end{longtable}
+    \end{small}
+    \end{landscape}
     \end{itemize}
 
