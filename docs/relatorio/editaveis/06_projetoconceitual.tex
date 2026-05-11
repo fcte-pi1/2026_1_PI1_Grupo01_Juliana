@@ -21,7 +21,7 @@ projeto que orientaram os modelos em CAD.
 O chassi foi projetado para abrigar os componentes eletrônicos e
 mecânicos do \textit{micromouse} dentro do limite dimensional
 estipulado pelas regras da competição (máximo de 25 cm de
-comprimento e 25 cm de largura). O design prioriza ...
+comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a distribuição de massa equilibrada, a proteção dos componentes e a facilidade de manutenção.
 
 \begin{figure}
     \centering
@@ -32,7 +32,7 @@ comprimento e 25 cm de largura). O design prioriza ...
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/chassi_fatiado.jpeg.jpeg}
+    \includegraphics[width=0.85\linewidth]{figuras/chassi_fatiado.jpeg}
     \caption{Vista explodida do chassi indicando a posição dos
              principais componentes: motores, rodas,
              placa ESP32, bateria e sensores IR.
@@ -122,22 +122,12 @@ fabricação do chassi pelos seguintes motivos:
 
 \subsection{Labirinto Modular de Testes (4×4)}
 
-% ------------------------------------------------------------------
-% TEXTO — Visão geral do labirinto de testes
-% Explique o objetivo do labirinto de testes e que ele deve reproduzir
-% as condições da competição (células 18 cm, paredes 5 cm × 1,2 cm,
-% piso preto, paredes brancas com topos vermelhos).
-% ------------------------------------------------------------------
+O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da competição, permitindo a calibração de sensores e o aprimoramento do algoritmo de navegação do robô. Trata-se de um ambiente físico que reproduz fielmente as medidas e características oficiais do torneio: malhas de células quadradas com $18\text{ cm}$ de lado cada, delimitadas por paredes de $5\text{ cm}$ de altura por $1,2\text{ cm}$ de espessura. Visualmente, o labirinto adota o padrão da categoria, com piso fosco na cor preta, paredes brancas com ótima refletividade para o sensoriamento \textit{infravermelho} e topos pintados na cor vermelha, criando um contraste e respeitando o regulamento.
 
-% >>> ESCREVA AQUI: visão geral do labirinto de testes (3–5 linhas) <<<
-
-% ------------------------------------------------------------------
-% FIGURA — Render / foto do labirinto completo montado
-% ------------------------------------------------------------------
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/labirinto_completo}
+    \includegraphics[width=0.85\linewidth]{figuras/visao_geral.jpeg}
     \caption{Labirinto modular 4×4 de testes. Dimensões externas:
              72 cm × 72 cm. Paredes brancas com topos vermelhos;
              piso preto.}
@@ -150,38 +140,31 @@ fabricação do chassi pelos seguintes motivos:
 
 \begin{figure}[htbp]
     \centering
-    \begin{minipage}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figuras/labirinto_modulo_cad}
-        \caption*{(a) Modelo CAD do módulo}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[b]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figuras/labirinto_modulo_foto}
-        \caption*{(b) Módulo fabricado}
-    \end{minipage}
-    \caption{Módulo de parede do labirinto. Altura: 50 mm;
-             espessura: 12 mm; comprimento: 180 mm.}
-    \label{fig:labirinto_modulo}
+    \includegraphics[width=0.85\linewidth]{figuras/Parede.pdf}
+    \caption{CAD do módulo de parede individual, com as principais cotas indicadas.}
+    \label{fig:labirinto_parede}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\linewidth]{figuras/Chao.pdf}
+    \caption{CAD do módulo de chão individual, com as principais cotas indicadas.}
+    \label{fig:labirinto_chao}
 \end{figure}
 
 % ------------------------------------------------------------------
 % FIGURA — Detalhe do sistema de encaixe entre módulos
 % ------------------------------------------------------------------
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.70\linewidth]{figuras/labirinto_encaixe}
-    \caption{Detalhe do sistema de encaixe entre os módulos de parede.
-             A folga projetada de ??? mm garante montagem sem ferramentas
-             e desmontagem rápida para reconfiguração do labirinto.}
-    \label{fig:labirinto_encaixe}
-\end{figure}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.70\linewidth]{figuras/labirinto_encaixe}
+%     \caption{Detalhe do sistema de encaixe entre os módulos de parede.
+%              A folga projetada (tipicamente na ordem de 0,3 a 0,5 mm) garante montagem sem ferramentas
+%              e desmontagem rápida para reconfiguração do labirinto.}
+%     \label{fig:labirinto_encaixe}
+% \end{figure}
 
-% ------------------------------------------------------------------
-% TABELA — Dimensões do labirinto conforme as regras da competição
-% ------------------------------------------------------------------
 
 \begin{table}[htbp]
     \centering
@@ -219,31 +202,23 @@ fabricação do chassi pelos seguintes motivos:
 % TEXTO — Justificativa do material: madeira (MDF / compensado / etc.)
 % ------------------------------------------------------------------
 
-\subsubsection*{Justificativa do Material — Madeira (???: MDF / Compensado / Pinus)}
-
-% >>> ESCREVA AQUI: justificativa técnica da madeira escolhida <<<
-% Tópicos obrigatórios (conforme critérios da issue):
-%  - Baixo custo e ampla disponibilidade
-%  - Rigidez e durabilidade suficientes para os testes
-%  - Facilidade de corte (serra, laser) e acabamento (pintura)
-%  - Massa final estimada do labirinto completo
-%  - Comparação breve com alternativas descartadas (alumínio, acrílico etc.)
+\subsubsection*{Justificativa do Material — Madeira (MDF)}
 
 O material selecionado para as paredes e base do labirinto de testes
-foi \textbf{???} pelos seguintes motivos:
+foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\text{ mm}$ pelos seguintes motivos, com forte apelo às decisões de modularidade do projeto:
 
 \begin{itemize}
     \item \textbf{Baixo custo e disponibilidade:}
-          % >>> descreva aqui <<<
+          O MDF é facilmente encontrado em qualquer marcenaria ou loja de bricolagem, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
 
     \item \textbf{Rigidez e estabilidade dimensional:}
-          % >>> descreva aqui <<<
+          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado, garantindo que os pinos de encaixe modular não sofram deformações desiguais, mantendo as larguras das células rigorosamente dentro da tolerância do padrão \textit{micromouse}.
 
     \item \textbf{Facilidade de fabricação e acabamento:}
-          % >>> descreva aqui (corte a laser, lixamento, pintura) <<<
+          Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, processos de usinagem CNC e corte a laser garantem precisão milimétrica nas juntas de encaixe dos módulos, garantindo montagem por \textit{press-fit} (encaixe por pressão) sem necessidade de cola, parafusos ou ferramentas.
 
     \item \textbf{Massa e praticidade:}
-          % >>> descreva aqui <<<
+          Os blocos modulares em MDF possuem massa confortável para o manuseio rápido. Isso é vital, visto que um dos focos da modularidade é permitir a rápida reconfiguração (troca de geometria do labirinto) pelo operador durante os testes de validação dos algoritmos do robô.
 \end{itemize}
 
 % ------------------------------------------------------------------
@@ -253,41 +228,36 @@ foi \textbf{???} pelos seguintes motivos:
 
 \subsubsection*{Acabamento Superficial}
 
-% >>> ESCREVA AQUI: como foram aplicadas as cores (paredes brancas,
-%     topos vermelhos, piso preto) e qual tinta/processo foi utilizado <<<
+Para satisfazer o regulamento, as faces laterais das paredes modulares receberam pintura em esmalte ou tinta acrílica branca, garantindo excelente reflectância para os emissores infravermelhos. O topo das paredes foi pintado de vermelho, demarcando visualmente os limites. Por fim, o tabuleiro (piso) principal recebeu acabamento em preto fosco para absorver a radiação IR e criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
 
 % ------------------------------------------------------------------
 % TEXTO — Roteiro de testes do labirinto (para PC2)
 % ------------------------------------------------------------------
 
-\subsubsection*{Roteiro de Testes — Labirinto}
+% \subsubsection*{Roteiro de Testes — Labirinto}
 
-\begin{table}[htbp]
-    \centering
-    \caption{Roteiro de testes de verificação e validação do labirinto modular.}
-    \label{tab:testes_labirinto}
-    \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
-        \hline
-        \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-        TE-L01 & Verificação dimensional das células &
-            Medir o lado interno de cada célula com trena. &
-            Valor entre ??? mm e ??? mm (tolerância ±??? mm). \\ \hline
-        TE-L02 & Estabilidade das paredes &
-            Empurrar a parede com força de ??? N e verificar deslocamento. &
-            Deslocamento ≤ ??? mm; parede retorna à posição original. \\ \hline
-        TE-L03 & Reconfiguração do layout &
-            Desmontar e remontar o labirinto em configuração diferente. &
-            Montagem concluída em menos de ??? minutos sem ferramentas. \\ \hline
-        TE-L04 & % >>> nome do teste <<< &
-            % >>> procedimento <<< &
-            % >>> resultado esperado <<< \\ \hline
-        \hline
-    \end{tabular}
-\end{table}
-
-% ==================================================================
-%  FIM DA SEÇÃO 4.2
-% ==================================================================
+% \begin{table}[htbp]
+%     \centering
+%     \caption{Roteiro de testes de verificação e validação do labirinto modular.}
+%     \label{tab:testes_labirinto}
+%     \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
+%         \hline
+%         \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+%         TE-L01 & Verificação dimensional das células &
+%             Medir o lado interno de cada célula com trena. &
+%             Valor entre ??? mm e ??? mm (tolerância ±??? mm). \\ \hline
+%         TE-L02 & Estabilidade das paredes &
+%             Empurrar a parede com força de ??? N e verificar deslocamento. &
+%             Deslocamento ≤ ??? mm; parede retorna à posição original. \\ \hline
+%         TE-L03 & Reconfiguração do layout &
+%             Desmontar e remontar o labirinto em configuração diferente. &
+%             Montagem concluída em menos de ??? minutos sem ferramentas. \\ \hline
+%         TE-L04 & % >>> nome do teste <<< &
+%             % >>> procedimento <<< &
+%             % >>> resultado esperado <<< \\ \hline
+%         \hline
+%     \end{tabular}
+% \end{table}
 
 \section{Descrição de \textit{hardware}}
 
