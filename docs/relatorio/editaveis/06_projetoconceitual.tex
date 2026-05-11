@@ -6,13 +6,6 @@
 
 \textcolor{red}{Apresentar e explicar a Estrutura Analítica do Projeto (EAP), tomando cuidado com a legibilidade da imagem. Se necessário, coloque a EAP dentro do comando ``\textsf{\textbackslash begin\{landscape\} \textbackslash end\{landscape\}}'' para que ela seja apresentada em uma página deitada.}
 
-% =============================================================
-%  SEÇÃO 4.2 — ESTRUTURA
-%  Projeto Conceitual do Produto | PI1 2026/1
-%  Responsável: Equipe de Estrutura
-%  Issue: Memorial Descritivo — Chassi (CAD) e Labirinto Modular
-% =============================================================
-
 \section{Estrutura}
 
 
@@ -21,87 +14,28 @@ labirinto de testes 4×4 desenvolvido pela equipe. São descritos os
 critérios de dimensionamento, a escolha de materiais e as decisões de
 projeto que orientaram os modelos em CAD.
 
-% ==================================================================
-%  4.2.1  CHASSI DO MICROMOUSE
-% ==================================================================
 
 \subsection{Chassi do \textit{Micromouse}}
 
-% ------------------------------------------------------------------
-% TEXTO — Visão geral do chassi
-% Explique brevemente o que é o chassi, sua função no sistema e
-% como ele foi concebido (requisitos de tamanho: ≤ 25 × 25 cm).
-% ------------------------------------------------------------------
 
-% >>> ESCREVA AQUI: visão geral do chassi (3–5 linhas) <<<
-% Exemplo orientativo (apague e substitua pelo texto da equipe):
-%
-% O chassi foi projetado para abrigar os componentes eletrônicos e
-% mecânicos do \textit{micromouse} dentro do limite dimensional
-% estipulado pelas regras da competição (máximo de 25 cm de
-% comprimento e 25 cm de largura). O design prioriza ...
+O chassi foi projetado para abrigar os componentes eletrônicos e
+mecânicos do \textit{micromouse} dentro do limite dimensional
+estipulado pelas regras da competição (máximo de 25 cm de
+comprimento e 25 cm de largura). O design prioriza ...
 
-
-% ------------------------------------------------------------------
-% FIGURA — Vista isométrica / renderização do chassi em CAD
-% Substitua "chassi_isometrico" pelo nome real do arquivo em
-% figuras/. Ajuste a largura conforme necessário (0.8\linewidth
-% funciona bem para uma figura principal).
-% ------------------------------------------------------------------
-
-\begin{figure}[htbp]
+\begin{figure}
     \centering
-    \includegraphics[width=0.80\linewidth]{figuras/chassi_isometrico}
-    \caption{Vista isométrica do chassi do \textit{micromouse} modelado
-             em CAD. Dimensões em milímetros.}
-    \label{fig:chassi_isometrico}
+    \includegraphics[width=0.5\linewidth]{figuras/Chassi.pdf}
+    \caption{Vista isométrica do chassi do \textit{micromouse} modelado em CAD. Dimensões em milímetros.}
+    \label{fig:chassi}
 \end{figure}
 
-% ------------------------------------------------------------------
-% FIGURA — Vistas ortogonais com cotas (frontal, lateral, superior)
-% Se tiver em um único arquivo, use apenas um \includegraphics.
-% Se tiver em arquivos separados, use minipage como abaixo.
-% ------------------------------------------------------------------
-
 \begin{figure}[htbp]
     \centering
-    % --- Vista frontal ---
-    \begin{minipage}[b]{0.32\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figuras/chassi_frontal}
-        \caption*{(a) Vista frontal}
-    \end{minipage}
-    \hfill
-    % --- Vista lateral ---
-    \begin{minipage}[b]{0.32\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figuras/chassi_lateral}
-        \caption*{(b) Vista lateral}
-    \end{minipage}
-    \hfill
-    % --- Vista superior ---
-    \begin{minipage}[b]{0.32\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{figuras/chassi_superior}
-        \caption*{(c) Vista superior}
-    \end{minipage}
-    \caption{Vistas ortogonais do chassi com cotas principais (mm).}
-    \label{fig:chassi_vistas}
-\end{figure}
-
-% ------------------------------------------------------------------
-% FIGURA — Vista explodida (opcional, mas recomendada)
-% Mostra a disposição de todos os componentes fixados ao chassi.
-% Remova o bloco inteiro se não tiver essa vista.
-% ------------------------------------------------------------------
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.85\linewidth]{figuras/chassi_explodido}
+    \includegraphics[width=0.85\linewidth]{figuras/chassi_fatiado.jpeg.jpeg}
     \caption{Vista explodida do chassi indicando a posição dos
-             principais componentes: motores (1), rodas (2),
-             placa ESP32 (3), bateria (4) e sensores IR (5).
-             % Ajuste a legenda numerando os itens reais do seu projeto.
+             principais componentes: motores, rodas,
+             placa ESP32, bateria e sensores IR.
              }
     \label{fig:chassi_explodido}
 \end{figure}
@@ -129,52 +63,32 @@ projeto que orientaram os modelos em CAD.
     \end{tabular}
 \end{table}
 
-% ------------------------------------------------------------------
-% TEXTO — Disposição dos componentes
-% Descreva onde cada subsistema está posicionado no chassi e
-% por que essa disposição foi escolhida (centro de gravidade,
-% acesso para manutenção, proximidade dos sensores com as paredes etc.)
-% ------------------------------------------------------------------
 
 \subsubsection*{Disposição dos Componentes}
 
-% >>> ESCREVA AQUI: descrição da disposição dos componentes <<<
-% Tópicos sugeridos:
-%  - Posição dos motores e como influencia o giro no lugar
-%  - Posição da bateria (impacta o centro de massa)
-%  - Posição dos sensores IR (frontal, laterais)
-%  - Posição da placa de controle (ESP32)
-%  - Roteamento dos cabos / acesso para manutenção
+A disposição dos componentes no chassi foi projetada para equilibrar a distribuição de massa, otimizar a tração e manobrabilidade, e facilitar a manutenção estrutural. Os motores de tração estão fixados de maneira centralizada ao longo das laterais, permitindo um giro com raio zero sobre o próprio eixo geométrico do robô.
+A bateria está posicionada no centro e na porção mais rebaixada possível da estrutura, rebaixando o centro de gravidade e aumentando a estabilidade dinâmica.
+Os sensores de distância (infravermelhos) encontram-se dispostos na frontal e nas laterais para realizar uma varredura constante das paredes sem apresentar pontos cegos. O microcontrolador ESP32 juntamente do driver de motor vêm instalados na plataforma superior, oferecendo fácil acesso à manutenção dos componentes eletrônicos, reprogramação da placa e melhorando a organização no roteamento de cabos.
 
-% ------------------------------------------------------------------
-% TEXTO — Justificativa do material: PLA
-% ------------------------------------------------------------------
 
 \subsubsection*{Justificativa do Material — PLA}
 
-% >>> ESCREVA AQUI: justificativa técnica do PLA <<<
-% Tópicos obrigatórios (conforme critérios da issue):
-%  - Densidade do PLA vs. ABS/PETG (equilíbrio peso × resistência)
-%  - Resistência mecânica suficiente para impactos com as paredes
-%  - Facilidade de impressão 3D (temperatura, aderência)
-%  - Custo e disponibilidade no mercado nacional
-%  - Referências bibliográficas, se houver
 
 O PLA (\textit{Polylactic Acid}) foi selecionado como material de
 fabricação do chassi pelos seguintes motivos:
 
 \begin{itemize}
     \item \textbf{Relação peso/resistência:}
-          % >>> descreva aqui <<<
+          O PLA apresenta estabilidade dimensional e resistência aos esforços mecânicos exigidos. Graças à sua rigidez estrutural, suporta impactos imprevistos contra paredes no labirinto fornecendo uma estrutura confiável ao mesmo tempo em que possui baixa densidade, o que não prejudica a aceleração dos motores.
 
     \item \textbf{Processabilidade por impressão 3D (FDM):}
-          % >>> descreva aqui <<<
+          Ao contrário do ABS, o PLA requer menores temperaturas de extrusão e não precisa de cabine fechada, evitando falhas por \textit{warp} (empenamento).
 
     \item \textbf{Custo e disponibilidade:}
-          % >>> descreva aqui <<<
+          Pela sua ampla adoção técnica, o PLA é uma opção de custo acessível de prototipagem, sendo amplamente disponível para rápida compra e uso nos laboratórios da instituição.
 
     \item \textbf{Limitações conhecidas e mitigações adotadas:}
-          % >>> ex.: fragilidade ao calor — descreva como foi contornado <<<
+          Embora o PLA exiba amolecimento sob elevadas temperaturas (perto de $60^{\circ}\text{C}$), a condição operacional do robô em competições \textit{indoor} e os tempos curtos de percurso não expõem o chassi a esse perigo. O fluxo de ar interno na execução afasta os componentes elétricos da temperatura prejudicial.
 \end{itemize}
 
 % ------------------------------------------------------------------
@@ -182,32 +96,29 @@ fabricação do chassi pelos seguintes motivos:
 % Liste os testes que serão realizados para validar a estrutura.
 % ------------------------------------------------------------------
 
-\subsubsection*{Roteiro de Testes — Chassi}
+% \subsubsection*{Roteiro de Testes — Chassi}
 
-\begin{table}[htbp]
-    \centering
-    \caption{Roteiro de testes de verificação e validação da estrutura do chassi.}
-    \label{tab:testes_chassi}
-    \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
-        \hline
-        \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-        TE-C01 & Verificação dimensional &
-            Medir comprimento e largura do chassi impresso com paquímetro. &
-            Valores ≤ 250 mm em ambas as dimensões. \\ \hline
-        TE-C02 & Teste de encaixe dos componentes &
-            Montar todos os subsistemas no chassi e verificar folgas. &
-            Nenhum componente solto ou com interferência. \\ \hline
-        TE-C03 & % >>> nome do teste <<< &
-            % >>> procedimento <<< &
-            % >>> resultado esperado <<< \\ \hline
-        % Adicione linhas conforme necessário
-        \hline
-    \end{tabular}
-\end{table}
+% \begin{table}[htbp]
+%     \centering
+%     \caption{Roteiro de testes de verificação e validação da estrutura do chassi.}
+%     \label{tab:testes_chassi}
+%     \begin{tabular}{p{1.2cm} p{3cm} p{4.5cm} p{4cm}}
+%         \hline
+%         \textbf{Código} & \textbf{Nome do teste} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+%         TE-C01 & Verificação dimensional &
+%             Medir comprimento e largura do chassi impresso com paquímetro. &
+%             Valores ≤ 250 mm em ambas as dimensões. \\ \hline
+%         TE-C02 & Teste de encaixe dos componentes &
+%             Montar todos os subsistemas no chassi e verificar folgas. &
+%             Nenhum componente solto ou com interferência. \\ \hline
+%         TE-C03 & % >>> nome do teste <<< &
+%             % >>> procedimento <<< &
+%             % >>> resultado esperado <<< \\ \hline
+%         % Adicione linhas conforme necessário
+%         \hline
+%     \end{tabular}
+% \end{table}
 
-% ==================================================================
-%  4.2.2  LABIRINTO MODULAR DE TESTES (4×4)
-% ==================================================================
 
 \subsection{Labirinto Modular de Testes (4×4)}
 
