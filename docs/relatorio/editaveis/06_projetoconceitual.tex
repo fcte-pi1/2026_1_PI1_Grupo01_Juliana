@@ -40,11 +40,6 @@ comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a
     \label{fig:chassi_explodido}
 \end{figure}
 
-% ------------------------------------------------------------------
-% TABELA — Dimensões principais do chassi
-% Preencha com os valores reais do seu CAD.
-% ------------------------------------------------------------------
-
 \begin{table}[htbp]
     \centering
     \caption{Dimensões principais do chassi do \textit{micromouse}.}
@@ -52,13 +47,12 @@ comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a
     \begin{tabular}{lcc}
         \hline
         \textbf{Cota / Elemento}          & \textbf{Valor (mm)} & \textbf{Observação}          \\ \hline
-        Comprimento total                 & ???                 & Limite máx. 250 mm           \\
-        Largura total                     & ???                 & Limite máx. 250 mm           \\
-        Altura total (sem componentes)    & ???                 & Sem restrição pela regra     \\
-        Distância entre eixos             & ???                 &                              \\
-        Diâmetro da roda                  & ???                 &                              \\
-        Largura da roda                   & ???                 &                              \\
-        % Adicione ou remova linhas conforme necessário
+        Comprimento total                 & 152                 & Limite máx. 250 mm           \\
+        Largura total                     & 212                 & Limite máx. 250 mm           \\
+        Altura total (sem componentes)    & 15                 & Sem restrição pela regra     \\
+        Distância entre eixos             & 162                 &                              \\
+        Diâmetro da roda                  & 68                 &                              \\
+        Largura da roda                   & 26                 &                              \\
         \hline
     \end{tabular}
 \end{table}
@@ -127,27 +121,24 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/visao_geral.jpeg}
+    \includegraphics[width=0.55\linewidth]{figuras/visao_geral.jpeg}
     \caption{Labirinto modular 4×4 de testes. Dimensões externas:
              72 cm × 72 cm. Paredes brancas com topos vermelhos;
              piso preto.}
     \label{fig:labirinto_completo}
 \end{figure}
 
-% ------------------------------------------------------------------
-% FIGURA — Detalhe do módulo de parede (peça individual com cotas)
-% ------------------------------------------------------------------
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/Parede.pdf}
+    \includegraphics[width=0.60\linewidth]{figuras/Parede.pdf}
     \caption{CAD do módulo de parede individual, com as principais cotas indicadas.}
     \label{fig:labirinto_parede}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/Chao.pdf}
+    \includegraphics[width=0.60\linewidth]{figuras/Chao.pdf}
     \caption{CAD do módulo de chão individual, com as principais cotas indicadas.}
     \label{fig:labirinto_chao}
 \end{figure}
@@ -182,25 +173,13 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
     \end{tabular}
 \end{table}
 
-% ------------------------------------------------------------------
-% TEXTO — Decisões de modularidade
-% Explique o sistema de encaixe, por que as dimensões da parede
-% (1,2 cm de espessura) garantem estabilidade, e como a
-% modularidade permite reconfigurar os labirintos para testes.
-% ------------------------------------------------------------------
-
 \subsubsection*{Decisões de Modularidade}
 
-% >>> ESCREVA AQUI: explicação do sistema de encaixe e modularidade <<<
-% Tópicos sugeridos:
-%  - Tipo de encaixe (macho-fêmea, pinos, ranhuras etc.)
-%  - Como a espessura de 12 mm contribui para a rigidez da parede
-%  - Capacidade de reconfigurar o layout do labirinto para diferentes testes
-%  - Facilidade de transporte e armazenamento
+O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
 
-% ------------------------------------------------------------------
-% TEXTO — Justificativa do material: madeira (MDF / compensado / etc.)
-% ------------------------------------------------------------------
+A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dimensões da competição, é essencial para transferir rigidez à estrutura de cada módulo.
+
+Essa abordagem de separação célula a célula oferece total liberdade na criação dos trajetos. A constante possibilidade de reconfigurar o layout do labirinto atende à necessidade da equipe de software de validar diferentes hipóteses para os algoritmos de mapeamento e navegação de maneira fácil. Ao finalizar os testes, a desmontagem resulta em peças de pequeno porte, garantindo total facilidade de transporte e armazenamento compacto do projeto.
 
 \subsubsection*{Justificativa do Material — Madeira (MDF)}
 
@@ -209,26 +188,21 @@ foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\t
 
 \begin{itemize}
     \item \textbf{Baixo custo e disponibilidade:}
-          O MDF é facilmente encontrado em qualquer marcenaria ou loja de bricolagem, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
+          O MDF é facilmente encontrado em qualquer marcenaria ou móveis não utilizados, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
 
     \item \textbf{Rigidez e estabilidade dimensional:}
-          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado, garantindo que os pinos de encaixe modular não sofram deformações desiguais, mantendo as larguras das células rigorosamente dentro da tolerância do padrão \textit{micromouse}.
+          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado.
 
     \item \textbf{Facilidade de fabricação e acabamento:}
-          Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, processos de usinagem CNC e corte a laser garantem precisão milimétrica nas juntas de encaixe dos módulos, garantindo montagem por \textit{press-fit} (encaixe por pressão) sem necessidade de cola, parafusos ou ferramentas.
+          Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, é facilmente cortado e usinado com ferramentas comuns, facilitando a produção em série dos módulos de parede e chão.
 
     \item \textbf{Massa e praticidade:}
-          Os blocos modulares em MDF possuem massa confortável para o manuseio rápido. Isso é vital, visto que um dos focos da modularidade é permitir a rápida reconfiguração (troca de geometria do labirinto) pelo operador durante os testes de validação dos algoritmos do robô.
+          Os blocos modulares em MDF possuem massa confortável para o manuseio rápido, visto que um dos focos da modularidade é permitir a rápida reconfiguração.
 \end{itemize}
-
-% ------------------------------------------------------------------
-% TEXTO — Acabamento superficial (pintura)
-% Explique as cores exigidas pela regra e como foram aplicadas.
-% ------------------------------------------------------------------
 
 \subsubsection*{Acabamento Superficial}
 
-Para satisfazer o regulamento, as faces laterais das paredes modulares receberam pintura em esmalte ou tinta acrílica branca, garantindo excelente reflectância para os emissores infravermelhos. O topo das paredes foi pintado de vermelho, demarcando visualmente os limites. Por fim, o tabuleiro (piso) principal recebeu acabamento em preto fosco para absorver a radiação IR e criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
+Para satisfazer o regulamento, está previsto que as faces laterais das paredes modulares recebam pintura em esmalte ou tinta acrílica branca, garantindo reflectância para os emissores infravermelhos. O topo das paredes deverá ser pintado de vermelho, demarcando visualmente os limites. Por fim, planeja-se que o tabuleiro (piso) principal receba um acabamento em preto fosco para absorver a radiação IR, de modo a criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
 
 % ------------------------------------------------------------------
 % TEXTO — Roteiro de testes do labirinto (para PC2)
@@ -273,7 +247,7 @@ Para satisfazer o regulamento, as faces laterais das paredes modulares receberam
 % Comecem com o diagrama de blocos, que é mais genérico, e depois indiquem os detalhes com a lista de materiais e os esquemáticos.
 }
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\linewidth]{figuras/Exemplo-diagrama-de-blocos.png}
     \includegraphics[width=0.5\linewidth]{figuras/Esquematico.png}
