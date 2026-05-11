@@ -3,9 +3,9 @@
 
 Esta seção apresenta a justificativa técnica para a seleção de cada componente utilizado no projeto, considerando requisitos funcionais, disponibilidade, custo e compatibilidade com a arquitetura geral do sistema.
 
-\subsection{ESP32-WROOM-32E}
+\subsection{ESP32-WROOM-32}
 
-O microcontrolador ESP32-WROOM-32E foi selecionado por oferecer capacidade de processamento adequada para aplicações embarcadas, além de integração nativa com comunicação Wi-Fi e Bluetooth, possibilitando futura expansão do sistema. Segundo o trabalho apresentado no CONICT do IFSP, o ESP32 apresenta boa compatibilidade com sistemas robóticos devido à sua quantidade de portas de entrada e saída, baixo custo e facilidade de integração com sensores e atuadores. Além disso, sua operação em 3,3 V torna o componente compatível com módulos eletrônicos modernos utilizados no projeto.
+O microcontrolador ESP32-WROOM-32 foi selecionado por oferecer capacidade de processamento adequada para aplicações embarcadas, além de integração nativa com comunicação Wi-Fi e Bluetooth, possibilitando futura expansão do sistema. Segundo o trabalho apresentado no CONICT do IFSP, o ESP32 apresenta boa compatibilidade com sistemas robóticos devido à sua quantidade de portas de entrada e saída, baixo custo e facilidade de integração com sensores e atuadores. Além disso, sua operação em 3,3 V torna o componente compatível com módulos eletrônicos modernos utilizados no projeto.
 
 Artigo base: \cite{oliveira2024_esp32_roboticar}
 
@@ -15,13 +15,16 @@ O sensor infravermelho LM393 foi selecionado para detecção de paredes e obstá
 
 Artigo base: \cite{lima2025_micromouse_lm393}
 
-\subsection{Bússola Magnetômetro (GY-271 HMC5883L)}
+% \subsection{Bússola Magnetômetro (GY-271 HMC5883L)}
 
-O módulo GY-271 com magnet\^ometro HMC5883L foi escolhido por sua praticidade na identifica\c{c}\~ao da orienta\c{c}\~ao absoluta do rob\^o durante a navega\c{c}\~ao. No contexto do Micromouse, esse tipo de sensor pode ser usado como apoio para ajustar a virada do rob\^o ap\'os manobras de 90\textdegree\ ou 180\textdegree, ajudando a reduzir desvios acumulados e a confirmar se a mudan\c{c}a de dire\c{c}\~ao ocorreu de forma consistente com o comando enviado aos motores. Al\'em disso, por se tratar de um m\'odulo pequeno, de f\'acil integra\c{c}\~ao via I\textsuperscript{2}C e baixo consumo, sua utiliza\c{c}\~ao favorece a montagem do sistema embarcado sem aumento significativo de complexidade.
+% O módulo GY-271 com magnet\^ometro HMC5883L foi escolhido por sua praticidade na identifica\c{c}\~ao da orienta\c{c}\~ao absoluta do rob\^o durante a navega\c{c}\~ao. No contexto do Micromouse, esse tipo de sensor pode ser usado como apoio para ajustar a virada do rob\^o ap\'os manobras de 90\textdegree\ ou 180\textdegree, ajudando a reduzir desvios acumulados e a confirmar se a mudan\c{c}a de dire\c{c}\~ao ocorreu de forma consistente com o comando enviado aos motores. Al\'em disso, por se tratar de um m\'odulo pequeno, de f\'acil integra\c{c}\~ao via I\textsuperscript{2}C e baixo consumo, sua utiliza\c{c}\~ao favorece a montagem do sistema embarcado sem aumento significativo de complexidade.
 
-Para garantir que a leitura n\~ao sofra interfer\^encia indevida dos motores, da ponte H ou de outros elementos do chassi, devem ser executados testes pr\'aticos com o rob\^o parado e tamb\'em em movimento. Os testes recomendados incluem: medi\c{c}\~ao da leitura de refer\^encia com o sistema desligado; compara\c{c}\~ao das leituras com motores desligados e ligados em diferentes rota\c{c}\~oes; valida\c{c}\~ao da varia\c{c}\~ao angular durante curvas conhecidas; e repeti\c{c}\~ao das medi\c{c}\~oes ap\'os altera\c{c}\~oes de posi\c{c}\~ao do sensor no chassi. Caso haja oscila\c{c}\~ao excessiva, o sensor deve ser reposicionado e a calibra\c{c}\~ao refeita at\'e que as leituras permane\c{c}am est\'aveis o suficiente para apoiar a corre\c{c}\~ao de orienta\c{c}\~ao do rob\^o.
+% Para garantir que a leitura n\~ao sofra interfer\^encia indevida dos motores, da ponte H ou de outros elementos do chassi, devem ser executados testes pr\'aticos com o rob\^o parado e tamb\'em em movimento. Os testes recomendados incluem: medi\c{c}\~ao da leitura de refer\^encia com o sistema desligado; compara\c{c}\~ao das leituras com motores desligados e ligados em diferentes rota\c{c}\~oes; valida\c{c}\~ao da varia\c{c}\~ao angular durante curvas conhecidas; e repeti\c{c}\~ao das medi\c{c}\~oes ap\'os altera\c{c}\~oes de posi\c{c}\~ao do sensor no chassi. Caso haja oscila\c{c}\~ao excessiva, o sensor deve ser reposicionado e a calibra\c{c}\~ao refeita at\'e que as leituras permane\c{c}am est\'aveis o suficiente para apoiar a corre\c{c}\~ao de orienta\c{c}\~ao do rob\^o.
 
-Fonte: \cite{eletrogate_bussola}
+% Fonte: \cite{eletrogate_bussola}
+
+\subsection{Giroscópio e Acelerômetro (MPU6050)}
+O módulo MPU6050 foi escolhido por sua praticidade na identifica\c{c}\~ao da orienta\c{c}\~ao absoluta do rob\^o durante a navega\c{c}\~ao. No contexto do Micromouse, esse tipo de sensor pode ser usado como apoio para ajustar a virada do rob\^o ap\'os manobras de 90\textdegree\ ou 180\textdegree, ajudando a reduzir desvios acumulados e a confirmar se a mudan\c{c}a de dire\c{c}\~ao ocorreu de forma consistente com o comando enviado aos motores. Al\'em disso, por se tratar de um m\'odulo pequeno, de f\'acil integra\c{c}\~ao via I\textsuperscript{2}C e baixo consumo, sua utiliza\c{c}\~ao favorece a montagem do sistema embarcado sem aumento significativo de complexidade.
 
 \subsection{Driver Ponte H (DRV8833)}
 
@@ -49,11 +52,11 @@ Artigo base:~\cite{valdovinos2019instrumentacion}
 
 \subsection{Chave Óptica para Encoder (MOCH22A)}
 
-O sensor óptico MOCH22A foi escolhido para a detecção de velocidade e posição das rodas, pois permite gerar pulsos a partir da passagem das marcas do disco encoder acoplado ao eixo do motor. A partir da contagem desses pulsos em intervalos de tempo conhecidos, o sistema consegue estimar a rotação do motor, acompanhar variações de velocidade e identificar a posição relativa do rob\^o durante manobras e deslocamentos no labirinto. Esse tipo de realimenta\c{c}\~ao \^e importante para o controle mais preciso da locomoc\~ao, principalmente em trajet\'orias curtas e corre\c{c}\~oes finas de movimento.
+O sensor óptico MOCH22A foi escolhido para a detecção de velocidade e posição das rodas, pois permite gerar pulsos a partir da passagem das marcas do disco encoder acoplado ao eixo do motor. A partir da contagem desses pulsos em intervalos de tempo conhecidos, o sistema consegue estimar a rotação do motor e, com isso, também estimar variações de velocidade e rotação do rob\^o durante manobras e deslocamentos no labirinto. Com esses dados, se faz uso de equações de movimento conhecidas para determinar a posição relativa do robô e seu deslocamento (CORKE, 2011). Esse tipo de realimenta\c{c}\~ao \^e importante para o controle mais preciso da locomoc\~ao, principalmente em trajet\'orias curtas e corre\c{c}\~oes finas de movimento.
 
 Embora a refer\^encia base utilize Arduino, o princ\'ipio de funcionamento \^e diretamente adapt\'avel ao ESP32, que tamb\'em possui suporte a interrup\c{c}\~oes e opera\c{c}\~ao adequada com leitura digital de pulsos. Dessa forma, o MOCH22A contribui para o sistema embarcado ao fornecer feedback confi\'avel de rota\c{c}\~ao, com baixo custo, montagem simples e boa integra\c{c}\~ao com a l\'ogica de controle do motor.
 
-Fonte:~\cite{makerhero_moch22a}
+Fontes:~\cite{makerhero_moch22a}
 
 \subsection{Sensor de Corrente (ACS712)}
 
