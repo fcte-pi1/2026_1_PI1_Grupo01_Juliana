@@ -67,6 +67,45 @@ SW - 6.4 - Ensaio apresentação & 25/06/2026 & -- & 06/07/2026 & -- & 6.1, 6.2,
 \end{longtable}
 \end{center}
 
+\end{landscape}
+
+\section{Cronograma do subgrupo de energia}
+
+\begin{table}[htpb]
+\begin{center}
+\caption{Cronograma do subgrupo de energia.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+& \textbf{Início} & \textbf{Início} & \textbf{Fim} & \textbf{Fim} & \textbf{Atividades} & \\
+\textbf{Atividade} & \textbf{Previsto} & \textbf{Realizado} & \textbf{Previsto} & \textbf{Realizado} & \textbf{Predecessoras} & \textbf{Responsáveis}\\ \hline
+EN - 1.1 - Levantamento de datasheets e cálculo de Joules  & 15/04/2026 & --- & 27/04/2026 & --- & ---   & --- \\ \hline
+EN - 1.2 - Escolha da fonte (NiMH) e desenho do esquemático & 30/04/2026 & --- & 11/05/2026 & --- & 1.1   & --- \\ \hline
+EN - 2.1 - Montagem do circuito de regulação e testes de bancada & 14/05/2026 & --- & 25/05/2026 & --- & 1.2   & --- \\ \hline
+EN - 2.2 - Integração do monitor de bateria com o software & 28/05/2026 & --- & 08/06/2026 & --- & 2.1   & --- \\ \hline
+EN - 3.1 - Testes de estresse com motores e validação de autonomia & 11/06/2026 & --- & 22/06/2026 & --- & 2.2   & --- \\ \hline
+EN - 3.2 - Revisão final e ensaio para apresentação & 25/06/2026 & --- & 06/07/2026 & --- & 3.1   & --- \\ \hline
+\end{tabular}}
+\end{center}
+\end{table}
+
+\section{Entregáveis do subgrupo de energia}
+
+\begin{table}[htpb]
+\begin{center}
+\caption{Entregáveis do subgrupo de energia.}
+\begin{tabular}{|l|p{9cm}|c|}
+\hline
+\textbf{Entregável} & \textbf{Descrição} & \textbf{Marco} \\ \hline
+Tabela de Consumo & Dimensionamento de corrente nominal e de pico. & PC2 \\ \hline
+Cálculo de Energia & Conversão para Wh e definição da margem de segurança. & PC2 \\ \hline
+Fonte de Alimentação & Definição do arranjo de pilhas NiMH ou Powerbank. & PC2 \\ \hline
+Módulo de Telemetria & Circuito de leitura de tensão funcional. & IPP \\ \hline
+Relatório de Autonomia & Validação do tempo de uso real em pista. & APT \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
 
 
 \begin{table}[htpb]
@@ -141,5 +180,3 @@ SW - 6.4 - Ensaio apresentação & 25/06/2026 & -- & 06/07/2026 & -- & 6.1, 6.2,
 % One & abcdef ghjijklmn & 123.456778 \\
 % \end{longtable}
 % \end{center}
-
-\end{landscape}
