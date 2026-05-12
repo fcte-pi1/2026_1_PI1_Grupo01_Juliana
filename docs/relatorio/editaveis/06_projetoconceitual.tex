@@ -2,9 +2,22 @@
 
 \section{Características gerais}
 
-\textcolor{red}{Descrever produto de forma geral. Apresentar itens teóricos sobre o projeto a serem aprofundados ou detalhados oportunamente.}
+O projeto tem como foco o desenvolvimento de um robô autônomo capaz de mapear e solucionar labirintos desconhecidos de dimensões 4 x 4, 8 x 8 e 16 x 16 células no menor tempo possível. O sistema integra um chassi, hardware de controle baseado em ESP32, algoritmos de navegação e um sistema web para transmissão de telemetria em tempo real. A seguir, a figura \ref{fig:eap_micromouse} representa a EAP do projeto que detalha a subdivisão de pacotes de trabalho nas frentes de Estrutura, Hardware, Energia e Software.
 
-\textcolor{red}{Apresentar e explicar a Estrutura Analítica do Projeto (EAP), tomando cuidado com a legibilidade da imagem. Se necessário, coloque a EAP dentro do comando ``\textsf{\textbackslash begin\{landscape\} \textbackslash end\{landscape\}}'' para que ela seja apresentada em uma página deitada.}
+\begin{landscape}
+    \begin{figure}[htpb]
+        \centering
+        \includegraphics[width=\linewidth]{figuras/EAP_PI1.pdf}
+        \caption{Estrutura Analítica do Projeto (EAP).}
+        \label{fig:eap_micromouse}
+    \end{figure}
+\end{landscape}
+
+
+
+% \textcolor{red}{Descrever produto de forma geral. Apresentar itens teóricos sobre o projeto a serem aprofundados ou detalhados oportunamente.}
+
+% \textcolor{red}{Apresentar e explicar a Estrutura Analítica do Projeto (EAP), tomando cuidado com a legibilidade da imagem. Se necessário, coloque a EAP dentro do comando ``\textsf{\textbackslash begin\{landscape\} \textbackslash end\{landscape\}}'' para que ela seja apresentada em uma página deitada.}
 
 \section{Estrutura}
 
@@ -24,14 +37,14 @@ comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/Chassi.pdf}
+    \includegraphics[width=0.8\linewidth]{figuras/Chassi.pdf}
     \caption{Vista isométrica do chassi do \textit{micromouse} modelado em CAD. Dimensões em milímetros.}
     \label{fig:chassi}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.85\linewidth]{figuras/chassi_fatiado.jpeg}
+    \includegraphics[width=0.8\linewidth]{figuras/chassi_fatiado.jpeg}
     \caption{Vista explodida do chassi indicando a posição dos
              principais componentes: motores, rodas,
              placa ESP32, bateria e sensores IR.
@@ -57,14 +70,14 @@ comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a
 \end{table}
 
 
-\subsubsection*{Disposição dos Componentes}
+\subsubsection{Disposição dos Componentes}
 
 A disposição dos componentes no chassi foi projetada para equilibrar a distribuição de massa, otimizar a tração e manobrabilidade, e facilitar a manutenção estrutural. Os motores de tração estão fixados de maneira centralizada ao longo das laterais, permitindo um giro com raio zero sobre o próprio eixo geométrico do robô.
 A bateria está posicionada no centro e na porção mais rebaixada possível da estrutura, rebaixando o centro de gravidade e aumentando a estabilidade dinâmica.
 Os sensores de distância (infravermelhos) encontram-se dispostos na frontal e nas laterais para realizar uma varredura constante das paredes sem apresentar pontos cegos. O microcontrolador ESP32 juntamente do driver de motor vêm instalados na plataforma superior, oferecendo fácil acesso à manutenção dos componentes eletrônicos, reprogramação da placa e melhorando a organização no roteamento de cabos.
 
 
-\subsubsection*{Justificativa do Material — PLA}
+\subsubsection{Justificativa do Material — PLA}
 
 
 O PLA (\textit{Polylactic Acid}) foi selecionado como material de
@@ -120,7 +133,7 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.55\linewidth]{figuras/visao_geral.jpeg}
+    \includegraphics[width=0.8\linewidth]{figuras/visao_geral.jpeg}
     \caption{Labirinto modular 4×4 de testes. Dimensões externas:
              72 cm × 72 cm. Paredes brancas com topos vermelhos;
              piso preto.}
@@ -130,14 +143,14 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.60\linewidth]{figuras/Parede.pdf}
+    \includegraphics[width=0.8\linewidth]{figuras/Parede.pdf}
     \caption{CAD do módulo de parede individual, com as principais cotas indicadas.}
     \label{fig:labirinto_parede}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.60\linewidth]{figuras/Chao.pdf}
+    \includegraphics[width=0.8\linewidth]{figuras/Chao.pdf}
     \caption{CAD do módulo de chão individual, com as principais cotas indicadas.}
     \label{fig:labirinto_chao}
 \end{figure}
@@ -148,7 +161,7 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
 
 % \begin{figure}[htbp]
 %     \centering
-%     \includegraphics[width=0.70\linewidth]{figuras/labirinto_encaixe}
+%     \includegraphics[width=0.8\linewidth]{figuras/labirinto_encaixe}
 %     \caption{Detalhe do sistema de encaixe entre os módulos de parede.
 %              A folga projetada (tipicamente na ordem de 0,3 a 0,5 mm) garante montagem sem ferramentas
 %              e desmontagem rápida para reconfiguração do labirinto.}
@@ -164,15 +177,15 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
     \begin{tabular}{lccc}
         \hline
         \textbf{Parâmetro}            & \textbf{Regra (competição)} & \textbf{Projetado} & \textbf{Tolerância} \\ \hline
-        Lado da célula                & 180 mm                       & ??? mm              & ±??? mm              \\
-        Altura da parede              & 50 mm                        & ??? mm              & ±??? mm              \\
-        Espessura da parede           & 12 mm                        & ??? mm              & ±??? mm              \\
-        Dimensão total do labirinto   & 720 mm × 720 mm              & ??? mm × ??? mm     & ±??? mm              \\
+        Lado da célula                & 180 mm                       & 180 mm              & ±0 mm              \\
+        Altura da parede              & 50 mm                        & 50 mm              & ±0 mm              \\
+        Espessura da parede           & 12 mm                        & 12 mm              & ±0 mm              \\
+        Dimensão total do labirinto   & 720 mm × 720 mm              & 720 mm × 720 mm     & ±0 mm              \\
         \hline
     \end{tabular}
 \end{table}
 
-\subsubsection*{Decisões de Modularidade}
+\subsubsection{Decisões de Modularidade}
 
 O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
 
@@ -180,7 +193,7 @@ A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dim
 
 Essa abordagem de separação célula a célula oferece total liberdade na criação dos trajetos. A constante possibilidade de reconfigurar o layout do labirinto atende à necessidade da equipe de software de validar diferentes hipóteses para os algoritmos de mapeamento e navegação de maneira fácil. Ao finalizar os testes, a desmontagem resulta em peças de pequeno porte, garantindo total facilidade de transporte e armazenamento compacto do projeto.
 
-\subsubsection*{Justificativa do Material — Madeira (MDF)}
+\subsubsection{Justificativa do Material — Madeira (MDF)}
 
 O material selecionado para as paredes e base do labirinto de testes
 foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\text{ mm}$ pelos seguintes motivos, com forte apelo às decisões de modularidade do projeto:
@@ -199,7 +212,7 @@ foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\t
           Os blocos modulares em MDF possuem massa confortável para o manuseio rápido, visto que um dos focos da modularidade é permitir a rápida reconfiguração.
 \end{itemize}
 
-\subsubsection*{Acabamento Superficial}
+\subsubsection{Acabamento Superficial}
 
 Para satisfazer o regulamento, está previsto que as faces laterais das paredes modulares recebam pintura em esmalte ou tinta acrílica branca, garantindo reflectância para os emissores infravermelhos. O topo das paredes deverá ser pintado de vermelho, demarcando visualmente os limites. Por fim, planeja-se que o tabuleiro (piso) principal receba um acabamento em preto fosco para absorver a radiação IR, de modo a criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
 
@@ -234,25 +247,109 @@ Para satisfazer o regulamento, está previsto que as faces laterais das paredes 
 
 \section{Descrição de \textit{hardware}}
 
-\textcolor{red}{A descrição de \textit{hardware} no documento deve permitir que outras pessoas repliquem o produto proposto neste documento. Para isso, deve-se explicar de forma textual os principais sub-sistemas e as escolhas de projeto, além de indicar:}
+\subsection{Diagrama de Blocos}
 
-\begin{itemize}
-    \item \textcolor{red}{ O diagrama de blocos \cite{blockdiagram}, que oferece uma visão geral do hardware, com as principais partes do sistema e as ligações entre elas.}
-    %\item A lista de materiais \cite{bom}, que facilita a montagem do sistema, indicando tudo que deve ser adquirido. Aproveitem a lista de materiais para apresentarem o orçamento dos mesmos.
-    \item \textcolor{red}{ O esquemático \cite{esquematico}, que mostra as conexões elétricas entre os componentes. Deve-se indicar os componentes por nomes e símbolos, e as conexões entre eles, incluindo a pinagem dos componentes. Se o esquemático ficar muito grande, pode-se separa-lo em vários esquemáticos. A ligação em \textit{protoboard} não é considerada um esquemático adequado.}
-\end{itemize}
+O diagrama de blocos consiste em uma representação visual de alto nível dos principais módulos e interações do sistema embarcado do \textit{micromouse}, conforme ilustrado na Figura \ref{fig:diag_hw}.
 
-\textcolor{red}{A Fig. \ref{fig:diagrama_blocos_e_esquematico} apresenta o diagrama de blocos e o esquemático de um circuito conversor de corrente alternada para corrente direta, a título de exemplo. Repare que o diagrama de blocos indica os subsistemas do circuito completo apresentado no esquemático.
-% Comecem com o diagrama de blocos, que é mais genérico, e depois indiquem os detalhes com a lista de materiais e os esquemáticos.
-}
-
-\begin{figure}[htbp]
+\begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/Exemplo-diagrama-de-blocos.png}
-    \includegraphics[width=0.5\linewidth]{figuras/Esquematico.png}
-    \caption{\textcolor{red}{Diagrama de blocos e esquemático de um circuito conversor de corrente alternada para corrente direta. Extraído de \cite{block_n_schematic}.}}
-    \label{fig:diagrama_blocos_e_esquematico}
+    \includegraphics[width=0.8\linewidth]{figuras/diagrama_micromouse2026_1.drawio.png}
+    \caption{Diagrama de blocos dos componentes eletrônicos do \textit{micromouse}}
+    \label{fig:diag_hw}
 \end{figure}
+
+\subsection{Esquematico}
+
+O projeto esquemático detalha as conexões físicas entre todos os componentes eletrônicos do robô. Para facilitar a visualização e o entendimento, a representação do circuito foi subdividida em módulos, apresentados através das Figuras~\ref{fig:esq_topmodule}, \ref{fig:esq_sensores}, \ref{fig:esq_motores} e \ref{fig:esq_alimentacao}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_topmodule_1-P1_2026-05-11}
+    \caption{Representação da Ligação dos Componentes no Microcontrolador}
+    \label{fig:esq_topmodule}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_sensores_1-P1_2026-05-11}
+    \caption{Representação Esquemática dos Sensores}
+    \label{fig:esq_sensores}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_motores_driver_1-P1_2026-05-11}
+    \caption{Representação Esquemática do Driver e Motores}
+    \label{fig:esq_motores}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-05-11}
+    \caption{Representação Esquemática da Alimentação do \textit{Micromouse}}
+    \label{fig:esq_alimentacao}
+\end{figure}
+
+
+\subsection{Justificativa da escolha dos componentes de \textit{hardware}}
+\label{sec:justificativa-componentes}
+
+Esta seção apresenta a justificativa técnica para a seleção de cada componente utilizado no projeto, considerando requisitos funcionais, disponibilidade, custo e compatibilidade com a arquitetura geral do sistema.
+
+\subsubsection{ESP32-WROOM-32}
+O ESP32-WROOM-32 foi selecionado por sua capacidade de processamento, integração nativa Wi-Fi/Bluetooth e operação em 3,3 V. Destaca-se pelo baixo custo e alta compatibilidade com sistemas robóticos e componentes eletrônicos modernos \cite{oliveira2024_esp32_roboticar}.
+
+\subsubsection{Sensor Infravermelho (LM393)}
+Adotado para a detecção de paredes, o sensor LM393 oferece retorno digital ao microcontrolador, baixo consumo elétrico (<1 mA) e alcance de 2 a 30 cm. É uma solução econômica e de baixa complexidade ideal para projetos educacionais \cite{lima2025_micromouse_lm393}.
+
+% \subsubsection{Bússola Magnetômetro (GY-271 HMC5883L)}
+% O módulo GY-271 atua na identificação da orientação absoluta do robô e correção de desvios após manobras de 90\textdegree\ e 180\textdegree. Requer testes de interferência eletromagnética em relação aos motores para garantir a estabilidade das leituras via I\textsuperscript{2}C \cite{eletrogate_bussola}.
+
+\subsubsection{Giroscópio e Acelerômetro (MPU6050)}
+O MPU6050 identifica a orientação relativa do robô, atuando via I\textsuperscript{2}C como redundância à odometria para mitigar desvios de trajetória durante as curvas. Destaca-se pelo tamanho compacto e baixo consumo energético.
+
+\subsubsection{Driver Ponte H (DRV8833)}
+O DRV8833 controla de forma independente a velocidade e a direção dos dois motores DC via sinais PWM. É compacto, eficiente e possui proteções internas essenciais contra sobrecorrente e superaquecimento \cite{oliveira2024_esp32_roboticar}.
+
+\subsubsection{Conversor Analógico-Digital (ADS1115)}
+O conversor externo ADS1115 (16 bits) foi escolhido para contornar o ruído intrínseco do ADC interno do ESP32 gerado pelo uso do Wi-Fi. Ele garante leituras consistentes e precisas para os sensores analógicos de corrente e tensão do projeto \cite{makerhero_ads1115, embarcados_esp32_adc}.
+
+\subsubsection{Regulador de Tensão Step-Down (LM2596)}
+O módulo LM2596 atua na conversão eficiente da tensão fornecida pela bateria. Ele garante uma alimentação contínua e estável para os componentes lógicos, protegendo o sistema embarcado contra oscilações elétricas \cite{oliveira2024_esp32_roboticar}.
+
+\subsubsection{Sensor de Tensão 0--25V (FZ0430)}
+O sensor FZ0430 monitora o nível da bateria, atuando como um divisor de tensão capaz de medir até 25 V. Condicionado pelo ADS1115, permite ao sistema calcular a carga com alta precisão e disparar alertas preventivos de bateria baixa \cite{valdovinos2019instrumentacion}.
+
+\subsubsection{Chave Óptica para Encoder (MOCH22A)}
+O MOCH22A lê os pulsos dos discos acoplados aos motores, fornecendo a odometria necessária para calcular o deslocamento e a rotação do Micromouse \cite{petercorke}. Sua integração via interrupções digitais no ESP32 possui baixo custo e montagem simples \cite{makerhero_moch22a}.
+
+\subsubsection{Sensor de Corrente (ACS712)}
+Utilizando o efeito Hall, a versão de 5A do ACS712 monitora o consumo elétrico dos circuitos de potência. Aliado ao conversor ADS1115, possibilita calcular a potência instantânea e estimar em tempo real a autonomia da bateria para a telemetria \cite{valdovinos2019instrumentacion}.
+
+\subsubsection{Buzzer Passivo}
+O \textit{buzzer} passivo realiza a sinalização sonora de eventos do robô. Foi priorizado frente à versão ativa por possuir dimensões mais compactas, ser mais leve e exigir um esquema de acionamento eletrônico de menor custo \cite{makerhero_buzzer}.
+
+
+
+% \textcolor{red}{A descrição de \textit{hardware} no documento deve permitir que outras pessoas repliquem o produto proposto neste documento. Para isso, deve-se explicar de forma textual os principais sub-sistemas e as escolhas de projeto, além de indicar:}
+
+% \begin{itemize}
+%     \item \textcolor{red}{ O diagrama de blocos \cite{blockdiagram}, que oferece uma visão geral do hardware, com as principais partes do sistema e as ligações entre elas.}
+%     %\item A lista de materiais \cite{bom}, que facilita a montagem do sistema, indicando tudo que deve ser adquirido. Aproveitem a lista de materiais para apresentarem o orçamento dos mesmos.
+%     \item \textcolor{red}{ O esquemático \cite{esquematico}, que mostra as conexões elétricas entre os componentes. Deve-se indicar os componentes por nomes e símbolos, e as conexões entre eles, incluindo a pinagem dos componentes. Se o esquemático ficar muito grande, pode-se separa-lo em vários esquemáticos. A ligação em \textit{protoboard} não é considerada um esquemático adequado.}
+% \end{itemize}
+
+% \textcolor{red}{A Fig. \ref{fig:diagrama_blocos_e_esquematico} apresenta o diagrama de blocos e o esquemático de um circuito conversor de corrente alternada para corrente direta, a título de exemplo. Repare que o diagrama de blocos indica os subsistemas do circuito completo apresentado no esquemático.
+% % Comecem com o diagrama de blocos, que é mais genérico, e depois indiquem os detalhes com a lista de materiais e os esquemáticos.
+% }
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=0.5\linewidth]{figuras/Exemplo-diagrama-de-blocos.png}
+%     \includegraphics[width=0.5\linewidth]{figuras/Esquematico.png}
+%     \caption{\textcolor{red}{Diagrama de blocos e esquemático de um circuito conversor de corrente alternada para corrente direta. Extraído de \cite{block_n_schematic}.}}
+%     \label{fig:diagrama_blocos_e_esquematico}
+% \end{figure}
 
 \section{Análise de consumo energético}
 
@@ -343,7 +440,7 @@ O subgrupo de software é responsável por dois componentes principais e interde
 
 \begin{center}
 \includegraphics[
-    width=0.95\textwidth,
+    width=0.8\textwidth,
     height=0.8\textheight,
     keepaspectratio
 ]{figuras/diagrama_atividades_uml.jpg}
@@ -356,11 +453,11 @@ O fluxo está dividido em três raias (\textit{swimlanes}): Operador/Usuário, M
 
 O ciclo de exploração repete: leitura dos sensores IR $\rightarrow$ detecção de paredes $\rightarrow$ atualização do mapa $\rightarrow$ algoritmo Flood Fill $\rightarrow$ movimentação. A cada passo, a telemetria é enviada ao sistema web em paralelo (velocidade, trajeto, bateria). Dois nós de decisão controlam a saída do loop: ``centro atingido?'' e ``bateria crítica?''. O alerta de bateria deriva para o operador e reintegra o fluxo. Ao atingir o centro, o robô calcula as estatísticas finais, envia ao sistema web, que persiste no banco e marca o campo ``Desafio cumprido''.
 
-\subsubsection*{Backlog do Produto}
+\subsection{Backlog do Produto}
  
 O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionais (RNF) definidos no Capítulo 2, priorizados pela classificação MoSCoW.
 
-\paragraph{Histórias de Usuário (Requisitos Funcionais)}
+\subsubsection{Histórias de Usuário (Requisitos Funcionais)}
  
 \begin{itemize}
 
@@ -370,7 +467,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
     \begin{center}
     \includegraphics[
-        width=0.95\textwidth,
+        width=0.8\textwidth,
         height=0.8\textheight,
         keepaspectratio
     ]{figuras/HU01–Execução autônoma.png}
@@ -385,7 +482,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
     \begin{center}
     \includegraphics[
-        width=0.95\textwidth,
+        width=0.8\textwidth,
         height=0.8\textheight,
         keepaspectratio
     ]{figuras/HU02–Mapeamento incremental.png}
@@ -415,7 +512,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
     \begin{center}
     \includegraphics[
-        width=0.95\textwidth,
+        width=0.8\textwidth,
         height=0.8\textheight,
         keepaspectratio
     ]{figuras/HU04–Histórico de corridas.png}
@@ -430,7 +527,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
     \begin{center}
     \includegraphics[
-        width=0.95\textwidth,
+        width=0.8\textwidth,
         height=0.8\textheight,
         keepaspectratio
     ]{figuras/HU05–Monitoramento de bateria.png}
@@ -445,7 +542,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
 
     \begin{center}
     \includegraphics[
-        width=0.95\textwidth,
+        width=0.8\textwidth,
         height=0.8\textheight,
         keepaspectratio
     ]{figuras/HU06–Desafio cumprido.png}
@@ -456,7 +553,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
  
 \end{itemize}
  
-\paragraph{Requisitos Não Funcionais}
+\subsection{Requisitos Não Funcionais}
  
 \begin{itemize}
     \item \textbf{RNF01} [\textit{Must have}] – O código-fonte embarcado e a memória do labirinto não podem ser alterados durante a execução de uma tentativa na pista.
@@ -467,7 +564,7 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
     \item \textbf{RNF06} [\textit{Should have}] – Ferramentas de inteligência artificial generativa não podem ser utilizadas nas atividades avaliativas do subgrupo.
 \end{itemize}
 
-\paragraph{Casos de Uso}
+\subsection{Casos de Uso}
 
 \begin{center}
 \begin{longtable}{|l|c|p{5.5cm}|p{3cm}|c|}
@@ -512,7 +609,7 @@ UC12 & HU04 & Filtrar histórico por tamanho de labirinto & Operador, Avaliador 
 
 \begin{center}
 \includegraphics[
-    width=0.95\textwidth,
+    width=0.8\textwidth,
     height=0.8\textheight,
     keepaspectratio
 ]{figuras/diagrama_caso_de_uso.jpg}
@@ -522,11 +619,11 @@ UC12 & HU04 & Filtrar histórico por tamanho de labirinto & Operador, Avaliador 
 
 Os casos de uso foram agrupados por cor: em roxo os do firmware embarcado (UC01–UC08), em rosa os da plataforma web (UC09–UC12). Os três atores são o Avaliador, o Operador e o Micromouse/ESP32 (executa todos os UCs embarcados). Os relacionamentos «include» indicam dependências obrigatórias — por exemplo, UC01 sempre inclui UC02 (mapeamento). O «extend» entre UC11 e UC12 indica que filtrar por labirinto é um comportamento opcional dentro da consulta de histórico.
 
-\paragraph{BPMN}
+\subsection{BPMN}
 
 \begin{center}
 \includegraphics[
-    width=0.95\textwidth,
+    width=0.8\textwidth,
     height=0.85\textheight,
     keepaspectratio
 ]{figuras/bpmn.png}
@@ -545,213 +642,223 @@ O backend é responsável por processar os dados da corrida no banco de dados, e
 
 Ao final da corrida, o sistema calcula as estatísticas finais, registra o resultado da tentativa e disponibiliza os dados históricos para consulta posterior através da plataforma web.
 
-\begin{itemize}
-    
-    \item \textbf{Descrição da arquitetura da solução de \textit{software} proposta}
-    
-    A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:arquitetura_sistema} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
 
-    \par
-    \begin{figure}[H]
-        \centering
-        \begin{tikzpicture}[
-            node distance=2.4cm and 1.6cm,
-            box/.style={rectangle, rounded corners, minimum width=3.2cm, minimum height=1cm, text centered, font=\small\bfseries, drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.3}},
-            arrow/.style={-{Stealth[length=2.5mm]}, thick},
-            labelstyle/.style={font=\scriptsize, align=center}
-        ]
-            % Cores por camada
-            \definecolor{corEmbarcado}{RGB}{52, 152, 219}
-            \definecolor{corComunicacao}{RGB}{241, 196, 15}
-            \definecolor{corBackend}{RGB}{46, 204, 113}
-            \definecolor{corBD}{RGB}{155, 89, 182}
-            \definecolor{corFrontend}{RGB}{231, 76, 60}
 
-            % Nós
-            \node[box, fill=corEmbarcado!20, draw=corEmbarcado!60] (esp) {\makecell{ESP32\\(Firmware)}};
-            \node[box, fill=corComunicacao!20, draw=corComunicacao!60, right=of esp] (comm) {Wi-Fi / MQTT};
-            \node[box, fill=corBackend!20, draw=corBackend!60, right=of comm] (api) {\makecell{FastAPI\\(Backend)}};
-            \node[box, fill=corBD!20, draw=corBD!60, below=of api] (db) {SQLite / PostgreSQL};
-            \node[box, fill=corFrontend!20, draw=corFrontend!60, above=of api] (front) {Frontend Web};
+\subsection{Descrição da arquitetura da solução de \textit{software} proposta}
 
-            % Setas
-            \draw[arrow, corComunicacao!80!black] (esp) -- node[above, labelstyle] {MQTT} (comm);
-            \draw[arrow, corComunicacao!80!black] (comm) -- node[above, labelstyle] {MQTT} (api);
-            \draw[arrow, corBD!80!black] (api) -- node[right, labelstyle] {SQLAlchemy\\Alembic} (db);
-            \draw[arrow, corFrontend!80!black] (front) -- node[left, labelstyle] {HTTP/REST\\WebSocket} (api);
+A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:arquitetura_sistema} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
 
-            % Agrupamentos
-            \begin{scope}[on background layer]
-                \node[fill=corEmbarcado!10, rounded corners, draw=corEmbarcado!40, dashed, fit=(esp), inner sep=6pt, label={[font=\scriptsize\bfseries, corEmbarcado!80!black]above:Camada Embarcada}] {};
-                \node[fill=corComunicacao!10, rounded corners, draw=corComunicacao!40, dashed, fit=(comm), inner sep=6pt, label={[font=\scriptsize\bfseries, corComunicacao!80!black]above:Comunicação}] {};
-                \node[fill=corBackend!10, rounded corners, draw=corBackend!40, dashed, fit=(api), inner sep=6pt, label={[font=\scriptsize\bfseries, corBackend!80!black]below:Camada de Aplicação}] {};
-                \node[fill=corBD!10, rounded corners, draw=corBD!40, dashed, fit=(db), inner sep=6pt, label={[font=\scriptsize\bfseries, corBD!80!black]below:Persistência}] {};
-                \node[fill=corFrontend!10, rounded corners, draw=corFrontend!40, dashed, fit=(front), inner sep=6pt, label={[font=\scriptsize\bfseries, corFrontend!80!black]above:Apresentação}] {};
-            \end{scope}
-        \end{tikzpicture}
-        \caption{Diagrama de arquitetura do sistema Micromouse.}
-        \label{fig:arquitetura_sistema}
-    \end{figure}
+\par
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2.4cm and 1.6cm,
+        box/.style={rectangle, rounded corners, minimum width=3.2cm, minimum height=1cm, text centered, font=\small\bfseries, drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.3}},
+        arrow/.style={-{Stealth[length=2.5mm]}, thick},
+        labelstyle/.style={font=\scriptsize, align=center}
+    ]
+        % Cores por camada
+        \definecolor{corEmbarcado}{RGB}{52, 152, 219}
+        \definecolor{corComunicacao}{RGB}{241, 196, 15}
+        \definecolor{corBackend}{RGB}{46, 204, 113}
+        \definecolor{corBD}{RGB}{155, 89, 182}
+        \definecolor{corFrontend}{RGB}{231, 76, 60}
 
-    A Tabela~\ref{tab:camadas_arquitetura} resume as camadas, as tecnologias adotadas em cada uma e as respectivas justificativas técnicas.
+        % Nós
+        \node[box, fill=corEmbarcado!20, draw=corEmbarcado!60] (esp) {\makecell{ESP32\\(Firmware)}};
+        \node[box, fill=corComunicacao!20, draw=corComunicacao!60, right=of esp] (comm) {Wi-Fi / MQTT};
+        \node[box, fill=corBackend!20, draw=corBackend!60, right=of comm] (api) {\makecell{FastAPI\\(Backend)}};
+        \node[box, fill=corBD!20, draw=corBD!60, below=of api] (db) {SQLite / PostgreSQL};
+        \node[box, fill=corFrontend!20, draw=corFrontend!60, above=of api] (front) {Frontend Web};
 
-    \begin{table}[H]
-        \centering
-        \caption{Camadas, tecnologias e justificativas da arquitetura.}
-        \label{tab:camadas_arquitetura}
-        \begin{tabular}{p{2.8cm}p{3.5cm}p{7cm}}
-            \toprule
-            \textbf{Camada} & \textbf{Tecnologia} & \textbf{Justificativa Técnica} \\
-            \midrule
-            Embarcada & ESP32, ESP-IDF, FreeRTOS, C & O ESP32 oferece processamento dual-core, Wi-Fi integrado e baixo consumo energético, atendendo às restrições de um robô autônomo. O ESP-IDF é o \textit{framework} oficial da Espressif, com suporte nativo a periféricos, \textit{threads} (FreeRTOS) e pilha de rede. A linguagem C garante controle direto de \textit{hardware} e desempenho previsível, essencial para o algoritmo Flood Fill e o controle em tempo real dos motores. \\
-            \midrule
-            Comunicação & Wi-Fi 802.11b/g/n, MQTT / HTTP & O módulo Wi-Fi nativo do ESP32 elimina a necessidade de circuitos adicionais de comunicação. O protocolo MQTT foi escolhido para telemetria em tempo real por ser leve, orientado a eventos e com baixa latência sobre TCP. O broker MQTT recebe os dados do robô e os encaminha ao backend; o frontend consome esses dados via WebSocket para atualização em tempo real. Requisições HTTP/REST complementam para consultas de histórico e filtros. \\
-            \midrule
-            Backend & Python 3, FastAPI, Uvicorn & FastAPI é um \textit{framework} assíncrono de alta performance para APIs REST, com validação automática via Pydantic e documentação interativa (OpenAPI/Swagger). A escolha do Python acelera o desenvolvimento e integra-se naturalmente com bibliotecas de ciência de dados, caso seja necessária análise preditiva de desempenho. \\
-            \midrule
-            Banco de Dados & SQLite (dev) / PostgreSQL (prod), SQLAlchemy, Alembic & Banco relacional foi preferido pela consistência ACID e pelo modelo de dados bem estruturado (labirintos, corridas, telemetria). SQLite viabiliza protótipos rápidos sem infraestrutura; PostgreSQL pode ser adotado em produção para concorrência e volume elevado. SQLAlchemy (ORM) e Alembic (migrations) garantem portabilidade e versionamento do schema. \\
-            \midrule
-            Frontend Web & HTML5, CSS3, JavaScript (React em avaliação) & A camada de apresentação será desenvolvida como aplicação web responsiva, consumindo a API REST do backend para consultas de histórico e filtros, e WebSocket para telemetria em tempo real. A escolha inicial por tecnologias web puras reduz a curva de aprendizado; a adoção do React será avaliada conforme a evolução dos protótipos de interface. \\
-            \bottomrule
-        \end{tabular}
-    \end{table}
+        % Setas
+        \draw[arrow, corComunicacao!80!black] (esp) -- node[above, labelstyle] {MQTT} (comm);
+        \draw[arrow, corComunicacao!80!black] (comm) -- node[above, labelstyle] {MQTT} (api);
+        \draw[arrow, corBD!80!black] (api) -- node[right, labelstyle] {SQLAlchemy\\Alembic} (db);
+        \draw[arrow, corFrontend!80!black] (front) -- node[left, labelstyle] {HTTP/REST\\WebSocket} (api);
 
-    \textbf{Visão Lógica.} O sistema é organizado em domínios bem definidos: (i) Navegação Autônoma, responsável pelo algoritmo Flood Fill, mapeamento de paredes e controle de trajetória; (ii) Telemetria e Comunicação, que encapsula a publicação unidirecional de dados via MQTT do robô para o backend; (iii) Gestão de Corridas, que persiste configurações de labirinto, resultados e estatísticas; e (iv) Visualização, que consome os dados persistidos para dashboards e relatórios.
+        % Agrupamentos
+        \begin{scope}[on background layer]
+            \node[fill=corEmbarcado!10, rounded corners, draw=corEmbarcado!40, dashed, fit=(esp), inner sep=6pt, label={[font=\scriptsize\bfseries, corEmbarcado!80!black]above:Camada Embarcada}] {};
+            \node[fill=corComunicacao!10, rounded corners, draw=corComunicacao!40, dashed, fit=(comm), inner sep=6pt, label={[font=\scriptsize\bfseries, corComunicacao!80!black]above:Comunicação}] {};
+            \node[fill=corBackend!10, rounded corners, draw=corBackend!40, dashed, fit=(api), inner sep=6pt, label={[font=\scriptsize\bfseries, corBackend!80!black]below:Camada de Aplicação}] {};
+            \node[fill=corBD!10, rounded corners, draw=corBD!40, dashed, fit=(db), inner sep=6pt, label={[font=\scriptsize\bfseries, corBD!80!black]below:Persistência}] {};
+            \node[fill=corFrontend!10, rounded corners, draw=corFrontend!40, dashed, fit=(front), inner sep=6pt, label={[font=\scriptsize\bfseries, corFrontend!80!black]above:Apresentação}] {};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Diagrama de arquitetura do sistema Micromouse.}
+    \label{fig:arquitetura_sistema}
+\end{figure}
 
-    \textbf{Visão de Processos.} O firmware embarcado executa múltiplas tarefas concorrentes sob o FreeRTOS: uma tarefa de alta prioridade para leitura de sensores e controle PID dos motores; uma tarefa de média prioridade para execução do algoritmo Flood Fill; e uma tarefa de baixa prioridade para transmissão de telemetria via Wi-Fi. O backend FastAPI opera de forma assíncrona, processando requisições HTTP e mensagens MQTT em event loops independentes, garantindo que a ingestão de telemetria não bloqueie consultas do frontend.
+\begin{center}
+\small
+\begin{longtable}{p{2.8cm}p{3.5cm}p{8.5cm}}
+    \caption{Camadas, tecnologias e justificativas da arquitetura.}
+    \label{tab:camadas_arquitetura} \\
+    \toprule
+    \textbf{Camada} & \textbf{Tecnologia} & \textbf{Justificativa Técnica} \\
+    \midrule
+    \endfirsthead
 
-    \textbf{Visão de Implementação.} O repositório está dividido em três diretórios principais: \texttt{src/firmware/} (código em C para ESP-IDF, incluindo o simulador Flood Fill em ambiente desktop); \texttt{src/backend/} (aplicação Python com FastAPI, models SQLAlchemy e migrations Alembic); e \texttt{src/frontend/} (aplicação web). Essa separação física reflete a independência das camadas e permite que diferentes subgrupos trabalhem em paralelo.
+    \multicolumn{3}{c}%
+    {{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
+    \toprule
+    \textbf{Camada} & \textbf{Tecnologia} & \textbf{Justificativa Técnica} \\
+    \midrule
+    \endhead
 
-    \textbf{Visão de Implantação.} O ESP32 funciona como cliente MQTT, conectando-se à rede local (Wi-Fi) ou a um \textit{hotspot} móvel. O backend pode ser executado localmente durante os testes de bancada ou implantado em serviços de hospedagem gratuita (ex.: Railway, Render) para acesso remoto, conforme previsto no orçamento do projeto. O frontend é servido como aplicação estática ou via servidor web integrado.
+    \midrule \multicolumn{3}{r}{{Continua na próxima página...}} \\
+    \endfoot
 
-    \textbf{Visão de Dados.} O modelo relacional é composto por três entidades principais: \texttt{Labirinto} (dimensão 4x4, 8x8 ou 16x16), \texttt{Corrida} (data, duração, velocidade média, resultado) e \texttt{EventoTelemetria} (posição X/Y, nível de bateria, timestamp). A Fig.~\ref{fig:der_micromouse} apresenta o diagrama entidade-relacionamento preliminar.
+    \bottomrule
+    \endlastfoot
 
-    \begin{figure}[H]
-        \centering
-        \begin{tikzpicture}[
-            entity/.style={rectangle, draw, fill=gray!10, minimum width=2.8cm, minimum height=0.9cm, font=\small\bfseries},
-            relation/.style={diamond, draw, fill=gray!20, aspect=2, font=\scriptsize},
-            attribute/.style={ellipse, draw, fill=gray!5, font=\scriptsize},
-            arrow/.style={-Stealth, thick},
-            label/.style={font=\scriptsize, midway, fill=white, inner sep=1pt}
-        ]
-            % Entidades
-            \node[entity] (lab) at (0,0) {Labirinto};
-            \node[entity] (corr) at (5,0) {Corrida};
-            \node[entity] (tel) at (10,0) {EventoTelemetria};
+    Embarcada & ESP32, ESP-IDF, FreeRTOS, C & O ESP32 oferece processamento dual-core, Wi-Fi integrado e baixo consumo energético, atendendo às restrições de um robô autônomo. O ESP-IDF é o \textit{framework} oficial da Espressif, com suporte nativo a periféricos, \textit{threads} (FreeRTOS) e pilha de rede. A linguagem C garante controle direto de \textit{hardware} e desempenho previsível, essencial para o algoritmo Flood Fill e o controle em tempo real dos motores. \\
+    \midrule
+    Comunicação & Wi-Fi 802.11b/g/n, MQTT / HTTP & O módulo Wi-Fi nativo do ESP32 elimina a necessidade de circuitos adicionais de comunicação. O protocolo MQTT foi escolhido para telemetria em tempo real por ser leve, orientado a eventos e com baixa latência sobre TCP. O broker MQTT recebe os dados do robô e os encaminha ao backend; o frontend consome esses dados via WebSocket para atualização em tempo real. Requisições HTTP/REST complementam para consultas de histórico e filtros. \\
+    \midrule
+    Backend & Python 3, FastAPI, Uvicorn & FastAPI é um \textit{framework} assíncrono de alta performance para APIs REST, com validação automática via Pydantic e documentação interativa (OpenAPI/Swagger). A escolha do Python acelera o desenvolvimento e integra-se naturalmente com bibliotecas de ciência de dados, caso seja necessária análise preditiva de desempenho. \\
+    \midrule
+    Banco de Dados & SQLite (dev) / PostgreSQL (prod), SQLAlchemy, Alembic & Banco relacional foi preferido pela consistência ACID e pelo modelo de dados bem estruturado (labirintos, corridas, telemetria). SQLite viabiliza protótipos rápidos sem infraestrutura; PostgreSQL pode ser adotado em produção para concorrência e volume elevado. SQLAlchemy (ORM) e Alembic (migrations) garantem portabilidade e versionamento do schema. \\
+    \midrule
+    Frontend Web & HTML5, CSS3, JavaScript (React em avaliação) & A camada de apresentação será desenvolvida como aplicação web responsiva, consumindo a API REST do backend para consultas de histórico e filtros, e WebSocket para telemetria em tempo real. A escolha inicial por tecnologias web puras reduz a curva de aprendizado; a adoção do React será avaliada conforme a evolução dos protótipos de interface. \\
+\end{longtable}
+\end{center}
+\subsubsection{Visão Lógica.} O sistema é organizado em domínios bem definidos: (i) Navegação Autônoma, responsável pelo algoritmo Flood Fill, mapeamento de paredes e controle de trajetória; (ii) Telemetria e Comunicação, que encapsula a publicação unidirecional de dados via MQTT do robô para o backend; (iii) Gestão de Corridas, que persiste configurações de labirinto, resultados e estatísticas; e (iv) Visualização, que consome os dados persistidos para dashboards e relatórios.
 
-            % Relacionamentos
-            \draw[arrow] (lab) -- node[above, label] {1} node[below, label] {N} (corr);
-            \draw[arrow] (corr) -- node[above, label] {1} node[below, label] {N} (tel);
+\subsubsection{Visão de Processos.} O firmware embarcado executa múltiplas tarefas concorrentes sob o FreeRTOS: uma tarefa de alta prioridade para leitura de sensores e controle PID dos motores; uma tarefa de média prioridade para execução do algoritmo Flood Fill; e uma tarefa de baixa prioridade para transmissão de telemetria via Wi-Fi. O backend FastAPI opera de forma assíncrona, processando requisições HTTP e mensagens MQTT em event loops independentes, garantindo que a ingestão de telemetria não bloqueie consultas do frontend.
 
-            % Atributos Labirinto
-            \node[attribute, below=0.6cm of lab] (dim) {dimensão};
-            \draw[-] (lab) -- (dim);
+\subsubsection{Visão de Implementação.} O repositório está dividido em três diretórios principais: \texttt{src/firmware/} (código em C para ESP-IDF, incluindo o simulador Flood Fill em ambiente desktop); \texttt{src/backend/} (aplicação Python com FastAPI, models SQLAlchemy e migrations Alembic); e \texttt{src/frontend/} (aplicação web). Essa separação física reflete a independência das camadas e permite que diferentes subgrupos trabalhem em paralelo.
 
-            % Atributos Corrida
-            \node[attribute, above=0.6cm of corr] (data) {data};
-            \node[attribute, above left=0.5cm of corr] (dur) {duração};
-            \node[attribute, above right=0.5cm of corr] (res) {resultado};
-            \draw[-] (corr) -- (data);
-            \draw[-] (corr) -- (dur);
-            \draw[-] (corr) -- (res);
+\subsubsection{Visão de Implantação.} O ESP32 funciona como cliente MQTT, conectando-se à rede local (Wi-Fi) ou a um \textit{hotspot} móvel. O backend pode ser executado localmente durante os testes de bancada ou implantado em serviços de hospedagem gratuita (ex.: Railway, Render) para acesso remoto, conforme previsto no orçamento do projeto. O frontend é servido como aplicação estática ou via servidor web integrado.
 
-            % Atributos Telemetria
-            \node[attribute, below=0.6cm of tel] (ts) {timestamp};
-            \node[attribute, below left=0.5cm of tel] (pos) {posição X/Y};
-            \node[attribute, below right=0.5cm of tel] (bat) {nível bateria};
-            \draw[-] (tel) -- (ts);
-            \draw[-] (tel) -- (pos);
-            \draw[-] (tel) -- (bat);
-        \end{tikzpicture}
-        \caption{Diagrama Entidade-Relacionamento preliminar do sistema Micromouse.}
-        \label{fig:der_micromouse}
-    \end{figure}
+\subsubsection{Visão de Dados.} O modelo relacional é composto por três entidades principais: \texttt{Labirinto} (dimensão 4x4, 8x8 ou 16x16), \texttt{Corrida} (data, duração, velocidade média, resultado) e \texttt{EventoTelemetria} (posição X/Y, nível de bateria, timestamp). A Fig.~\ref{fig:der_micromouse} apresenta o diagrama entidade-relacionamento preliminar.
 
-    \textbf{Padrão Arquitetural.} Adotou-se o padrão em camadas (\textit{Layered Architecture}), variante cliente-servidor, por ser amplamente compreendido, de baixa complexidade para equipes acadêmicas e suficiente para os requisitos de escalabilidade do projeto. Não há necessidade de microsserviços dado o escopo reduzido e a equipe enxuta; um monolito bem modularizado atende às demandas com menor sobrecarga operacional.
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+        entity/.style={rectangle, draw, fill=gray!10, minimum width=2.8cm, minimum height=0.9cm, font=\small\bfseries},
+        relation/.style={diamond, draw, fill=gray!20, aspect=2, font=\scriptsize},
+        attribute/.style={ellipse, draw, fill=gray!5, font=\scriptsize},
+        arrow/.style={-Stealth, thick},
+        label/.style={font=\scriptsize, midway, fill=white, inner sep=1pt}
+    ]
+        % Entidades
+        \node[entity] (lab) at (0,0) {Labirinto};
+        \node[entity] (corr) at (5,0) {Corrida};
+        \node[entity] (tel) at (10,0) {EventoTelemetria};
 
-    \textbf{Alinhamento com Hardware.} A arquitetura de software foi validada em conjunto com o subgrupo de hardware. Os pinos de GPIO do ESP32 foram mapeados para os drivers de motor (DRV8833) e sensores de distância (infravermelhos), garantindo que os módulos de software de controle e leitura correspondam ao esquemático elétrico. A tabela de alocação de pinos e os valores específicos de temporização (frequência do PWM para motores, taxa de amostragem dos sensores) serão definidos em conjunto com o subgrupo de Hardware na Sprint 3 e refletidos nas configurações das tarefas do FreeRTOS.     
-    
-    \item \textbf{Roteiro de testes funcionais}
+        % Relacionamentos
+        \draw[arrow] (lab) -- node[above, label] {1} node[below, label] {N} (corr);
+        \draw[arrow] (corr) -- node[above, label] {1} node[below, label] {N} (tel);
 
-    Os casos de teste a seguir cobrem as histórias de usuário do backlog
-    (HU01–HU06), incluindo todas as classificadas como \textit{Must have}, e
-    serão a base para a automação E2E e os testes de bancada do firmware nas
-    entregas seguintes. Cada caso é identificado por um código no formato
-    TF\textit{nn} e indica, quando aplicável, o requisito funcional (RF) e a
-    história de usuário (HU) rastreados.
+        % Atributos Labirinto
+        \node[attribute, below=0.6cm of lab] (dim) {dimensão};
+        \draw[-] (lab) -- (dim);
 
-    \begin{landscape}
-    \begin{small}
-    \begin{longtable}{|p{1.2cm}|p{3cm}|p{3.5cm}|p{4cm}|p{5.5cm}|p{4cm}|}
-        \caption{Roteiro de testes funcionais do sistema Micromouse.}
-        \label{tab:testes-funcionais} \\
-        \hline
-        \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-        \endfirsthead
+        % Atributos Corrida
+        \node[attribute, above=0.6cm of corr] (data) {data};
+        \node[attribute, above left=0.5cm of corr] (dur) {duração};
+        \node[attribute, above right=0.5cm of corr] (res) {resultado};
+        \draw[-] (corr) -- (data);
+        \draw[-] (corr) -- (dur);
+        \draw[-] (corr) -- (res);
 
-        \multicolumn{6}{c}%
-        {{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
-        \hline
-        \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-        \endhead
+        % Atributos Telemetria
+        \node[attribute, below=0.6cm of tel] (ts) {timestamp};
+        \node[attribute, below left=0.5cm of tel] (pos) {posição X/Y};
+        \node[attribute, below right=0.5cm of tel] (bat) {nível bateria};
+        \draw[-] (tel) -- (ts);
+        \draw[-] (tel) -- (pos);
+        \draw[-] (tel) -- (bat);
+    \end{tikzpicture}
+    \caption{Diagrama Entidade-Relacionamento preliminar do sistema Micromouse.}
+    \label{fig:der_micromouse}
+\end{figure}
 
-        \hline \multicolumn{6}{|r|}{{Continua na próxima página...}} \\ \hline
-        \endfoot
+\subsubsection{Padrão Arquitetural.} Adotou-se o padrão em camadas (\textit{Layered Architecture}), variante cliente-servidor, por ser amplamente compreendido, de baixa complexidade para equipes acadêmicas e suficiente para os requisitos de escalabilidade do projeto. Não há necessidade de microsserviços dado o escopo reduzido e a equipe enxuta; um monolito bem modularizado atende às demandas com menor sobrecarga operacional.
 
-        \hline
-        \endlastfoot
+\subsubsection{Alinhamento com Hardware.} A arquitetura de software foi validada em conjunto com o subgrupo de hardware. Os pinos de GPIO do ESP32 foram mapeados para os drivers de motor (DRV8833) e sensores de distância (infravermelhos), garantindo que os módulos de software de controle e leitura correspondam ao esquemático elétrico. A tabela de alocação de pinos e os valores específicos de temporização (frequência do PWM para motores, taxa de amostragem dos sensores) serão definidos em conjunto com o subgrupo de Hardware na Sprint 3 e refletidos nas configurações das tarefas do FreeRTOS.     
 
-        TF01 & Resolução autônoma em labirinto 4×4 (HU01, RF01, RF03) &
-        Validar a execução completa da navegação autônoma até o centro do labirinto, sem qualquer intervenção humana. &
-        Labirinto 4×4 montado conforme as dimensões oficiais; bateria com carga $\geq$ 80\%; firmware com o algoritmo Flood Fill gravado; robô posicionado na célula de partida orientado para o norte. &
-        1) Ligar o robô; 2) acionar o botão de início; 3) acompanhar a execução até a parada autônoma; 4) inspecionar visualmente, ao final, se houve contato com paredes durante o trajeto. &
-        Robô alcança a célula central em $\leq$ 60 s sem tocar nas paredes, sinaliza chegada (LED) e não houve qualquer interação humana durante a tentativa. \\ \hline
+\subsection{Roteiro de testes funcionais}
 
-        TF02 & Mapeamento incremental de paredes (HU02, RF02, RF06) &
-        Verificar que o firmware detecta e registra as paredes do labirinto à medida que explora, construindo o mapa em tempo de execução. &
-        TF01 executado com sucesso; labirinto 4×4 com layout previamente conhecido pela equipe; canal de log (serial ou MQTT) ativo para extração do mapa. &
-        1) Iniciar uma corrida no labirinto 4×4 conhecido; 2) ao final, extrair o mapa gerado (via log serial ou endpoint REST); 3) comparar o mapa célula a célula com o layout físico de referência. &
-        Ao menos 80\% das células do labirinto 4×4 são corretamente mapeadas (critério da HU02), sem falsos positivos de parede registrados. \\ \hline
+Os casos de teste a seguir cobrem as histórias de usuário do backlog
+(HU01–HU06), incluindo todas as classificadas como \textit{Must have}, e
+serão a base para a automação E2E e os testes de bancada do firmware nas
+entregas seguintes. Cada caso é identificado por um código no formato
+TF\textit{nn} e indica, quando aplicável, o requisito funcional (RF) e a
+história de usuário (HU) rastreados.
 
-        TF03 & Telemetria em tempo real no painel web (HU03, RF09) &
-        Verificar a atualização contínua de posição, tempo de corrida e nível de bateria no painel web, com latência aceitável. &
-        Backend FastAPI e broker MQTT em execução; frontend acessível pelo navegador; robô (ou simulador) conectado à rede e publicando telemetria. &
-        1) Abrir o painel web; 2) iniciar uma corrida (real ou simulada); 3) cronometrar o intervalo entre atualizações consecutivas exibidas; 4) confirmar que posição, tempo e bateria atualizam sem recarregar a página. &
-        Os campos de posição, tempo e bateria são atualizados em intervalos $\leq$ 500\,ms durante toda a corrida (mínimo de 60\,s observados) e nenhuma recarga manual da página é necessária. \\ \hline
+\begin{landscape}
+\begin{small}
+\begin{longtable}{|p{1.2cm}|p{3cm}|p{3.5cm}|p{4cm}|p{5.5cm}|p{4cm}|}
+    \caption{Roteiro de testes funcionais do sistema Micromouse.}
+    \label{tab:testes-funcionais} \\
+    \hline
+    \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+    \endfirsthead
 
-        TF04 & Persistência da corrida ao término (HU04) &
-        Garantir que os dados finais de cada corrida concluída são gravados no banco e ficam disponíveis para consulta. &
-        Backend e banco de dados (SQLite ou PostgreSQL) operacionais; tela de histórico acessível; corrida em execução prestes a terminar. &
-        1) Concluir a corrida (chegada ao centro ou parada controlada); 2) aguardar o evento de fim; 3) acessar a tela de histórico; 4) inspecionar o registro mais recente. &
-        Aparece um novo registro no histórico contendo, no mínimo, data/hora, duração, velocidade média, tamanho do labirinto e resultado, e o mesmo é recuperável via \texttt{GET /corridas}. \\ \hline
+    \multicolumn{6}{c}%
+    {{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
+    \hline
+    \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
+    \endhead
 
-        TF05 & Filtro do histórico por tamanho de labirinto (HU04, UC12) &
-        Verificar que o filtro de consulta exibe apenas corridas do tamanho de labirinto selecionado. &
-        Banco de dados contendo ao menos uma corrida persistida para cada dimensão (4×4, 8×8 e 16×16); tela de histórico aberta. &
-        1) Selecionar a opção ``4×4'' no filtro e conferir a lista; 2) repetir para ``8×8'' e ``16×16''; 3) limpar o filtro e conferir a lista completa. &
-        Em cada seleção, apenas corridas da dimensão escolhida são exibidas; ao limpar o filtro, todas as corridas voltam a ser listadas. \\ \hline
+    \hline \multicolumn{6}{|r|}{{Continua na próxima página...}} \\ \hline
+    \endfoot
 
-        TF06 & Leitura do nível de bateria via divisor de tensão (HU05, RF08) &
-        Validar a leitura analógica do divisor de tensão pelo ESP32 e a transmissão do percentual de carga para o painel web. &
-        Chassi montado com o divisor de tensão conforme o esquemático; multímetro digital disponível como referência; firmware com módulo de monitoramento de bateria ativo; painel web aberto. &
-        1) Medir a tensão real da bateria com o multímetro; 2) comparar com o percentual exibido no painel; 3) repetir a medição após 10\,min de operação contínua. &
-        O percentual exibido no painel corresponde à leitura do multímetro com erro $\leq$ 5\% e diminui de forma monotônica ao longo do tempo de uso. \\ \hline
+    \hline
+    \endlastfoot
 
-        TF07 & Indicador ``Desafio cumprido'' preenchido automaticamente (HU06) &
-        Verificar que o sistema atribui automaticamente ``Sim'' ou ``Não'' ao campo ``Desafio cumprido'' com base na detecção da chegada ao centro. &
-        Backend, frontend e firmware operacionais; lógica de detecção do centro habilitada; tela de histórico acessível. &
-        Cenário A) realizar uma corrida em que o robô atinge o centro e, em seguida, consultar o histórico. Cenário B) interromper manualmente uma corrida antes da chegada e consultar o histórico. &
-        Cenário A: o campo ``Desafio cumprido'' aparece como ``Sim'' para a corrida concluída. Cenário B: o mesmo campo aparece como ``Não'' para a corrida interrompida. \\ \hline
+    TF01 & Resolução autônoma em labirinto 4×4 (HU01, RF01, RF03) &
+    Validar a execução completa da navegação autônoma até o centro do labirinto, sem qualquer intervenção humana. &
+    Labirinto 4×4 montado conforme as dimensões oficiais; bateria com carga $\geq$ 80\%; firmware com o algoritmo Flood Fill gravado; robô posicionado na célula de partida orientado para o norte. &
+    1) Ligar o robô; 2) acionar o botão de início; 3) acompanhar a execução até a parada autônoma; 4) inspecionar visualmente, ao final, se houve contato com paredes durante o trajeto. &
+    Robô alcança a célula central em $\leq$ 60 s sem tocar nas paredes, sinaliza chegada (LED) e não houve qualquer interação humana durante a tentativa. \\ \hline
 
-        TF08 & Detecção da chegada ao centro do labirinto (RF04, UC07) &
-        Garantir que a chegada à célula central dispara o encerramento da corrida e o envio das estatísticas finais ao backend. &
-        Labirinto 4×4 montado; firmware com lógica de detecção de centro; comunicação MQTT ativa entre robô e backend. &
-        1) Posicionar o robô na célula de partida; 2) iniciar a corrida; 3) observar o comportamento ao atingir a célula central; 4) confirmar nos logs e via API REST o registro do evento de fim de corrida. &
-        Ao alcançar a célula central, o robô para imediatamente, publica uma mensagem MQTT com as estatísticas finais e a corrida é registrada como concluída no histórico. \\ \hline
+    TF02 & Mapeamento incremental de paredes (HU02, RF02, RF06) &
+    Verificar que o firmware detecta e registra as paredes do labirinto à medida que explora, construindo o mapa em tempo de execução. &
+    TF01 executado com sucesso; labirinto 4×4 com layout previamente conhecido pela equipe; canal de log (serial ou MQTT) ativo para extração do mapa. &
+    1) Iniciar uma corrida no labirinto 4×4 conhecido; 2) ao final, extrair o mapa gerado (via log serial ou endpoint REST); 3) comparar o mapa célula a célula com o layout físico de referência. &
+    Ao menos 80\% das células do labirinto 4×4 são corretamente mapeadas (critério da HU02), sem falsos positivos de parede registrados. \\ \hline
 
-    \end{longtable}
-    \end{small}
-    \end{landscape}
-    \end{itemize}
+    TF03 & Telemetria em tempo real no painel web (HU03, RF09) &
+    Verificar a atualização contínua de posição, tempo de corrida e nível de bateria no painel web, com latência aceitável. &
+    Backend FastAPI e broker MQTT em execução; frontend acessível pelo navegador; robô (ou simulador) conectado à rede e publicando telemetria. &
+    1) Abrir o painel web; 2) iniciar uma corrida (real ou simulada); 3) cronometrar o intervalo entre atualizações consecutivas exibidas; 4) confirmar que posição, tempo e bateria atualizam sem recarregar a página. &
+    Os campos de posição, tempo e bateria são atualizados em intervalos $\leq$ 500\,ms durante toda a corrida (mínimo de 60\,s observados) e nenhuma recarga manual da página é necessária. \\ \hline
+
+    TF04 & Persistência da corrida ao término (HU04) &
+    Garantir que os dados finais de cada corrida concluída são gravados no banco e ficam disponíveis para consulta. &
+    Backend e banco de dados (SQLite ou PostgreSQL) operacionais; tela de histórico acessível; corrida em execução prestes a terminar. &
+    1) Concluir a corrida (chegada ao centro ou parada controlada); 2) aguardar o evento de fim; 3) acessar a tela de histórico; 4) inspecionar o registro mais recente. &
+    Aparece um novo registro no histórico contendo, no mínimo, data/hora, duração, velocidade média, tamanho do labirinto e resultado, e o mesmo é recuperável via \texttt{GET /corridas}. \\ \hline
+
+    TF05 & Filtro do histórico por tamanho de labirinto (HU04, UC12) &
+    Verificar que o filtro de consulta exibe apenas corridas do tamanho de labirinto selecionado. &
+    Banco de dados contendo ao menos uma corrida persistida para cada dimensão (4×4, 8×8 e 16×16); tela de histórico aberta. &
+    1) Selecionar a opção ``4×4'' no filtro e conferir a lista; 2) repetir para ``8×8'' e ``16×16''; 3) limpar o filtro e conferir a lista completa. &
+    Em cada seleção, apenas corridas da dimensão escolhida são exibidas; ao limpar o filtro, todas as corridas voltam a ser listadas. \\ \hline
+
+    TF06 & Leitura do nível de bateria via divisor de tensão (HU05, RF08) &
+    Validar a leitura analógica do divisor de tensão pelo ESP32 e a transmissão do percentual de carga para o painel web. &
+    Chassi montado com o divisor de tensão conforme o esquemático; multímetro digital disponível como referência; firmware com módulo de monitoramento de bateria ativo; painel web aberto. &
+    1) Medir a tensão real da bateria com o multímetro; 2) comparar com o percentual exibido no painel; 3) repetir a medição após 10\,min de operação contínua. &
+    O percentual exibido no painel corresponde à leitura do multímetro com erro $\leq$ 5\% e diminui de forma monotônica ao longo do tempo de uso. \\ \hline
+
+    TF07 & Indicador ``Desafio cumprido'' preenchido automaticamente (HU06) &
+    Verificar que o sistema atribui automaticamente ``Sim'' ou ``Não'' ao campo ``Desafio cumprido'' com base na detecção da chegada ao centro. &
+    Backend, frontend e firmware operacionais; lógica de detecção do centro habilitada; tela de histórico acessível. &
+    Cenário A) realizar uma corrida em que o robô atinge o centro e, em seguida, consultar o histórico. Cenário B) interromper manualmente uma corrida antes da chegada e consultar o histórico. &
+    Cenário A: o campo ``Desafio cumprido'' aparece como ``Sim'' para a corrida concluída. Cenário B: o mesmo campo aparece como ``Não'' para a corrida interrompida. \\ \hline
+
+    TF08 & Detecção da chegada ao centro do labirinto (RF04, UC07) &
+    Garantir que a chegada à célula central dispara o encerramento da corrida e o envio das estatísticas finais ao backend. &
+    Labirinto 4×4 montado; firmware com lógica de detecção de centro; comunicação MQTT ativa entre robô e backend. &
+    1) Posicionar o robô na célula de partida; 2) iniciar a corrida; 3) observar o comportamento ao atingir a célula central; 4) confirmar nos logs e via API REST o registro do evento de fim de corrida. &
+    Ao alcançar a célula central, o robô para imediatamente, publica uma mensagem MQTT com as estatísticas finais e a corrida é registrada como concluída no histórico. \\ \hline
+
+\end{longtable}
+\end{small}
+\end{landscape}
 
