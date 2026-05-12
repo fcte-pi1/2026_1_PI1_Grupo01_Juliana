@@ -64,9 +64,31 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+> Requer **Python 3.10+** (o `requirements.txt` fixa `alembic 1.18.4`,
+> que não suporta versões anteriores).
+
 ---
 
-### 5. Executar o servidor
+### 5. Aplicar as migrations
+
+```bash
+PYTHONPATH=. alembic upgrade head
+```
+
+> O `PYTHONPATH=.` é necessário porque `migrations/env.py` importa
+> `from app.database import Base`. Sem ele o alembic falha com
+> `ModuleNotFoundError: No module named 'app'`. Alternativa equivalente:
+> `python -m alembic upgrade head`.
+
+(Opcional) Popular o banco com dados de exemplo:
+
+```bash
+PYTHONPATH=. python seed.py
+```
+
+---
+
+### 6. Executar o servidor
 
 ```bash
 uvicorn app.main:app --reload
@@ -77,6 +99,58 @@ A aplicação ficará disponível em:
 ```bash
 http://localhost:8000
 ```
+
+---
+
+## 🧪 Como testar a API
+
+### POST `/telemetria` pelo Swagger
+
+O FastAPI já gera uma documentação interativa em
+<http://localhost:8000/docs>.
+
+1. Abra <http://localhost:8000/docs>.
+2. Clique no endpoint `POST /telemetria`.
+3. Clique em **Try it out**.
+4. Cole o JSON abaixo no campo de body e clique em **Execute**:
+
+   ```json
+   {
+     "corrida_id": 1,
+     "timestamp": "2026-05-10T12:34:56Z",
+     "posicao_x": 2,
+     "posicao_y": 3,
+     "nivel_bateria": 87.5,
+     "velocidade": 0.42
+   }
+   ```
+
+5. A resposta (status `201` + body com o evento criado) aparece logo
+   abaixo.
+
+### WebSocket `/ws/telemetria` pelo Postman
+
+O Swagger não suporta WebSocket — use o Postman:
+
+1. No Postman, clique em **New → WebSocket Request**.
+2. Cole a URL: `ws://localhost:8000/ws/telemetria`.
+3. Clique em **Connect**.
+4. Na aba **Message**, selecione **JSON** e envie:
+
+   ```json
+   {
+     "corrida_id": 1,
+     "timestamp": "2026-05-10T12:36:00Z",
+     "posicao_x": 5,
+     "posicao_y": 5,
+     "nivel_bateria": 70.0,
+     "velocidade": 0.55
+   }
+   ```
+
+5. O backend responde com o evento persistido (mesmo JSON com `id`
+   gerado). Para ver o broadcast, abra **duas conexões** Postman para a
+   mesma URL — ao enviar pacote em uma, ambas recebem.
 
 ---
 
@@ -97,6 +171,71 @@ GET /health
   "status": "OK"
 }
 ```
+
+---
+
+## 📡 Telemetria
+
+Recebimento dos pacotes enviados pelo micromouse durante uma corrida.
+Há duas formas equivalentes: `POST /telemetria` para envios pontuais e
+`WebSocket /ws/telemetria` para fluxo contínuo em tempo real (com
+broadcast para todos os clientes conectados).
+
+### Payload
+
+```json
+{
+  "corrida_id": 1,
+  "labirinto_id": 2,
+  "timestamp": "2026-05-10T12:34:56Z",
+  "posicao_x": 2,
+  "posicao_y": 3,
+  "nivel_bateria": 87.5,
+  "velocidade": 0.42
+}
+```
+
+| Campo           | Tipo    | Obrigatório | Observação                                              |
+| --------------- | ------- | ----------- | ------------------------------------------------------- |
+| `corrida_id`    | int     | condicional | Usa uma corrida já existente.                           |
+| `labirinto_id`  | int     | condicional | Se `corrida_id` não for enviado, abre uma nova corrida. |
+| `timestamp`     | ISO8601 | sim         | Momento da leitura.                                     |
+| `posicao_x`     | int ≥0  | sim         | Coordenada na grade.                                    |
+| `posicao_y`     | int ≥0  | sim         | Coordenada na grade.                                    |
+| `nivel_bateria` | float   | sim         | Porcentagem 0–100.                                      |
+| `velocidade`    | float   | não         | m/s.                                                    |
+
+> Pelo menos um entre `corrida_id` e `labirinto_id` deve ser informado.
+
+### POST `/telemetria`
+
+Recebe um pacote pontual de telemetria. Resposta `201`:
+
+```json
+{
+  "id": 4,
+  "corrida_id": 1,
+  "timestamp": "2026-05-10T12:34:56",
+  "posicao_x": 2,
+  "posicao_y": 3,
+  "nivel_bateria": 87.5,
+  "velocidade": 0.42
+}
+```
+
+> Veja a seção [🧪 Como testar a API](#-como-testar-a-api) para o
+> passo-a-passo no Swagger.
+
+### WebSocket `/ws/telemetria`
+
+- O cliente envia mensagens JSON com o mesmo payload do POST.
+- Cada pacote válido é persistido e re-emitido para todos os clientes
+  conectados (inclusive o produtor), permitindo dashboards em tempo real.
+- Pacotes inválidos retornam `{"erro": "...", "detalhes": [...]}` apenas
+  para o emissor.
+
+> Veja a seção [🧪 Como testar a API](#-como-testar-a-api) para o
+> passo-a-passo no Postman.
 
 ---
 

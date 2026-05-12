@@ -345,3 +345,14 @@ Thumbs.db
 # Banco de dados
 *.db
 *.sqlite
+
+# Node
+node_modules/
+
+# Venv
+venv/
+env/
+.venv/
+
+# Pycache
+__pycache__/
