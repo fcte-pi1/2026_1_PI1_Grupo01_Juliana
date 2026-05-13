@@ -3,11 +3,14 @@ description: Para atividades técnicas, manutenção ou documentação.
 title: "Tarefa X.X: [Título Curto]"
 labels: ["geral"]
 body:
-  - type: markdown
+  - type: textarea
+    id: detalhes-atividade
     attributes:
-      value: |
-        ### 🏗️ Detalhes da Atividade
-        Descreva a necessidade técnica ou de infraestrutura.
+      label: "🏗️ Detalhes da Atividade"
+      description: "Descreva a necessidade técnica ou de infraestrutura."
+      placeholder: "Explique detalhadamente o que precisa ser feito nesta tarefa..."
+    validations:
+      required: true
   - type: dropdown
     id: area-labels
     attributes:
