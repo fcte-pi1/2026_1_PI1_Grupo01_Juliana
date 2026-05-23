@@ -34,13 +34,7 @@ O chassi foi projetado para abrigar os componentes eletrônicos e
 mecânicos do \textit{micromouse} dentro do limite dimensional
 estipulado pelas regras da competição (máximo de 25 cm de
 comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a distribuição de massa equilibrada, a proteção dos componentes e a facilidade de manutenção.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Chassi.pdf}
-    \caption{Vista isométrica do chassi do \textit{micromouse} modelado em CAD. Dimensões em milímetros.}
-    \label{fig:chassi}
-\end{figure}
+As pranchas técnicas contendo as vistas ortogonais e o detalhamento completo das cotas de fabricação do chassi podem ser consultadas no \autoref{apendice_cad_chassi}
 
 \begin{figure}[htbp]
     \centering
@@ -128,7 +122,10 @@ fabricação do chassi pelos seguintes motivos:
 
 \subsection{Labirinto Modular de Testes (4×4)}
 
-O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da competição, permitindo a calibração de sensores e o aprimoramento do algoritmo de navegação do robô. Trata-se de um ambiente físico que reproduz fielmente as medidas e características oficiais do torneio: malhas de células quadradas com $18\text{ cm}$ de lado cada, delimitadas por paredes de $5\text{ cm}$ de altura por $1,2\text{ cm}$ de espessura. Visualmente, o labirinto adota o padrão da categoria, com piso fosco na cor preta, paredes brancas com ótima refletividade para o sensoriamento \textit{infravermelho} e topos pintados na cor vermelha, criando um contraste e respeitando o regulamento.
+O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da competição, permitindo a calibração de sensores e o aprimoramento do algoritmo de navegação do robô. 
+Trata-se de um ambiente físico que reproduz fielmente as medidas e características oficiais do torneio: malhas de células quadradas com $18\text{ cm}$ de lado cada, delimitadas por paredes de
+ $5\text{ cm}$ de altura por $1,2\text{ cm}$ de espessura. Visualmente, o labirinto adota o padrão da categoria, com piso fosco na cor preta, paredes brancas com ótima refletividade para o sensoriamento
+  \textit{infravermelho} e topos pintados na cor vermelha, criando um contraste e respeitando o regulamento. 
 
 
 \begin{figure}[htbp]
@@ -138,21 +135,6 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
              72 cm × 72 cm. Paredes brancas com topos vermelhos;
              piso preto.}
     \label{fig:labirinto_completo}
-\end{figure}
-
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Parede.pdf}
-    \caption{CAD do módulo de parede individual, com as principais cotas indicadas.}
-    \label{fig:labirinto_parede}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Chao.pdf}
-    \caption{CAD do módulo de chão individual, com as principais cotas indicadas.}
-    \label{fig:labirinto_chao}
 \end{figure}
 
 % ------------------------------------------------------------------
@@ -187,7 +169,9 @@ O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da com
 
 \subsubsection{Decisões de Modularidade}
 
-O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
+O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos
+cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão. O detalhamento
+dimensional e os desenhos técnicos em CAD das peças individuais que compõem os módulos de chão e parede encontram-se disponíveis no \autoref{apendice_cad_chassi}
 
 A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dimensões da competição, é essencial para transferir rigidez à estrutura de cada módulo.
 
@@ -251,7 +235,7 @@ Para satisfazer o regulamento, está previsto que as faces laterais das paredes 
 
 O diagrama de blocos consiste em uma representação visual de alto nível dos principais módulos e interações do sistema embarcado do \textit{micromouse}, conforme ilustrado na Figura \ref{fig:diag_hw}.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figuras/diagrama_micromouse2026_1.drawio.png}
     \caption{Diagrama de blocos dos componentes eletrônicos do \textit{micromouse}}
@@ -260,35 +244,7 @@ O diagrama de blocos consiste em uma representação visual de alto nível dos p
 
 \subsection{Esquematico}
 
-O projeto esquemático detalha as conexões físicas entre todos os componentes eletrônicos do robô. Para facilitar a visualização e o entendimento, a representação do circuito foi subdividida em módulos, apresentados através das Figuras~\ref{fig:esq_topmodule}, \ref{fig:esq_sensores}, \ref{fig:esq_motores} e \ref{fig:esq_alimentacao}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_topmodule_1-P1_2026-05-11}
-    \caption{Representação da Ligação dos Componentes no Microcontrolador}
-    \label{fig:esq_topmodule}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_sensores_1-P1_2026-05-11}
-    \caption{Representação Esquemática dos Sensores}
-    \label{fig:esq_sensores}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_motores_driver_1-P1_2026-05-11}
-    \caption{Representação Esquemática do Driver e Motores}
-    \label{fig:esq_motores}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-05-11}
-    \caption{Representação Esquemática da Alimentação do \textit{Micromouse}}
-    \label{fig:esq_alimentacao}
-\end{figure}
+O projeto esquemático detalha as conexões físicas entre todos os componentes eletrônicos do robô. Para facilitar a visualização e o entendimento, a representação do circuito foi subdividida em módulos, apresentados através das Figuras no \autoref{apendice_esquematicos_hw}.
 
 
 \subsection{Justificativa da escolha dos componentes de \textit{hardware}}
@@ -296,40 +252,31 @@ O projeto esquemático detalha as conexões físicas entre todos os componentes 
 
 Esta seção apresenta a justificativa técnica para a seleção de cada componente utilizado no projeto, considerando requisitos funcionais, disponibilidade, custo e compatibilidade com a arquitetura geral do sistema.
 
-\subsubsection{ESP32-WROOM-32}
-O ESP32-WROOM-32 foi selecionado por sua capacidade de processamento, integração nativa Wi-Fi/Bluetooth e operação em 3,3 V. Destaca-se pelo baixo custo e alta compatibilidade com sistemas robóticos e componentes eletrônicos modernos \cite{oliveira2024_esp32_roboticar}.
+\begin{itemize}
 
-\subsubsection{Sensor Infravermelho (LM393)}
-Adotado para a detecção de paredes, o sensor LM393 oferece retorno digital ao microcontrolador, baixo consumo elétrico (<1 mA) e alcance de 2 a 30 cm. É uma solução econômica e de baixa complexidade ideal para projetos educacionais \cite{lima2025_micromouse_lm393}.
+    \item \textbf{ESP32-WROOM-32:} O ESP32-WROOM-32 foi selecionado por sua capacidade de processamento, integração nativa Wi-Fi/Bluetooth e operação em 3,3 V. Destaca-se pelo baixo custo e alta compatibilidade com sistemas robóticos e componentes eletrônicos modernos \cite{oliveira2024_esp32_roboticar}.
 
-% \subsubsection{Bússola Magnetômetro (GY-271 HMC5883L)}
-% O módulo GY-271 atua na identificação da orientação absoluta do robô e correção de desvios após manobras de 90\textdegree\ e 180\textdegree. Requer testes de interferência eletromagnética em relação aos motores para garantir a estabilidade das leituras via I\textsuperscript{2}C \cite{eletrogate_bussola}.
+    \item \textbf{Sensor Infravermelho (LM393):} Adotado para a detecção de paredes, o sensor LM393 oferece retorno digital ao microcontrolador, baixo consumo elétrico (<1 mA) e alcance de 2 a 30 cm. É uma solução econômica e de baixa complexidade ideal para projetos educacionais \cite{lima2025_micromouse_lm393}.
 
-\subsubsection{Giroscópio e Acelerômetro (MPU6050)}
-O MPU6050 identifica a orientação relativa do robô, atuando via I\textsuperscript{2}C como redundância à odometria para mitigar desvios de trajetória durante as curvas. Destaca-se pelo tamanho compacto e baixo consumo energético.
+%   \item \textbf{Bússola Magnetômetro (GY-271 HMC5883L):} O módulo GY-271 atua na identificação da orientação absoluta do robô e correção de desvios após manobras de 90\textdegree\ e 180\textdegree. Requer testes de interferência eletromagnética em relação aos motores para garantir a estabilidade das leituras via I\textsuperscript{2}C \cite{eletrogate_bussola}.
 
-\subsubsection{Driver Ponte H (DRV8833)}
-O DRV8833 controla de forma independente a velocidade e a direção dos dois motores DC via sinais PWM. É compacto, eficiente e possui proteções internas essenciais contra sobrecorrente e superaquecimento \cite{oliveira2024_esp32_roboticar}.
+    \item \textbf{Giroscópio e Acelerômetro (MPU6050):} O MPU6050 identifica a orientação relativa do robô, atuando via I\textsuperscript{2}C como redundância à odometria para mitigar desvios de trajetória durante as curvas. Destaca-se pelo tamanho compacto e baixo consumo energético.
 
-\subsubsection{Conversor Analógico-Digital (ADS1115)}
-O conversor externo ADS1115 (16 bits) foi escolhido para contornar o ruído intrínseco do ADC interno do ESP32 gerado pelo uso do Wi-Fi. Ele garante leituras consistentes e precisas para os sensores analógicos de corrente e tensão do projeto \cite{makerhero_ads1115, embarcados_esp32_adc}.
+    \item \textbf{Driver Ponte H (DRV8833):} O DRV8833 controla de forma independente a velocidade e a direção dos dois motores DC via sinais PWM. É compacto, eficiente e possui proteções internas essenciais contra sobrecorrente e superaquecimento \cite{oliveira2024_esp32_roboticar}.
 
-\subsubsection{Regulador de Tensão Step-Down (LM2596)}
-O módulo LM2596 atua na conversão eficiente da tensão fornecida pela bateria. Ele garante uma alimentação contínua e estável para os componentes lógicos, protegendo o sistema embarcado contra oscilações elétricas \cite{oliveira2024_esp32_roboticar}.
+    \item \textbf{Conversor Analógico-Digital (ADS1115):} O conversor externo ADS1115 (16 bits) foi escolhido para contornar o ruído intrínseco do ADC interno do ESP32 gerado pelo uso do Wi-Fi. Ele garante leituras consistentes e precisas para os sensores analógicos de corrente e tensão do projeto \cite{makerhero_ads1115, embarcados_esp32_adc}.
 
-\subsubsection{Sensor de Tensão 0--25V (FZ0430)}
-O sensor FZ0430 monitora o nível da bateria, atuando como um divisor de tensão capaz de medir até 25 V. Condicionado pelo ADS1115, permite ao sistema calcular a carga com alta precisão e disparar alertas preventivos de bateria baixa \cite{valdovinos2019instrumentacion}.
+    \item \textbf{Regulador de Tensão Step-Down (LM2596):} O módulo LM2596 atua na conversão eficiente da tensão fornecida pela bateria. Ele garante uma alimentação contínua e estável para os componentes lógicos, protegendo o sistema embarcado contra oscilações elétricas \cite{oliveira2024_esp32_roboticar}.
 
-\subsubsection{Chave Óptica para Encoder (MOCH22A)}
-O MOCH22A lê os pulsos dos discos acoplados aos motores, fornecendo a odometria necessária para calcular o deslocamento e a rotação do Micromouse \cite{petercorke}. Sua integração via interrupções digitais no ESP32 possui baixo custo e montagem simples \cite{makerhero_moch22a}.
+    \item \textbf{Sensor de Tensão 0--25V (FZ0430):} O sensor FZ0430 monitora o nível da bateria, atuando como um divisor de tensão capaz de medir até 25 V. Condicionado pelo ADS1115, permite ao sistema calcular a carga com alta precisão e disparar alertas preventivos de bateria baixa \cite{valdovinos2019instrumentacion}.
 
-\subsubsection{Sensor de Corrente (ACS712)}
-Utilizando o efeito Hall, a versão de 5A do ACS712 monitora o consumo elétrico dos circuitos de potência. Aliado ao conversor ADS1115, possibilita calcular a potência instantânea e estimar em tempo real a autonomia da bateria para a telemetria \cite{valdovinos2019instrumentacion}.
+    \item \textbf{Chave Óptica para Encoder (MOCH22A):} O MOCH22A lê os pulsos dos discos acoplados aos motores, fornecendo a odometria necessária para calcular o deslocamento e a rotação do Micromouse \cite{petercorke}. Sua integração via interrupções digitais no ESP32 possui baixo custo e montagem simples \cite{makerhero_moch22a}.
 
-\subsubsection{Buzzer Passivo}
-O \textit{buzzer} passivo realiza a sinalização sonora de eventos do robô. Foi priorizado frente à versão ativa por possuir dimensões mais compactas, ser mais leve e exigir um esquema de acionamento eletrônico de menor custo \cite{makerhero_buzzer}.
+    \item \textbf{Sensor de Corrente (ACS712):} Utilizando o efeito Hall, a versão de 5A do ACS712 monitora o consumo elétrico dos circuitos de potência. Aliado ao conversor ADS1115, possibilita calcular a potência instantânea e estimar em tempo real a autonomia da bateria para a telemetria \cite{valdovinos2019instrumentacion}.
 
+    \item \textbf{Buzzer Passivo:} O \textit{buzzer} passivo realiza a sinalização sonora de eventos do robô. Foi priorizado frente à versão ativa por possuir dimensões mais compactas, ser mais leve e exigir um esquema de acionamento eletrônico de menor custo \cite{makerhero_buzzer}.
 
+\end{itemize}
 
 % \textcolor{red}{A descrição de \textit{hardware} no documento deve permitir que outras pessoas repliquem o produto proposto neste documento. Para isso, deve-se explicar de forma textual os principais sub-sistemas e as escolhas de projeto, além de indicar:}
 
@@ -461,95 +408,29 @@ O backlog foi elaborado com base nos requisitos funcionais (RF) e não funcionai
  
 \begin{itemize}
 
-    \item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
-    \textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
-    \textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa.
+\item \textbf{HU01 – Resolução autônoma do labirinto} [\textit{Must have}]\\
+\textit{Eu, como} avaliador do projeto, \textit{quero} que o sistema permita visualizar e validar a execução da resolução autônoma de labirintos de tamanhos 4×4, 8×8 e 16×16, \textit{para} verificar a capacidade de navegação sem intervenção humana.\\
+\textbf{Critérios de aceitação:} o robô deve atingir o centro do labirinto sem tocar nas paredes e sem qualquer interação externa durante a tentativa. O protótipo desta interface pode ser visualizado na Figura \ref{fig:execucaoautonoma_fig} do Apêndice \ref{apendice_prototipos}.
 
-    \begin{center}
-    \includegraphics[
-        width=0.8\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU01–Execução autônoma.png}
+\item \textbf{HU02 – Mapeamento incremental do labirinto} [\textit{Must have}]\\
+\textit{Eu, como} desenvolvedor do sistema embarcado, \textit{quero} que o robô detecte e registre paredes à medida que explora, \textit{para} construir o mapa do labirinto em tempo de execução.\\
+\textbf{Critérios de aceitação:} após a primeira corrida em um labirinto 4×4, ao menos 80\% das células devem ter sido corretamente mapeadas. O protótipo desta interface pode ser visualizado na Figura \ref{fig:mapeamento_fig} do Apêndice \ref{apendice_prototipos}.
 
-    \captionof{figure}{Protótipo da HU01.}
-    \label{fig:execucaoautonoma_fig}
-    \end{center}
- 
-    \item \textbf{HU02 – Mapeamento incremental do labirinto} [\textit{Must have}]\\
-    \textit{Eu, como} desenvolvedor do sistema embarcado, \textit{quero} que o robô detecte e registre paredes à medida que explora, \textit{para} construir o mapa do labirinto em tempo de execução.\\
-    \textbf{Critérios de aceitação:} após a primeira corrida em um labirinto 4×4, ao menos 80\% das células devem ter sido corretamente mapeadas.
+\item \textbf{HU03 – Telemetria em tempo real} [\textit{Must have}]\\
+\textit{Eu, como} observador da corrida, \textit{quero} visualizar no painel web o trajeto percorrido, o tempo, a velocidade média e o nível de bateria em tempo real, \textit{para} acompanhar o desempenho do robô durante a tentativa.\\
+\textbf{Critérios de aceitação:} os dados devem ser atualizados no painel com latência máxima estipulada pela equipe, sem gargalos visuais perceptíveis. O protótipo desta interface pode ser visualizado na Figura \ref{fig:telemetria_fig} do Apêndice \ref{apendice_prototipos}.
 
-    \begin{center}
-    \includegraphics[
-        width=0.8\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU02–Mapeamento incremental.png}
+\item \textbf{HU04 – Persistência e consulta de histórico} [\textit{Must have}]\\
+\textit{Eu, como} professor avaliador, \textit{quero} consultar os resultados de corridas anteriores filtradas por labirinto, \textit{para} comparar o desempenho do robô ao longo do projeto.\\
+\textbf{Critérios de aceitação:} os dados finais de cada corrida concluída devem ser gravados no banco de dados e recuperáveis pela interface de histórico com filtro por tamanho de labirinto. O protótipo desta interface pode ser visualizado na Figura \ref{fig:historicocorridas_fig} do Apêndice \ref{apendice_prototipos}.
 
-    \captionof{figure}{Protótipo da HU02.}
-    \label{fig:mapeamento_fig}
-    \end{center}
+\item \textbf{HU05 – Monitoramento de bateria} [\textit{Should have}]\\
+\textit{Eu, como} operador do robô, \textit{quero} visualizar no painel web o nível percentual de carga da bateria enviado pelo sistema embarcado, \textit{para} evitar interrupções inesperadas durante as corridas.\\
+\textbf{Critérios de aceitação:} o nível de bateria deve ser lido via divisor de tensão pelo ESP32 e exibido no painel web com atualização a cada ciclo de telemetria. O protótipo desta interface pode ser visualizado na Figura \ref{fig:monitoramentobateria_fig} do Apêndice \ref{apendice_prototipos}.
 
-    \item \textbf{HU03 – Telemetria em tempo real} [\textit{Must have}]\\
-    \textit{Eu, como} observador da corrida, \textit{quero} visualizar no painel web o trajeto percorrido, o tempo, a velocidade média e o nível de bateria em tempo real, \textit{para} acompanhar o desempenho do robô durante a tentativa.\\
-    \textbf{Critérios de aceitação:} os dados devem ser atualizados no painel com latência máxima estipulada pela equipe, sem gargalos visuais perceptíveis.
-
-    \begin{center}
-    \includegraphics[
-        width=0.95\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU03–Telemetria em tempo real.png}
-
-    \captionof{figure}{Protótipo da HU03.}
-    \label{fig:telemetria_fig}
-    \end{center}
- 
-    \item \textbf{HU04 – Persistência e consulta de histórico} [\textit{Must have}]\\
-    \textit{Eu, como} professor avaliador, \textit{quero} consultar os resultados de corridas anteriores filtradas por labirinto, \textit{para} comparar o desempenho do robô ao longo do projeto.\\
-    \textbf{Critérios de aceitação:} os dados finais de cada corrida concluída devem ser gravados no banco de dados e recuperáveis pela interface de histórico com filtro por tamanho de labirinto.
-
-    \begin{center}
-    \includegraphics[
-        width=0.8\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU04–Histórico de corridas.png}
-
-    \captionof{figure}{Protótipo da HU04.}
-    \label{fig:historicocorridas_fig}
-    \end{center}
- 
-    \item \textbf{HU05 – Monitoramento de bateria} [\textit{Should have}]\\
-    \textit{Eu, como} operador do robô, \textit{quero} visualizar no painel web o nível percentual de carga da bateria enviado pelo sistema embarcado, \textit{para} evitar interrupções inesperadas durante as corridas.\\
-    \textbf{Critérios de aceitação:} o nível de bateria deve ser lido via divisor de tensão pelo ESP32 e exibido no painel web com atualização a cada ciclo de telemetria.
-
-    \begin{center}
-    \includegraphics[
-        width=0.8\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU05–Monitoramento de bateria.png}
-
-    \captionof{figure}{Protótipo da HU05.}
-    \label{fig:monitoramentobateria_fig}
-    \end{center}
- 
-    \item \textbf{HU06 – Indicador de desafio cumprido} [\textit{Could have}]\\
-    \textit{Eu, como} usuário do sistema web, \textit{quero} visualizar se o desafio foi cumprido (Sim/Não) ao término de cada corrida, \textit{para} identificar rapidamente o resultado no histórico.\\
-    \textbf{Critérios de aceitação:} ao final de cada corrida, o campo ``Desafio cumprido'' deve ser preenchido automaticamente com base na detecção da chegada ao centro.
-
-    \begin{center}
-    \includegraphics[
-        width=0.8\textwidth,
-        height=0.8\textheight,
-        keepaspectratio
-    ]{figuras/HU06–Desafio cumprido.png}
-
-    \captionof{figure}{Protótipo da HU06.}
-    \label{fig:desafiocumprido_fig}
-    \end{center}
+\item \textbf{HU06 – Indicador de desafio cumprido} [\textit{Could have}]\\
+\textit{Eu, como} usuário do sistema web, \textit{quero} visualizar se o desafio foi cumprido (Sim/Não) ao término de cada corrida, \textit{para} identificar rapidamente o resultado no histórico.\\
+\textbf{Critérios de aceitação:} ao final de cada corrida, o campo ``Desafio cumprido'' deve ser preenchido automaticamente com base na detecção da chegada ao centro. O protótipo desta interface pode ser visualizado na Figura \ref{fig:desafiocumprido_fig} do Apêndice \ref{apendice_prototipos}.
  
 \end{itemize}
  
@@ -782,83 +663,10 @@ A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (
 
 \subsection{Roteiro de testes funcionais}
 
-Os casos de teste a seguir cobrem as histórias de usuário do backlog
+Os casos de teste presentes \autoref{apendice_roteiro_detalhado} cobrem as histórias de usuário do backlog
 (HU01–HU06), incluindo todas as classificadas como \textit{Must have}, e
 serão a base para a automação E2E e os testes de bancada do firmware nas
 entregas seguintes. Cada caso é identificado por um código no formato
 TF\textit{nn} e indica, quando aplicável, o requisito funcional (RF) e a
 história de usuário (HU) rastreados.
-
-\begin{landscape}
-\begin{small}
-\begin{longtable}{|p{1.2cm}|p{3cm}|p{3.5cm}|p{4cm}|p{5.5cm}|p{4cm}|}
-    \caption{Roteiro de testes funcionais do sistema Micromouse.}
-    \label{tab:testes-funcionais} \\
-    \hline
-    \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-    \endfirsthead
-
-    \multicolumn{6}{c}%
-    {{\bfseries Tabela \thetable{} -- continuação da página anterior}} \\
-    \hline
-    \textbf{Código} & \textbf{Nome} & \textbf{Objetivo} & \textbf{Pré-condições} & \textbf{Procedimento} & \textbf{Resultado esperado} \\ \hline
-    \endhead
-
-    \hline \multicolumn{6}{|r|}{{Continua na próxima página...}} \\ \hline
-    \endfoot
-
-    \hline
-    \endlastfoot
-
-    TF01 & Resolução autônoma em labirinto 4×4 (HU01, RF01, RF03) &
-    Validar a execução completa da navegação autônoma até o centro do labirinto, sem qualquer intervenção humana. &
-    Labirinto 4×4 montado conforme as dimensões oficiais; bateria com carga $\geq$ 80\%; firmware com o algoritmo Flood Fill gravado; robô posicionado na célula de partida orientado para o norte. &
-    1) Ligar o robô; 2) acionar o botão de início; 3) acompanhar a execução até a parada autônoma; 4) inspecionar visualmente, ao final, se houve contato com paredes durante o trajeto. &
-    Robô alcança a célula central em $\leq$ 60 s sem tocar nas paredes, sinaliza chegada (LED) e não houve qualquer interação humana durante a tentativa. \\ \hline
-
-    TF02 & Mapeamento incremental de paredes (HU02, RF02, RF06) &
-    Verificar que o firmware detecta e registra as paredes do labirinto à medida que explora, construindo o mapa em tempo de execução. &
-    TF01 executado com sucesso; labirinto 4×4 com layout previamente conhecido pela equipe; canal de log (serial ou MQTT) ativo para extração do mapa. &
-    1) Iniciar uma corrida no labirinto 4×4 conhecido; 2) ao final, extrair o mapa gerado (via log serial ou endpoint REST); 3) comparar o mapa célula a célula com o layout físico de referência. &
-    Ao menos 80\% das células do labirinto 4×4 são corretamente mapeadas (critério da HU02), sem falsos positivos de parede registrados. \\ \hline
-
-    TF03 & Telemetria em tempo real no painel web (HU03, RF09) &
-    Verificar a atualização contínua de posição, tempo de corrida e nível de bateria no painel web, com latência aceitável. &
-    Backend FastAPI e broker MQTT em execução; frontend acessível pelo navegador; robô (ou simulador) conectado à rede e publicando telemetria. &
-    1) Abrir o painel web; 2) iniciar uma corrida (real ou simulada); 3) cronometrar o intervalo entre atualizações consecutivas exibidas; 4) confirmar que posição, tempo e bateria atualizam sem recarregar a página. &
-    Os campos de posição, tempo e bateria são atualizados em intervalos $\leq$ 500\,ms durante toda a corrida (mínimo de 60\,s observados) e nenhuma recarga manual da página é necessária. \\ \hline
-
-    TF04 & Persistência da corrida ao término (HU04) &
-    Garantir que os dados finais de cada corrida concluída são gravados no banco e ficam disponíveis para consulta. &
-    Backend e banco de dados (SQLite ou PostgreSQL) operacionais; tela de histórico acessível; corrida em execução prestes a terminar. &
-    1) Concluir a corrida (chegada ao centro ou parada controlada); 2) aguardar o evento de fim; 3) acessar a tela de histórico; 4) inspecionar o registro mais recente. &
-    Aparece um novo registro no histórico contendo, no mínimo, data/hora, duração, velocidade média, tamanho do labirinto e resultado, e o mesmo é recuperável via \texttt{GET /corridas}. \\ \hline
-
-    TF05 & Filtro do histórico por tamanho de labirinto (HU04, UC12) &
-    Verificar que o filtro de consulta exibe apenas corridas do tamanho de labirinto selecionado. &
-    Banco de dados contendo ao menos uma corrida persistida para cada dimensão (4×4, 8×8 e 16×16); tela de histórico aberta. &
-    1) Selecionar a opção ``4×4'' no filtro e conferir a lista; 2) repetir para ``8×8'' e ``16×16''; 3) limpar o filtro e conferir a lista completa. &
-    Em cada seleção, apenas corridas da dimensão escolhida são exibidas; ao limpar o filtro, todas as corridas voltam a ser listadas. \\ \hline
-
-    TF06 & Leitura do nível de bateria via divisor de tensão (HU05, RF08) &
-    Validar a leitura analógica do divisor de tensão pelo ESP32 e a transmissão do percentual de carga para o painel web. &
-    Chassi montado com o divisor de tensão conforme o esquemático; multímetro digital disponível como referência; firmware com módulo de monitoramento de bateria ativo; painel web aberto. &
-    1) Medir a tensão real da bateria com o multímetro; 2) comparar com o percentual exibido no painel; 3) repetir a medição após 10\,min de operação contínua. &
-    O percentual exibido no painel corresponde à leitura do multímetro com erro $\leq$ 5\% e diminui de forma monotônica ao longo do tempo de uso. \\ \hline
-
-    TF07 & Indicador ``Desafio cumprido'' preenchido automaticamente (HU06) &
-    Verificar que o sistema atribui automaticamente ``Sim'' ou ``Não'' ao campo ``Desafio cumprido'' com base na detecção da chegada ao centro. &
-    Backend, frontend e firmware operacionais; lógica de detecção do centro habilitada; tela de histórico acessível. &
-    Cenário A) realizar uma corrida em que o robô atinge o centro e, em seguida, consultar o histórico. Cenário B) interromper manualmente uma corrida antes da chegada e consultar o histórico. &
-    Cenário A: o campo ``Desafio cumprido'' aparece como ``Sim'' para a corrida concluída. Cenário B: o mesmo campo aparece como ``Não'' para a corrida interrompida. \\ \hline
-
-    TF08 & Detecção da chegada ao centro do labirinto (RF04, UC07) &
-    Garantir que a chegada à célula central dispara o encerramento da corrida e o envio das estatísticas finais ao backend. &
-    Labirinto 4×4 montado; firmware com lógica de detecção de centro; comunicação MQTT ativa entre robô e backend. &
-    1) Posicionar o robô na célula de partida; 2) iniciar a corrida; 3) observar o comportamento ao atingir a célula central; 4) confirmar nos logs e via API REST o registro do evento de fim de corrida. &
-    Ao alcançar a célula central, o robô para imediatamente, publica uma mensagem MQTT com as estatísticas finais e a corrida é registrada como concluída no histórico. \\ \hline
-
-\end{longtable}
-\end{small}
-\end{landscape}
 
