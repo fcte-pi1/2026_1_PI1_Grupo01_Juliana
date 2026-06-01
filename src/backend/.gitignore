@@ -1,0 +1,6 @@
+# Artefatos de testes
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
