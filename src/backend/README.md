@@ -14,8 +14,16 @@ Backend responsável por receber, processar e disponibilizar dados de telemetria
 backend/
 ├── app/
 │   ├── routes/
-│   │   └── health.py
+│   │   ├── health.py
+│   │   └── telemetria.py
+│   ├── models/
+│   ├── schemas/
 │   └── main.py
+├── tests/
+│   ├── conftest.py
+│   ├── test_health.py
+│   └── test_telemetria.py
+├── pytest.ini
 ├── requirements.txt
 └── README.md
 ```
@@ -99,6 +107,51 @@ A aplicação ficará disponível em:
 ```bash
 http://localhost:8000
 ```
+
+---
+
+## ✅ Testes automatizados (pytest + cobertura)
+
+A suíte de testes fica em `tests/` e roda sobre um **banco SQLite isolado em
+memória** — não toca no `micromouse.db`. A configuração está no `pytest.ini`
+(cobertura via `pytest-cov` já habilitada).
+
+```bash
+# com o venv ativado e dentro de src/backend
+pip install -r requirements.txt   # garante pytest e pytest-cov
+pytest                            # roda tudo + relatório de cobertura no terminal
+```
+
+O relatório HTML detalhado é gerado em `htmlcov/index.html`. Para rodar um
+arquivo ou teste específico:
+
+```bash
+pytest tests/test_telemetria.py
+pytest tests/test_telemetria.py::test_post_telemetria_labirinto_inexistente_retorna_404
+```
+
+### Fixtures disponíveis (em `tests/conftest.py`)
+
+Use-as nos novos testes — basta declará-las como argumento da função:
+
+| Fixture             | Para que serve                                                        |
+| ------------------- | --------------------------------------------------------------------- |
+| `client`            | `TestClient` da API já conectado ao banco de teste.                   |
+| `db_session`        | Sessão SQLAlchemy para montar dados direto no banco.                  |
+| `labirintos`        | Semeia os 3 labirintos e retorna `{"4x4": id, "8x8": id, "16x16": id}`. |
+| `pacote_telemetria` | Construtor de payload de telemetria válido (aceita `**overrides`).    |
+
+Exemplo (ver `tests/test_telemetria.py`):
+
+```python
+def test_exemplo(client, labirintos, pacote_telemetria):
+    resp = client.post("/telemetria", json=pacote_telemetria(labirinto_id=labirintos["4x4"]))
+    assert resp.status_code == 201
+```
+
+> A meta da entrega é **cobertura ≥ 70%**. Os testes-modelo já cobrem health e
+> os casos básicos do `POST /telemetria`; as suítes completas (WebSocket,
+> models/schemas, histórico) são as Tarefas T6–T9.
 
 ---
 
