@@ -112,6 +112,23 @@ http://localhost:8000
 
 ## ✅ Testes automatizados (pytest + cobertura)
 
+> 🤖 **Precisa do robô / ESP32 / sensores para rodar os testes? NÃO.**
+> Os testes automatizados rodam **100% sem hardware** e sem internet. Você só
+> precisa de **Python + as dependências do `requirements.txt`**. Não é preciso
+> ter o ESP32, o robô montado, sensores calibrados, Wi-Fi ou MQTT.
+>
+> Por quê:
+> - O banco usado é um **SQLite em memória**, criado e destruído a cada teste
+>   (não toca no `micromouse.db` nem em banco nenhum de verdade).
+> - Os pacotes de telemetria são **fabricados dentro do próprio teste** (fixture
+>   `pacote_telemetria`), simulando exatamente o que o robô enviaria — então não
+>   há robô de verdade enviando dados.
+> - O servidor sobe em memória pelo `TestClient`; **não** é preciso rodar o
+>   `uvicorn` à parte.
+>
+> O hardware (ESP enviando telemetria real) só importa para a **integração de
+> sistema** / demonstração do robô — que é outra entrega, não estes testes.
+
 A suíte de testes fica em `tests/` e roda sobre um **banco SQLite isolado em
 memória** — não toca no `micromouse.db`. A configuração está no `pytest.ini`
 (cobertura via `pytest-cov` já habilitada).
