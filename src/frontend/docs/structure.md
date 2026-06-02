@@ -36,11 +36,11 @@ O roteamento é gerenciado pelo `react-router-dom`, utilizando um layout base pa
 Componente pai que contém o **Header** e a **Navegação**. Ele utiliza o `<Outlet />` para renderizar as páginas específicas.
 
 ### 2. `Telemetry` (Página)
-Preparado para consumir dados em tempo real. Exibe:
-- Status da bateria.
-- Cronômetro de corrida.
-- Velocidade e trajetória.
-- Componente `MazeMap`.
+Consome o WebSocket `/ws/telemetria` (via hook `useTelemetry`) e exibe em tempo real:
+- Status da conexão (Conectando/Conectado/Desconectado).
+- Bateria, velocidade média e tempo decorrido.
+- Indicador de desafio cumprido (Sim/Não) — derivado de o robô alcançar o centro.
+- Seletor de tamanho do labirinto (4x4, 8x8, 16x16) e o componente `MazeMap`.
 
 ### 3. `History` (Página)
 Interface de consulta ao banco de dados (SQLite via FastAPI).
@@ -48,7 +48,9 @@ Interface de consulta ao banco de dados (SQLite via FastAPI).
 - Indicador de "Desafio Cumprido".
 
 ### 4. `MazeMap` (Componente Reutilizável)
-Responsável por desenhar a grade do labirinto e a posição atual (X, Y) do Micromouse. No momento, funciona como um placeholder para a lógica de grid.
+Desenha a grade NxN do labirinto e sobrepõe o trajeto percorrido, a posição atual (X, Y) do Micromouse e a célula de chegada (bloco 2x2 central), com legenda.
+
+> **Configuração da API:** o endereço do WebSocket pode ser definido pela variável de ambiente `VITE_WS_URL` (ex.: `ws://localhost:8000/ws/telemetria`). Sem ela, o padrão é `ws://<host>:8000/ws/telemetria`.
 
 ---
 
