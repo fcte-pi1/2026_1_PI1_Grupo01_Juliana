@@ -11,6 +11,8 @@ export default defineConfig({
     globals: true,
     // Carrega matchers do jest-dom (toBeInTheDocument etc.) antes dos testes.
     setupFiles: './src/test/setup.js',
+    // Restringe o Vitest aos testes em src/; os specs E2E (Playwright) ficam em e2e/.
+    include: ['src/**/*.{test,spec}.{js,jsx}'],
     css: true,
     coverage: {
       provider: 'v8',
