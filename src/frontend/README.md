@@ -60,3 +60,52 @@ it('exemplo', () => {
 
 > O smoke test atual cobre o `App` (navegação + página inicial). As suítes
 > completas das páginas e componentes são as Tarefas T10–T12.
+
+## 🎭 Testes E2E / sistema (Playwright)
+
+Diferente dos testes acima (que rodam em `jsdom`), os testes **E2E** abrem a
+aplicação em um **navegador real** (Chromium headless) e validam os fluxos do
+ponto de vista do usuário — são os testes de sistema/funcional exigidos na
+seção 7.5 do relatório.
+
+### Como rodar
+
+```bash
+# dentro de src/frontend
+npm install                  # instala dependências (inclui @playwright/test)
+npx playwright install chromium   # baixa o navegador (só na primeira vez)
+npm run e2e                  # roda os testes E2E (headless)
+npm run e2e:ui               # modo interativo (UI do Playwright)
+npm run e2e:report           # abre o último relatório HTML
+```
+
+Não precisa subir o frontend manualmente: o `playwright.config.js` tem um
+`webServer` que executa `npm run dev` automaticamente antes dos testes.
+
+### Onde ficam os testes
+
+- Os specs E2E ficam em **`e2e/`** com sufixo `.spec.js` (ex.: `e2e/smoke.spec.js`).
+  Eles **não** são executados pelo Vitest (o Vitest está restrito a `src/`).
+- Configuração em `playwright.config.js`.
+
+### ⚠️ E2E que dependem do backend (Tarefas T13–T15)
+
+O `webServer` padrão sobe **apenas o frontend** — suficiente para o smoke test e
+fluxos de navegação. Os E2E que precisam de **dados reais da API** (telemetria,
+histórico) devem subir também o backend. Para isso, transforme o `webServer` em
+uma lista no `playwright.config.js`:
+
+```js
+webServer: [
+  { command: 'npm run dev', url: 'http://localhost:5173', reuseExistingServer: !process.env.CI },
+  {
+    // backend: ajuste o caminho do uvicorn ao seu ambiente (venv)
+    command: 'cd ../backend && venv/bin/python -m uvicorn app.main:app --port 8000',
+    url: 'http://localhost:8000/health',
+    reuseExistingServer: !process.env.CI,
+  },
+],
+```
+
+> Os fluxos E2E devem seguir o **roteiro de testes funcionais** (Tarefa T2).
+> O molde inicial está em `e2e/smoke.spec.js`.
