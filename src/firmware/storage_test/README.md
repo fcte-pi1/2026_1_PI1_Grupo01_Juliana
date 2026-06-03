@@ -40,11 +40,16 @@ Como você está sem a ESP física agora, o script `simulate_storage.py` simula 
 
 Quando você estiver com o hardware físico em mãos, poderá compilar o firmware real.
 
+### Tabela de Partições Customizada (Importante para SPIFFS)
+Para que o sistema de arquivos SPIFFS monte com sucesso no hardware da ESP32, configuramos uma partição personalizada na memória flash do chip.
+* **`partitions.csv`**: Define a partição de dados do tipo `spiffs` com tamanho de 1 MB.
+* **`sdkconfig.defaults`**: Garante que o processo de build do ESP-IDF ative automaticamente a opção de tabela de partições customizada (`CONFIG_PARTITION_TABLE_CUSTOM=y`) e a aponte para o nosso `partitions.csv`. Não é necessário configurar isso no `menuconfig` manualmente.
+
 ### Utilizando a Extensão do ESP-IDF no VS Code:
 1. Abra o projeto no VS Code.
 2. Certifique-se de que a extensão oficial do **ESP-IDF** da Espressif está instalada e configurada.
 3. Clique no botão de seleção de target (barra inferior do VS Code) e escolha o chip correto (ex: `ESP32` ou `ESP32-S3`).
-4. Clique em **Build** (ícone de engrenagem) para compilar o código.
+4. Clique em **Build** (ícone de engrenagem) para compilar o código. O ESP-IDF usará o `sdkconfig.defaults` para gerar a configuração de partições apropriada automaticamente.
 5. Conecte a placa via USB, selecione a porta COM correspondente e clique em **Flash** (ícone de raio) para gravar no chip.
 6. Clique em **Monitor** (ícone de monitor) para abrir o terminal serial (UART).
 
