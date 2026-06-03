@@ -6,7 +6,7 @@
 #include "esp_log.h"
 #include "driver/gpio.h"
 
-static const chat *TAG = "motor";
+static const char *TAG = "motor";
 
 //timer
 static mcpwm_timer_handle_t timer = NULL;
@@ -20,8 +20,23 @@ static mcpwm_cmpr_handle_t cmp_motorL;
 static mcpwm_gen_handle_t gen_motorR;
 static mcpwm_gen_handle_t gen_motorL;
 
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerR(){
+	return cmp_motorR; 
+	}
+	
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerL(){
+	return cmp_motorL; 
+	}
+
+mcpwm_gen_handle_t driver_get_gen_handlerR(){
+	return gen_motorR; 
+	}
+	
+mcpwm_gen_handle_t driver_get_gen_handlerL(){
+	return gen_motorL; 
+	}
 //rotina de configuracoes iniciais para timer, operador e gpio
-void driver_init(*motor_t motor){
+void driver_init(){
     //configuracao dos gpios de saida
     gpio_config_t io_conf = {
         .pin_bit_mask = GPIO_OUTPUT_PIN_SEL,
@@ -46,10 +61,10 @@ void driver_init(*motor_t motor){
         .count_mode = MCPWM_TIMER_COUNT_MODE_UP
     };
 
-    mcpwm_new_timer{
+    mcpwm_new_timer(
         &timer_config,
         &timer
-    };
+    );
 
     //configurando os operadores
     mcpwm_operator_config_t operator_config = {
@@ -126,7 +141,7 @@ void motor_init(motor_t *motor){
 //funcoes para controle de velocidade
 static void set_pwm(
     mcpwm_cmpr_handle_t cmp,
-    uint8_t duty
+    uint16_t duty
 )
 {
     uint32_t ticks =
@@ -138,28 +153,28 @@ static void set_pwm(
     );
 }
 
-void motor_set_speed(motor_t *motor, uint8_t speed){
+void motor_set_speed(motor_t *motor, int8_t speed){
     ESP_LOGI(TAG, "velocidade do motor: %d", speed);
         if(speed > 30 && speed <= 100)
     {
         set_pwm(motor->comp, speed);
-        gpio_set_level(motor->dir, 0);
+        gpio_set_level(motor->dir_gpio, 0);
     }
-    else if(speed < 30 && speed >= -100)
+    else if(speed < 30 && -speed <= 100)
     {
         set_pwm(motor->comp, -speed);
-        gpio_set_level(motor->dir, 1);
+        gpio_set_level(motor->dir_gpio, 1);
     }
     else
     {
         set_pwm(motor->comp, 0);
-        gpio_set_level(motor->dir, 0);
+        gpio_set_level(motor->dir_gpio, 0);
     }
 }
 
 void motor_stop(motor_t *motor){
     set_pwm(motor->comp, PERIOD_TICKS);
-    gpio_set_level(motor->dir, 1);
+    gpio_set_level(motor->dir_gpio, 1);
 }
 
 

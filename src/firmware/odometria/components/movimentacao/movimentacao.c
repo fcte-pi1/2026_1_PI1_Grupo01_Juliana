@@ -8,10 +8,11 @@
 #include "encoder.h"
 #include "m_driver.h"
 #include "odometria.h"
+#include "movimentacao.h"
 
 static const char *TAG = "movimentacao";
 
-//funcoes locais
+//funcoes especificas
 
 void mouse_movefwd(motor_t *motorR, motor_t *motorL){
     motor_set_speed(motorR, MOTOR_FWD_SPD);
@@ -43,7 +44,7 @@ void mouse_break(motor_t *motorR, motor_t *motorL){
     ESP_LOGI(TAG, "comando frear");
 }
 
-//funcoes publicas
+//funcoes de movimentacao
 
 void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
     float target = L_CELULA_CM;
@@ -55,8 +56,8 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     mouse_movefwd(mtrR, mtrL);
 
     while(desloc < target){
-        desloc_R += encoder_get_deslocamento(encR);
-        desloc_L += encoder_get_deslocamento(encL);
+        desloc_R += encoder_get_deslocamento(encR, RAIO_R);
+        desloc_L += encoder_get_deslocamento(encL, RAIO_R);
 
         desloc = (desloc_R + desloc_L)/2.0f;
 
@@ -77,8 +78,8 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     mouse_spin(mtrR, mtrL, 1);
 
     while (theta < target_theta){
-        desloc_R += encoder_get_deslocamento(encR);
-        desloc_L += encoder_get_deslocamento(encL);
+        desloc_R += encoder_get_deslocamento(encR, RAIO_R);
+        desloc_L += encoder_get_deslocamento(encL, RAIO_R);
         
         theta = (desloc_R + desloc_L)/W_EIXOS;
 
@@ -99,8 +100,8 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
     mouse_spin(mtrR, mtrL, 0);
 
     while (theta < target_theta){
-        desloc_R += encoder_get_deslocamento(encR);
-        desloc_L += encoder_get_deslocamento(encL);
+        desloc_R += encoder_get_deslocamento(encR, RAIO_R);
+        desloc_L += encoder_get_deslocamento(encL, RAIO_R);
         
         theta = (desloc_R + desloc_L)/W_EIXOS;
 

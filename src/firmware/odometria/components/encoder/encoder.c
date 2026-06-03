@@ -98,13 +98,13 @@ float encoder_get_teta(encoder_t *encoder){
     int pulsos = count - previous_count;
     previous_count = count;
 
-    float teta = (pulsos * M_PI)/10.0f
+    float teta = (pulsos * M_PI)/10.0f;
     
     return teta;
 }
 
 //velocidade angular media [rad/s]
-float encoder_get_w(encoder_t *encoder, int64_t dt){
+float encoder_get_w(encoder_t *encoder, uint64_t dt){
     
     float dteta = encoder_get_teta(encoder);
 
@@ -114,7 +114,7 @@ float encoder_get_w(encoder_t *encoder, int64_t dt){
 }
 
 //velocidade linear media [m/s]
-float encoder_get_v(encoder_t *encoder, int64_t dt, float raio){
+float encoder_get_v(encoder_t *encoder, uint64_t dt, float raio){
     float w = encoder_get_w(encoder, dt);
     float v = w * raio;
 

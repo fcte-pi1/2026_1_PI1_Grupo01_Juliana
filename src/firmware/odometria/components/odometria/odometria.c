@@ -40,6 +40,7 @@ void odometria_update_xy(pose_t *pose, float deslocamento){
         break;
     case SUL:
         pose->y -= deslocamento;
+        break;
     case OESTE:
         pose->x -= deslocamento;
         break;
@@ -54,7 +55,7 @@ void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 -
         switch (pose->orientacao)
         {
         case NORTE:
-            pose->orientacao++
+            pose->orientacao++;
             break;
         case LESTE:
             pose->orientacao++;
@@ -63,8 +64,8 @@ void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 -
             pose->orientacao++;
             break;
         case OESTE:
-            pose->orientacao = NORTH;
-
+            pose->orientacao = NORTE;
+	    break;
         default:
             break;
         }
@@ -72,7 +73,7 @@ void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 -
         switch (pose->orientacao)
         {
         case NORTE:
-            pose->orientacao = WEST;
+            pose->orientacao = OESTE;
             break;
         case LESTE:
             pose->orientacao--;
@@ -82,7 +83,7 @@ void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 -
             break;
         case OESTE:
             pose->orientacao--;
-
+	    break;
         default:
             break;
         }
@@ -101,7 +102,7 @@ const char* odometria_orientacao_string(orientacao_t o){
     case SUL:
         return "SUL";
     case OESTE:
-        return "OESTE":
+        return "OESTE";
     default:
         return "DESCONHECIDA";
     }

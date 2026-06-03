@@ -1,8 +1,8 @@
 #ifndef ENCODER_H
 #define ENCODER_H
 
-#define GPIO_R 35
-#define GPIO_L 32
+#define GPIO_ENC_R 35
+#define GPIO_ENC_L 32
 
 #include "driver/gpio.h"
 #include "driver/pulse_cnt.h"
@@ -23,6 +23,6 @@ float encoder_get_w(encoder_t *encoder, uint64_t dt);
 
 float encoder_get_v(encoder_t *encoder, uint64_t dt, float raio);
 
-float encoder_get_deslocamento(encoder_t *encoder, uint64_t dt, float raio);
+float encoder_get_deslocamento(encoder_t *encoder, float raio);
 
 #endif

@@ -1,10 +1,10 @@
 #ifndef M_DRIVER_H
 #define M_DRIVER_H
 
-#define GPIO_R              18
-#define GPIO_L              17
+#define GPIO_DIR_R              18
+#define GPIO_DIR_L              17
 
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_R) | (1ULL<<GPIO_L))
+#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_DIR_R) | (1ULL<<GPIO_DIR_L))
 
 #define PWM_R               19
 #define PWM_L               5
@@ -23,19 +23,27 @@
 
 //struct do motor para modularizar as inicializacoes
 typedef struct{
-    gpio_num_t pwm_gpio
-    gpio_num_t dir_gpio
+    gpio_num_t pwm_gpio;
+    gpio_num_t dir_gpio;
 
-    mcpwm_cmpr_handle_t comp 
-    mcpwm_gen_handle_t  gen
+    mcpwm_cmpr_handle_t comp; 
+    mcpwm_gen_handle_t  gen;
 } motor_t;
 
 void driver_init();
 
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerR();
+
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerL();
+
+mcpwm_gen_handle_t driver_get_gen_handlerR();
+
+mcpwm_gen_handle_t driver_get_gen_handlerL();
+
 void motor_init(motor_t *motor);
 
-void motor_set_speed(motor_t *motor, uint8_t speed);
+void motor_set_speed(motor_t *motor, int8_t speed);
 
-void motor_break(motor_t *motor);
+void motor_stop(motor_t *motor);
 
 #endif
