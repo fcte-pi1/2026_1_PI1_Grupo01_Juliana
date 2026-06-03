@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-// E2E (Tarefa T14, issue #123): consulta de histórico de corridas e aplicação
+// E2E (Tarefa T14, issue #131): consulta de histórico de corridas e aplicação
 // de filtros por tamanho de labirinto.
 //
 // Em vez de subir o backend, interceptamos as chamadas a GET /corridas via
