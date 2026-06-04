@@ -25,61 +25,40 @@ void app_main(void)
 	motor_init(&motorR);
 	motor_init(&motorL);
 	
-	char linha[32];
+//	char linha[32];
 
-    int  index = 0;
+//      int  index = 0;
 
 
     while(1)
     {
-	    int in = getchar();
-	    if(in == EOF){
-		    vTaskDelay(pdMS_TO_TICKS(10));
-		    continue;
+	int in = getchar();
+	if(in == EOF){
+		vTaskDelay(pdMS_TO_TICKS(10));
+		continue;
 
-	    }
+	}
 
-	    if(in == '\n'){
-	    	linha[index] = '\0';
-
-		switch (linha[0]){
-			case 'f':
-				mouse_movefwd(&motorR, &motorL);
-				break;
-			case 'b':
-				mouse_movebwd(&motorR, &motorL);
-				break;
-			case 'd':
-				mouse_spin(&motorR, &motorL, 1);
-				break;
-			case 'e':
-				mouse_spin(&motorR, &motorL, 0);
-				break;
-			case ' ':
-				mouse_break(&motorR, &motorL);
-				break;
-			default:
-				break;
+	switch (in){
+		case 'f':
+			mouse_movefwd(&motorR, &motorL);
+			break;
+		case 'b':
+			mouse_movebwd(&motorR, &motorL);
+			break;
+		case 'd':
+			mouse_spin(&motorR, &motorL, 1);
+			break;
+		case 'e':
+			mouse_spin(&motorR, &motorL, 0);
+			break;
+		case ' ':
+			mouse_break(&motorR, &motorL);
+			break;
+		default:
+			break;
 
 		}
-		index = 0;
-	
-	    }
-       
-	
-	    if(index < sizeof(linha) - 1){
-	    
-	    	linha[index] = in;
-		    index++;
-
-		    
-	    } 
-	    else{
-		printf("Limite de buffer alcancado\n");
-
-	    	index = 0;
-
-	    } 
 	    vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

@@ -141,11 +141,11 @@ void motor_init(motor_t *motor){
 //funcoes para controle de velocidade
 static void set_pwm(
     mcpwm_cmpr_handle_t cmp,
-    uint16_t duty
+    uint8_t duty
 )
 {
     uint32_t ticks =
-        (50 * duty) / 100;
+        (PERIOD_TICKS * duty) / 100;
 
     mcpwm_comparator_set_compare_value(
         cmp,
@@ -173,8 +173,8 @@ void motor_set_speed(motor_t *motor, int8_t speed){
 }
 
 void motor_stop(motor_t *motor){
-    set_pwm(motor->comp, PERIOD_TICKS);
-    gpio_set_level(motor->dir_gpio, 1);
+    set_pwm(motor->comp, 0);
+    gpio_set_level(motor->dir_gpio, 0);
 }
 
 

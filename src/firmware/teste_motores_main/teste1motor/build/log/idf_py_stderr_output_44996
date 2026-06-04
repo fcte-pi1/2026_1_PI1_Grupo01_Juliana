@@ -1,0 +1,23 @@
+Command: cmake -G Ninja -B C:\Users\nobor\FGA\Materias\PI1\2026_1_PI1_Grupo01_Juliana\src\firmware\teste_motores_main\teste1motor\build -DPYTHON_DEPS_CHECKED=1 -DPYTHON=C:\Espressif\tools\python\v6.0.1\venv\Scripts\python.exe -DESP_PLATFORM=1 -DCCACHE_ENABLE=False C:\Users\nobor\FGA\Materias\PI1\2026_1_PI1_Grupo01_Juliana\src\firmware\teste_motores_main\teste1motor
+Configuration Report               
++---------------------------------+
+|  Parser Version: 1              |
+|  Verbosity: default             |
+|  Defaults policy: sdkconfig     |
+|  Status: Finished successfully  |
+|                                 |
++---------------------------------+
+CMake Warning in C:/esp/v6.0.1/esp-idf/components/mbedtls/mbedtls/tf-psa-crypto/core/CMakeLists.txt:
+  The object file directory
+
+    C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/esp-idf/mbedtls/mbedtls/tf-psa-crypto/core/CMakeFiles/tfpsacrypto.dir/./
+
+  has 181 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    cab966582a2f09fb526898c48d4096d5/psa_crypto_driver_esp_hmac_transparent.c.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
