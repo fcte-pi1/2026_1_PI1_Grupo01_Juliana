@@ -64,6 +64,58 @@
 
 \section{Testes de \textit{software}}
 
+O \textit{backlog} do produto definido no primeiro ponto de controle (PC1) é composto por seis histórias
+de usuário (HU01--HU06). Nesta entrega foram efetivamente implementadas e validadas
+por testes automatizados as quatro histórias do módulo de \textit{software}
+(web/\textit{backend}): HU03, HU04, HU05 e HU06, o que corresponde a $66{,}7\%$ do
+\textit{backlog} funcional (acima do mínimo de $50\%$). As histórias HU01
+(resolução autônoma) e HU02 (mapeamento incremental) pertencem ao módulo embarcado
+e dependem da integração final com a placa ESP32, estando planejadas para a etapa
+seguinte; por isso não compõem o conjunto validado nesta seção.
+
+\begin{table}[H]
+    \centering
+    \caption{Associação entre histórias de usuário implementadas, protótipos e
+    funcionalidades acessadas na interface gráfica.}
+    \label{tab:hu_prototipo_gui}
+    \footnotesize
+    \begin{tabular}{|c|p{3.6cm}|c|p{3.6cm}|p{3.4cm}|}
+        \hline
+        \textbf{HU} & \textbf{História de usuário} & \textbf{Protótipo} &
+        \textbf{Funcionalidade acessada na GUI} &
+        \textbf{Suíte de testes que valida} \\ \hline
+
+        HU03 & Telemetria em tempo real: trajeto, tempo, velocidade média e
+        bateria durante a corrida. & Figura~\ref{fig:telemetria_fig} &
+        Tela \textit{Telemetria ao Vivo}: grade do labirinto,
+        métricas e status de conexão atualizados via WebSocket. &
+        Unitário (\textit{Telemetry}, \textit{useTelemetry}); E2E
+        \texttt{telemetria.spec.js}; \textit{backend} POST \texttt{/telemetria}
+        e WS \texttt{/ws/telemetria}. \\ \hline
+
+        HU04 & Persistência e consulta de histórico de corridas com filtro por
+        tamanho. & Figura~\ref{fig:historicocorridas_fig} &
+        Tela \textit{Histórico}: tabela de corridas
+        e filtro por dimensão do labirinto. &
+        Unitário (\textit{History}, \textit{useHistory}); E2E
+        \texttt{history.spec.js}; \textit{backend} GET \texttt{/corridas}. \\ \hline
+
+        HU05 & Monitoramento do nível de bateria no painel web. &
+        Figura~\ref{fig:monitoramentobateria_fig} &
+        Indicador de bateria na tela \textit{Telemetria ao Vivo}, alimentado pelo 
+        campo \texttt{nivel\_bateria} da telemetria. &
+        Coberta pelos testes de telemetria (unitário e E2E); validada com dados
+        simulados. \\ \hline
+
+        HU06 & Indicador de desafio cumprido (Sim/Não) ao atingir o centro do
+        labirinto. & Figura~\ref{fig:desafiocumprido_fig} &
+        Campo \textit{Desafio Cumprido} na tela \textit{Telemetria ao Vivo}, 
+        calculado ao atingir a região central. &
+        Unitário (\textit{Telemetry}); E2E \texttt{telemetria.spec.js}
+        (casos ``Sim'' e ``Não''). \\ \hline
+    \end{tabular}
+\end{table}
+
 \textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do \textit{software} foram atendidos.
 Considerando a implementação de $50\%$ do \textit{backlog} do produto (funcional):}
 
