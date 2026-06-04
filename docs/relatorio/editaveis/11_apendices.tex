@@ -208,6 +208,37 @@
 \end{small}
 \end{landscape}
 
+\chapter{Evidências de Testes e Cobertura de Código}
+\label{apendice_evidencias_testes}
+
+Este apêndice reúne as evidências de execução das suítes de testes automatizados e
+de cobertura de código-fonte do \textit{software}, geradas pelo \textit{pipeline} de
+Integração Contínua e referenciadas na Seção~\ref{sec:testes_software}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth, keepaspectratio]{figuras/cobertura_backend.png}
+    \caption{Relatório de cobertura do \textit{backend} (\texttt{pytest-cov}): $98\%$ de
+    cobertura total, acima do mínimo de $70\%$.}
+    \label{fig:cobertura_backend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/cobertura_frontend.png}
+    \caption{Relatório de cobertura do \textit{frontend} (\texttt{Vitest}): $93{,}28\%$ de
+    \textit{statements} e $97{,}03\%$ de linhas, acima do mínimo de $70\%$.}
+    \label{fig:cobertura_frontend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/e2e_playwright.png}
+    \caption{Relatório dos testes de sistema E2E (\texttt{Playwright}): 19 casos
+    aprovados, distribuídos nas quatro suítes funcionais.}
+    \label{fig:e2e_playwright}
+\end{figure}
+
 % \textcolor{red}{Apêndices e anexos são materiais complementares ao texto que só devem ser incluídos quando forem imprescindíveis à compreensão deste:}
 
 % \textcolor{red}{

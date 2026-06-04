@@ -63,6 +63,7 @@
 \textcolor{red}{Apresentar com detalhes os testes feitos para conferir se as demandas energéticas do projeto foram atendidas.}
 
 \section{Testes de \textit{software}}
+\label{sec:testes_software}
 
 O \textit{backlog} do produto definido no primeiro ponto de controle (PC1) é composto por seis histórias
 de usuário (HU01--HU06). Nesta entrega foram efetivamente implementadas e validadas
@@ -116,45 +117,151 @@ seguinte; por isso não compõem o conjunto validado nesta seção.
     \end{tabular}
 \end{table}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do \textit{software} foram atendidos.
-Considerando a implementação de $50\%$ do \textit{backlog} do produto (funcional):}
+A estratégia de testes do \textit{software} cobre três níveis: testes unitários e de
+integração (de componentes e de rotas), com medição de cobertura de código-fonte, e
+testes de sistema do tipo funcional (\textit{end-to-end}, E2E), que exercitam a
+aplicação pela interface gráfica. Todas as suítes são executadas automaticamente a
+cada \textit{push} ou \textit{pull request} por um \textit{pipeline} de Integração
+Contínua (GitHub Actions), que reprova a alteração caso a cobertura fique abaixo de
+$70\%$.
 
-\begin{itemize}
-    \item \textcolor{red}{Listar as histórias de usuários implementadas.}
-    \item \textcolor{red}{Listar a associação entre as histórias de usuários e os protótipos, deixando claro qual é a funcionalidade que será acessada pelo usuário/professor(a) por meio da interface gráfica.}
-    \item \textcolor{red}{Listar os suítes de testes automatizados em nível:}
-    \begin{itemize}
-        \item \textcolor{red}{Unitário e integração, com cobertura de código-fonte de pelo menos $70\%$;}
-        \item \textcolor{red}{Sistema, do tipo funcional (end-to-end E2E).}
-    \end{itemize}
-\end{itemize}
+\subsection{Testes unitários e de integração}
 
-\textcolor{red}{\textbf{Observações:}}
-\begin{enumerate}
-    \item \textcolor{red}{Em relação ao \textit{backlog} do produto, será considerado como referência aquele descrito no primeiro ponto de controle, contemplando as correções e \textit{feedbacks} da-os professora(e)s. O ideal seria a real atualização entre o planejado X realizado.}
-    \item \textcolor{red}{Os testes mencionados nesta subseção dizem respeito aos testes de \textit{software}. O Roteiro de testes funcionais, entregue no primeiro ponto de controle deve ser corrigido a partir do apontamento da-os professora(e)s. Além disso, ele deve guiar a execução dos testes E2E automatizados. O conjunto de casos de testes funcionais documentados devem estar coerentes com a automação via interface gráfica de entrada de dados.}
-\end{enumerate}
+No \textit{backend} (FastAPI), os testes foram escritos com \texttt{pytest} e
+\texttt{pytest-cov}, empregando banco SQLite em memória e \textit{fixtures} que
+substituem a sessão de banco real, de modo a não depender de infraestrutura externa.
+No \textit{frontend} (React), foram utilizados \texttt{Vitest} e \textit{Testing
+Library} sobre o ambiente \texttt{jsdom}. A Tabela~\ref{tab:suites_unit} resume as
+suítes e a cobertura obtida, ambas acima do mínimo exigido de $70\%$; os relatórios
+de cobertura correspondentes constam do Apêndice~\ref{apendice_evidencias_testes}
+(Figuras~\ref{fig:cobertura_backend} e~\ref{fig:cobertura_frontend}).
 
-\textcolor{red}{Exemplos de ferramentas de teste funcionais E2E:}
-\begin{itemize}
-    \item \textcolor{red}{Selenium} 
-    \item \textcolor{red}{Cypress}
-    \item \textcolor{red}{Playwright}
-\end{itemize}
+\begin{table}[H]
+    \centering
+    \caption{Suítes de testes unitários e de integração e cobertura de código.}
+    \label{tab:suites_unit}
+    \small
+    \begin{tabular}{|l|p{3.0cm}|p{5.2cm}|c|c|}
+        \hline
+        \textbf{Camada} & \textbf{Ferramentas} & \textbf{Principais suítes} &
+        \textbf{Testes} & \textbf{Cobertura} \\ \hline
+        \textit{Backend} & \texttt{pytest}, \texttt{pytest-cov} &
+        telemetria (POST e WebSocket), \textit{models} e \textit{schemas},
+        histórico/consulta e \textit{health} & 74 & $98\%$ \\ \hline
+        \textit{Frontend} & \texttt{Vitest}, \textit{Testing Library} &
+        páginas \textit{Telemetry} e \textit{History}, componentes \textit{Layout} e
+        \textit{MazeMap}, \textit{hooks} e roteamento & 37 & $93\%$ \\ \hline
+    \end{tabular}
+\end{table}
 
-\textcolor{red}{Exemplos de ferramentas de testes em nível unitário e integração:}
-\begin{itemize}
-    \item \textcolor{red}{Jest}
-    \item \textcolor{red}{unittest}
-    \item \textcolor{red}{pytest}
-    \item \textcolor{red}{tox}
-    \item \textcolor{red}{gTest}
-    \item \textcolor{red}{Catch2}
-\end{itemize}
+\subsection{Testes de sistema (E2E)}
+
+Os testes de sistema foram automatizados com \texttt{Playwright}, executados em modo
+\textit{headless} (compatível com a Integração Contínua). As suítes automatizam os
+casos funcionais de \textit{software} do roteiro de testes
+(Apêndice~\ref{apendice_roteiro_detalhado}); os casos do módulo embarcado (TF01 e
+TF02) dependem da integração com a ESP32 e serão validados posteriormente. A suíte
+completa soma 19 casos. As suítes que exercitam o fluxo de telemetria, por validarem
+a integração entre os módulos, são detalhadas na Seção~\ref{sec:testes_integracao};
+as suítes funcionais da aplicação web (consulta de histórico e navegação) constam da
+Tabela~\ref{tab:suites_e2e}.
+
+\begin{table}[H]
+    \centering
+    \caption{Suítes de testes de sistema (E2E) automatizadas com Playwright.}
+    \label{tab:suites_e2e}
+    \small
+    \begin{tabular}{|l|p{9.3cm}|}
+        \hline
+        \textbf{Suíte} & \textbf{Cenários validados} \\ \hline
+        \texttt{history.spec.js} & Consulta do histórico e filtro por tamanho de
+        labirinto, incluindo a restauração da listagem completa (4 casos). \\ \hline
+        \texttt{smoke.spec.js} & Carregamento básico da aplicação e navegação inicial
+        entre as telas (2 casos). \\ \hline
+    \end{tabular}
+\end{table}
+
+A execução das suítes, a verificação do limiar de cobertura e a coleta das evidências
+(relatórios de cobertura e do Playwright) são realizadas automaticamente pelo
+\textit{pipeline} de Integração Contínua, garantindo que a \textit{branch} principal
+permaneça sempre com os testes verdes. O relatório de execução dos testes E2E é
+apresentado na Figura~\ref{fig:e2e_playwright} (Apêndice~\ref{apendice_evidencias_testes}).
 
 \section{Testes de integração}
+\label{sec:testes_integracao}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do projeto como um todo foram atendidos.}
+A integração da comunicação de telemetria foi validada entre os componentes de
+\textit{software} (API, persistência, WebSocket e \textit{frontend}), com a fonte de
+dados simulada por um dublê de WebSocket e um cliente de teste que reproduzem o
+contrato \texttt{TelemetriaOut}. A integração com o \textit{firmware} real da ESP32 está
+planejada para a \textit{sprint}-5 (\#22 e \#23).
+
+O fluxo de telemetria é o principal ponto de integração do sistema, pois atravessa
+todas as camadas do \textit{software}: o sistema embarcado, a API, o banco de dados, o
+canal de tempo real e a interface web. Por isso, esta seção concentra a verificação
+desse caminho de ponta a ponta. O fluxo é o seguinte: um emissor de telemetria (um
+simulador em \textit{Python} que mimetiza o \textit{firmware}, ou um dublê de WebSocket
+executado no navegador) envia pacotes ao \textit{endpoint} \texttt{POST /telemetria}; o
+\textit{backend} valida o pacote, persiste o evento, resolve a corrida associada
+(criando-a no primeiro pacote e reutilizando-a nos seguintes) e repassa o dado, em
+tempo real, a todos os clientes conectados pelo canal \texttt{/ws/telemetria}; por fim,
+a interface web recebe o evento e atualiza o painel. Esse fluxo corresponde ao diagrama
+de sequência da corrida completa apresentado no capítulo de projeto do sistema.
+% TODO: substituir pela referência \ref{} ao diagrama de sequência quando a Tarefa
+% de diagramas UML (#21) for concluída.
+
+A verificação cobre as quatro etapas desse contrato, da ingestão do pacote até o
+consumo pela interface, combinando testes de integração de \textit{backend} (que
+exercitam diretamente a API, a persistência e o \textit{broadcast}) com testes de
+sistema fim a fim. Ao todo, treze casos automatizados de E2E (doze do fluxo ao vivo e um
+de robustez de reconexão) somam-se aos testes de integração de \textit{backend} para
+cobrir o caminho completo da telemetria. A Tabela~\ref{tab:testes_integracao} detalha
+cada teste, os componentes que ele integra e os cenários validados.
+
+\begin{table}[H]
+    \centering
+    \caption{Testes de integração do fluxo de telemetria, validados com dados simulados.}
+    \label{tab:testes_integracao}
+    \small
+    \begin{tabular}{|p{3.3cm}|p{4.0cm}|p{5.7cm}|}
+        \hline
+        \textbf{Teste / nível} & \textbf{Componentes integrados} &
+        \textbf{Cenários validados} \\ \hline
+        Ingestão (\texttt{POST /telemetria}, \textit{backend}) &
+        API e camada de persistência (banco de dados) &
+        Pacote aceito (\texttt{201}); evento de telemetria gravado; corrida criada no
+        primeiro pacote e reutilizada nos seguintes. \\ \hline
+        \textit{Broadcast} (WebSocket \texttt{/ws/telemetria}, \textit{backend}) &
+        API, gerenciador de conexões e múltiplos clientes &
+        Repasse do pacote a todos os clientes conectados; descarte de conexões inativas
+        sem afetar os demais; tratamento de \textit{payload} inválido e de
+        \texttt{labirinto\_id} inexistente. \\ \hline
+        Fim a fim ao vivo (\texttt{telemetria.spec.js}, E2E) &
+        WebSocket e \textit{frontend} (painel) &
+        Atualização em tempo real de posição, velocidade média, bateria e tempo;
+        renderização do \textit{grid}; indicador de desafio cumprido; robustez a
+        mensagens inválidas (12 casos). \\ \hline
+        Robustez de conexão (\texttt{reconexao.spec.js}, E2E) &
+        WebSocket e \textit{frontend} &
+        Sinalização da perda de conexão, reconexão automática e retomada das
+        atualizações na interface (1 caso). \\ \hline
+        Emissor $\rightarrow$ \textit{backend} (simulador de armazenamento) &
+        \textit{Firmware} simulado e API &
+        Envio ao \texttt{POST /telemetria} dos dados persistidos localmente, com
+        criação e consulta da corrida resultante. \\ \hline
+    \end{tabular}
+\end{table}
+
+Os resultados de execução dessas suítes constam do relatório de testes E2E
+(Figura~\ref{fig:e2e_playwright}) e do relatório de cobertura do \textit{backend}
+(Figura~\ref{fig:cobertura_backend}), ambos no
+Apêndice~\ref{apendice_evidencias_testes}.
+
+A integração completa com o \textit{hardware} físico (o envio dos pacotes pela
+ESP32 a partir das leituras reais dos sensores) será validada na \textit{sprint}-5
+(\#22 e \#23), quando a placa estiver plenamente configurada. Nesta entrega, a
+comunicação foi verificada de ponta a ponta com dados simulados, garantindo que o
+contrato de integração entre os módulos está correto.
 
 %\textcolor{red}{Com relação ao \textit{software}, será necessário apresentar pacotes de componentes de \textit{software}, suas funções e características, e explicar as decisões de projeto.}
 
