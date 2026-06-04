@@ -25,7 +25,30 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Rodar testes com cobertura
-        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=70
+        run: |
+          pytest --cov=app --cov-report=term-missing \
+                 --cov-report=html --cov-report=xml \
+                 --cov-fail-under=70 | tee coverage.txt
+
+      - name: Publicar resumo de cobertura (backend)
+        if: always()
+        run: |
+          {
+            echo "## Cobertura — Backend (pytest)"
+            echo '```'
+            tail -n 20 coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Exportar evidência de cobertura (backend)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-backend
+          path: |
+            src/backend/htmlcov/
+            src/backend/coverage.xml
+          retention-days: 90
 
   frontend:
     name: Frontend — Vitest + cobertura
@@ -47,7 +70,25 @@ jobs:
         run: npm ci
 
       - name: Rodar testes com cobertura
-        run: npx vitest run --coverage --coverage.thresholds.statements=70
+        run: npx vitest run --coverage --coverage.thresholds.statements=70 | tee coverage.txt
+
+      - name: Publicar resumo de cobertura (frontend)
+        if: always()
+        run: |
+          {
+            echo "## Cobertura — Frontend (Vitest)"
+            echo '```'
+            tail -n 20 coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Exportar evidência de cobertura (frontend)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-frontend
+          path: src/frontend/coverage/
+          retention-days: 90
 
   e2e:
     name: Frontend — Playwright E2E
@@ -73,3 +114,11 @@ jobs:
 
       - name: Rodar testes E2E
         run: npm run e2e
+
+      - name: Exportar evidência E2E (Playwright)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-e2e
+          path: src/frontend/playwright-report/
+          retention-days: 90
