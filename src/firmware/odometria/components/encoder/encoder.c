@@ -11,7 +11,7 @@
 
 #include "encoder.h"
 
-static int previous_count = 0;
+static const char *TAG = "encoder";
 
 //rotina de configuracoes iniciais do periferico pcnt
 esp_err_t encoder_init(encoder_t *encoder, gpio_num_t gpio)
@@ -85,21 +85,26 @@ esp_err_t encoder_init(encoder_t *encoder, gpio_num_t gpio)
         )
     );
 
+    ESP_LOGI(TAG, "encoder: iniciado"); 
     return ESP_OK;
 }
 
 //movimento estimado do eixo do motor [rad]
+//baseado na condicao de que a leitura e feita
+//com o carrinho parado...
 float encoder_get_teta(encoder_t *encoder){
     
     int count = 0;
 
     pcnt_unit_get_count(encoder->unit, &count);
 
-    int pulsos = count - previous_count;
-    previous_count = count;
+    pcnt_unit_clear_count(encoder->unit);
+
+    int pulsos = count;
 
     float teta = (pulsos * M_PI)/10.0f;
     
+    ESP_LOGI(TAG, "pulsos lidos: %d", pulsos);
     return teta;
 }
 

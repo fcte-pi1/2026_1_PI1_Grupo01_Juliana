@@ -1,0 +1,259 @@
+Command: /home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python /home/nobor/.espressif/v6.0.1/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motor_encoder/build/teste_motor_encoder.elf /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motor_encoder/build/bootloader/bootloader.elf -m '/home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python' '/home/nobor/.espressif/v6.0.1/esp-idf/tools/idf.py' '-p' '/dev/ttyUSB0'
+g. R�ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6272
+load:0x40078000,len:15848
+load:0x40080400,len:3920
+entry 0x40080644
+[0;32mI (27) boot: ESP-IDF v6.0.1 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Jun  5 2026 16:35:40[0m
+[0;32mI (28) boot: Multicore bootloader[0m
+[0;32mI (29) boot: chip revision: v3.1[0m
+[0;32mI (32) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (35) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (49) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (62) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (75) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=09d98h ( 40344) map[0m
+[0;32mI (101) esp_image: segment 1: paddr=00019dc0 vaddr=3ffb0000 size=02a0ch ( 10764) load[0m
+[0;32mI (105) esp_image: segment 2: paddr=0001c7d4 vaddr=40080000 size=03844h ( 14404) load[0m
+[0;32mI (111) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=0fdf4h ( 65012) map[0m
+[0;32mI (135) esp_image: segment 4: paddr=0002fe1c vaddr=40083844 size=075bch ( 30140) load[0m
+[0;32mI (148) esp_image: segment 5: paddr=000373e0 vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (154) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (154) boot: Disabling RNG early entropy source...[0m
+[0;32mI (166) cpu_start: Multicore app[0m
+[0;32mI (174) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (174) cpu_start: Pro cpu start user code[0m
+[0;32mI (174) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (176) app_init: Application information:[0m
+[0;32mI (180) app_init: Project name:     teste_motor_encoder[0m
+[0;32mI (185) app_init: App version:      4f4c481-dirty[0m
+[0;32mI (189) app_init: Compile time:     Jun  5 2026 16:36:01[0m
+[0;32mI (194) app_init: ELF file SHA256:  dbc333872...[0m
+[0;32mI (199) app_init: ESP-IDF:          v6.0.1[0m
+[0;32mI (202) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (206) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (210) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (214) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (221) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (226) heap_init: At 3FFB33E8 len 0002CC18 (179 KiB): DRAM[0m
+[0;32mI (231) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (236) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (242) heap_init: At 4008AE00 len 00015200 (84 KiB): IRAM[0m
+[0;32mI (248) spi_flash: detected chip: generic[0m
+[0;32mI (251) spi_flash: flash io: dio[0m
+[0;33mW (254) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (267) main_task: Started on CPU0[0m
+[0;32mI (277) main_task: Calling app_main()[0m
+[0;32mI (277) encoder: encoder: iniciado[0m
+[0;32mI (277) encoder: encoder: iniciado[0m
+[0;32mI (277) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (277) motor: velocidade do motor: 0[0m
+[0;32mI (277) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (287) motor: velocidade do motor: 0[0m
+[0;32mI (3797) movimentacao: comando frear[0m
+[0;32mI (3797) encoder: pulsos lidos: 0[0m
+[0;32mI (3797) teste_encoder: angulo direita: 0.000000[0m
+[0;32mI (3797) encoder: pulsos lidos: 0[0m
+[0;32mI (3797) teste_encoder: angulo esquerda: 0.000000[0m
+[0;32mI (4327) movimentacao: comando frear[0m
+[0;32mI (4327) encoder: pulsos lidos: 0[0m
+[0;32mI (4327) teste_encoder: angulo direita: 0.000000[0m
+[0;32mI (4327) encoder: pulsos lidos: 0[0m
+[0;32mI (4327) teste_encoder: angulo esquerda: 0.000000[0m
+����������������������������������������������������������������frear
+[0;32mI (10937) encoder: pulsos lidos: 0[0m
+[0;32mI (10937) teste_encoder: angulo direita: 0.000000[0m
+[0;32mI (10937) encoder: pulsos lidos: 3[0m
+[0;32mI (10937) teste_encoder: angulo esquerda: 0.942478[0m
+[0;32mI (14987) movimentacao: comando frear[0m
+[0;32mI (14987) encoder: pulsos lidos: 0[0m
+[0;32mI (14987) teste_encoder: angulo direita: 0.000000[0m
+[0;32mI (14987) encoder: pulsos lidos: 5[0m
+[0;32mI (14987) teste_encoder: angulo esquerda: 1.570796[0m
+[0;32mI (18407) movimentacao: comando frear[0m
+[0;32mI (18407) encoder: pulsos lidos: 0[0m
+[0;32mI (18407) teste_encoder: angulo direita: 0.000000[0m
+[0;32mI (18407) encoder: pulsos lidos: 7[0m
+[0;32mI (18407) teste_encoder: angulo esquerda: 2.199115[0m
+[0;32mI (67447) motor: velocidade do motor: 50[0m
+[0;32mI (67447) motor: velocidade do motor: 50[0m
+[0;32mI (67447) movimentacao: comando andar para frente[0m
+[0;32mI (70147) movimentacao: comando frear[0m
+[0;32mI (70147) encoder: pulsos lidos: 175[0m
+[0;32mI (70147) teste_encoder: angulo direita: 54.977871[0m
+[0;32mI (70147) encoder: pulsos lidos: 193[0m
+[0;32mI (70147) teste_encoder: angulo esquerda: 60.632740[0m
+[0;32mI (74657) motor: velocidade do motor: 31[0m
+[0;32mI (74657) motor: velocidade do motor: -31[0m
+[0;32mI (74657) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (76797) movimentacao: comando frear[0m
+[0;32mI (76797) encoder: pulsos lidos: 61[0m
+[0;32mI (76797) teste_encoder: angulo direita: 19.163715[0m
+[0;32mI (76797) encoder: pulsos lidos: 77[0m
+[0;32mI (76797) teste_encoder: angulo esquerda: 24.190264[0m
+[0;32mI (79557) motor: velocidade do motor: -31[0m
+[0;32mI (79557) motor: velocidade do motor: 31[0m
+[0;32mI (79557) movimentacao: comando virar sentido horario[0m
+[0;32mI (82277) movimentacao: comando frear[0m
+[0;32mI (82277) encoder: pulsos lidos: 70[0m
+[0;32mI (82277) teste_encoder: angulo direita: 21.991148[0m
+[0;32mI (82277) encoder: pulsos lidos: 84[0m
+[0;32mI (82277) teste_encoder: angulo esquerda: 26.389378[0m
+[0;32mI (85747) motor: velocidade do motor: 50[0m
+[0;32mI (85747) motor: velocidade do motor: 50[0m
+[0;32mI (85747) movimentacao: comando andar para frente[0m
+[0;32mI (87797) movimentacao: comando frear[0m
+[0;32mI (87797) encoder: pulsos lidos: 135[0m
+[0;32mI (87797) teste_encoder: angulo direita: 42.411499[0m
+[0;32mI (87797) encoder: pulsos lidos: 153[0m
+[0;32mI (87797) teste_encoder: angulo esquerda: 48.066368[0m
+[0;32mI (128927) motor: velocidade do motor: 50[0m
+[0;32mI (128927) motor: velocidade do motor: 50[0m
+[0;32mI (128927) movimentacao: comando andar para frente[0m
+[0;32mI (131207) movimentacao: comando frear[0m
+[0;32mI (131207) encoder: pulsos lidos: 169[0m
+[0;32mI (131207) teste_encoder: angulo direita: 53.092915[0m
+[0;32mI (131207) encoder: pulsos lidos: 185[0m
+[0;32mI (131207) teste_encoder: angulo esquerda: 58.119465[0m
+[0;32mI (138417) motor: velocidade do motor: -31[0m
+[0;32mI (138417) motor: velocidade do motor: -31[0m
+[0;32mI (138417) movimentacao: comando andar para tras[0m
+[0;32mI (140437) movimentacao: comando frear[0m
+[0;32mI (140437) encoder: pulsos lidos: 61[0m
+[0;32mI (140437) teste_encoder: angulo direita: 19.163715[0m
+[0;32mI (140437) encoder: pulsos lidos: 75[0m
+[0;32mI (140437) teste_encoder: angulo esquerda: 23.561945[0m
+����������������������������������������������������������������motor: -31
+[0;32mI (151157) motor: velocidade do motor: -31[0m
+[0;32mI (151157) movimentacao: comando andar para tras[0m
+[0;32mI (153107) movimentacao: comando frear[0m
+[0;32mI (153107) encoder: pulsos lidos: 50[0m
+[0;32mI (153107) teste_encoder: angulo direita: 15.707963[0m
+[0;32mI (153107) encoder: pulsos lidos: 60[0m
+[0;32mI (153107) teste_encoder: angulo esquerda: 18.849556[0m
+[0;32mI (176907) motor: velocidade do motor: -31[0m
+[0;32mI (176907) motor: velocidade do motor: -31[0m
+[0;32mI (176907) movimentacao: comando andar para tras[0m
+[0;32mI (178317) motor: velocidade do motor: -31[0m
+[0;32mI (178317) motor: velocidade do motor: -31[0m
+[0;32mI (178317) movimentacao: comando andar para tras[0m
+[0;32mI (178617) movimentacao: comando frear[0m
+[0;32mI (178617) encoder: pulsos lidos: 46[0m
+[0;32mI (178617) teste_encoder: angulo direita: 14.451326[0m
+[0;32mI (178617) encoder: pulsos lidos: 52[0m
+[0;32mI (178617) teste_encoder: angulo esquerda: 16.336283[0m
+[0;32mI (181187) motor: velocidade do motor: -31[0m
+[0;32mI (181187) motor: velocidade do motor: -31[0m
+[0;32mI (181187) movimentacao: comando andar para tras[0m
+[0;32mI (181937) movimentacao: comando frear[0m
+[0;32mI (181937) encoder: pulsos lidos: 17[0m
+[0;32mI (181937) teste_encoder: angulo direita: 5.340707[0m
+[0;32mI (181937) encoder: pulsos lidos: 20[0m
+[0;32mI (181937) teste_encoder: angulo esquerda: 6.283185[0m
+[0;32mI (194147) motor: velocidade do motor: -31[0m
+[0;32mI (194147) motor: velocidade do motor: -31[0m
+[0;32mI (194147) movimentacao: comando andar para tras[0m
+[0;32mI (195177) movimentacao: comando frear[0m
+[0;32mI (195177) encoder: pulsos lidos: 26[0m
+[0;32mI (195177) teste_encoder: angulo direita: 8.168141[0m
+[0;32mI (195177) encoder: pulsos lidos: 29[0m
+[0;32mI (195177) teste_encoder: angulo esquerda: 9.110619[0m
+[0;32mI (200127) motor: velocidade do motor: -31[0m
+[0;32mI (200127) motor: velocidade do motor: -31[0m
+[0;32mI (200127) movimentacao: comando andar para tras[0m
+[0;32mI (200947) movimentacao: comando frear[0m
+[0;32mI (200947) encoder: pulsos lidos: 20[0m
+[0;32mI (200947) teste_encoder: angulo direita: 6.283185[0m
+[0;32mI (200947) encoder: pulsos lidos: 22[0m
+[0;32mI (200947) teste_encoder: angulo esquerda: 6.911504[0m
+[0;32mI (207387) motor: velocidade do motor: 50[0m
+[0;32mI (207387) motor: velocidade do motor: 50[0m
+[0;32mI (207387) movimentacao: comando andar para frente[0m
+[0;32mI (207707) movimentacao: comando frear[0m
+[0;32mI (207707) encoder: pulsos lidos: 13[0m
+[0;32mI (207707) teste_encoder: angulo direita: 4.084071[0m
+[0;32mI (207707) encoder: pulsos lidos: 15[0m
+[0;32mI (207707) teste_encoder: angulo esquerda: 4.712389[0m
+[0;32mI (210117) motor: velocidade do motor: 50[0m
+[0;32mI (210117) motor: velocidade do motor: 50[0m
+[0;32mI (210117) movimentacao: comando andar para frente[0m
+[0;32mI (210587) movimentacao: comando frear[0m
+[0;32mI (210587) encoder: pulsos lidos: 27[0m
+[0;32mI (210587) teste_encoder: angulo direita: 8.482300[0m
+[0;32mI (210587) encoder: pulsos lidos: 29[0m
+[0;32mI (210587) teste_encoder: angulo esquerda: 9.110619[0m
+[0;32mI (212507) motor: velocidade do motor: 50[0m
+[0;32mI (212507) motor: velocidade do motor: 50[0m
+[0;32mI (212507) movimentacao: comando andar para frente[0m
+[0;32mI (212857) movimentacao: comando frear[0m
+[0;32mI (212857) encoder: pulsos lidos: 21[0m
+[0;32mI (212857) teste_encoder: angulo direita: 6.597344[0m
+[0;32mI (212857) encoder: pulsos lidos: 24[0m
+[0;32mI (212857) teste_encoder: angulo esquerda: 7.539823[0m
+[0;32mI (217447) motor: velocidade do motor: 50[0m
+[0;32mI (217447) motor: velocidade do motor: 50[0m
+[0;32mI (217447) movimentacao: comando andar para frente[0m
+[0;32mI (217837) movimentacao: comando frear[0m
+[0;32mI (217837) encoder: pulsos lidos: 22[0m
+[0;32mI (217837) teste_encoder: angulo direita: 6.911504[0m
+[0;32mI (217837) encoder: pulsos lidos: 24[0m
+[0;32mI (217837) teste_encoder: angulo esquerda: 7.539823[0m
+[0;32mI (219027) motor: velocidade do motor: 50[0m
+[0;32mI (219027) motor: velocidade do motor: 50[0m
+[0;32mI (219027) movimentacao: comando andar para frente[0m
+[0;32mI (219427) movimentacao: comando frear[0m
+[0;32mI (219427) encoder: pulsos lidos: 24[0m
+[0;32mI (219427) teste_encoder: angulo direita: 7.539823[0m
+[0;32mI (219427) encoder: pulsos lidos: 27[0m
+[0;32mI (219427) teste_encoder: angulo esquerda: 8.482300[0m
+[0;32mI (220657) motor: velocidade do motor: 50[0m
+[0;32mI (220657) motor: velocidade do motor: 50[0m
+[0;32mI (220657) movimentacao: comando andar para frente[0m
+[0;32mI (221037) movimentacao: comando frear[0m
+[0;32mI (221037) encoder: pulsos lidos: 22[0m
+[0;32mI (221037) teste_encoder: angulo direita: 6.911504[0m
+[0;32mI (221037) encoder: pulsos lidos: 25[0m
+[0;32mI (221037) teste_encoder: angulo esquerda: 7.853981[0m
+[0;32mI (222627) motor: velocidade do motor: 50[0m
+[0;32mI (222627) motor: velocidade do motor: 50[0m
+[0;32mI (222627) movimentacao: comando andar para frente[0m
+[0;32mI (222927) movimentacao: comando frear[0m
+[0;32mI (222927) encoder: pulsos lidos: 17[0m
+[0;32mI (222927) teste_encoder: angulo direita: 5.340707[0m
+[0;32mI (222927) encoder: pulsos lidos: 20[0m
+[0;32mI (222927) teste_encoder: angulo esquerda: 6.283185[0m
+[0;32mI (228057) motor: velocidade do motor: 50[0m
+[0;32mI (228057) motor: velocidade do motor: 50[0m
+[0;32mI (228057) movimentacao: comando andar para frente[0m
+[0;32mI (229587) movimentacao: comando frear[0m
+[0;32mI (229587) encoder: pulsos lidos: 102[0m
+[0;32mI (229587) teste_encoder: angulo direita: 32.044247[0m
+[0;32mI (229587) encoder: pulsos lidos: 115[0m
+[0;32mI (229587) teste_encoder: angulo esquerda: 36.128315[0m
+[0;32mI (250437) motor: velocidade do motor: -31[0m
+[0;32mI (250437) motor: velocidade do motor: 31[0m
+[0;32mI (250437) movimentacao: comando virar sentido horario[0m
+[0;32mI (252997) movimentacao: comando frear[0m
+[0;32mI (252997) encoder: pulsos lidos: 77[0m
+[0;32mI (252997) teste_encoder: angulo direita: 24.190264[0m
+[0;32mI (252997) encoder: pulsos lidos: 94[0m
+[0;32mI (252997) teste_encoder: angulo esquerda: 29.530972[0m
+[0;32mI (254407) motor: velocidade do motor: 31[0m
+[0;32mI (254407) motor: velocidade do motor: -31[0m
+[0;32mI (254407) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (256897) movimentacao: comando frear[0m
+[0;32mI (256897) encoder: pulsos lidos: 63[0m
+[0;32mI (256897) teste_encoder: angulo direita: 19.792034[0m
+[0;32mI (256897) encoder: pulsos lidos: 77[0m
+[0;32mI (256897) teste_encoder: angulo esquerda: 24.190264[0m
