@@ -1,4 +1,4 @@
-/* * Data converted from C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 #if !defined (__APPLE__) && !defined (__linux__)

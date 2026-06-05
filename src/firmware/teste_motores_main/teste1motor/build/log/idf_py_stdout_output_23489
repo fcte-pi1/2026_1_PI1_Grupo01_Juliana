@@ -1,0 +1,6 @@
+Command: ninja all
+[1/4] cd /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build && /home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python /home/nobor/.espressif/v6.0.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/partition_table/partition-table.bin /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/teste1motor.bin
+teste1motor.bin binary size 0x26e70 bytes. Smallest app partition is 0x100000 bytes. 0xd9190 bytes (85%) free.
+[2/4] Performing build step for 'bootloader'
+[1/1] cd /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader && /home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python /home/nobor/.espressif/v6.0.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader/bootloader.bin
+Bootloader binary size 0x6610 bytes. 0x9f0 bytes (9%) free.

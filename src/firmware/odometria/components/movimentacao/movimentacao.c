@@ -21,8 +21,8 @@ void mouse_movefwd(motor_t *motorR, motor_t *motorL){
 }
 
 void mouse_movebwd(motor_t *motorR, motor_t *motorL){
-    motor_set_speed(motorR, MOTOR_BWD_SPD);
-    motor_set_speed(motorL, MOTOR_BWD_SPD);
+    motor_set_speed(motorR, -MOTOR_BWD_SPD);
+    motor_set_speed(motorL, -MOTOR_BWD_SPD);
     ESP_LOGI(TAG, "comando andar para tras");
 }
 

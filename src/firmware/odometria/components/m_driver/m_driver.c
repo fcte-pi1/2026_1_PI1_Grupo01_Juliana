@@ -10,44 +10,53 @@ static const char *TAG = "motor";
 
 //timer
 static mcpwm_timer_handle_t timer = NULL;
-static mcpwm_oper_handle_t oper = NULL;
+static mcpwm_oper_handle_t oper1 = NULL;
+static mcpwm_oper_handle_t oper2 = NULL;
 
-//comparadores (um para cada motor)
-static mcpwm_cmpr_handle_t cmp_motorR;
-static mcpwm_cmpr_handle_t cmp_motorL;
+//comparadores (um par para cada motor)
+static mcpwm_cmpr_handle_t cmp_motorR1;
+static mcpwm_cmpr_handle_t cmp_motorR2;
 
-//geradores (um para cada motor)
-static mcpwm_gen_handle_t gen_motorR;
-static mcpwm_gen_handle_t gen_motorL;
+static mcpwm_cmpr_handle_t cmp_motorL1;
+static mcpwm_cmpr_handle_t cmp_motorL2;
 
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerR(){
-	return cmp_motorR; 
+//geradores (um par para cada motor)
+static mcpwm_gen_handle_t gen_motorR1;
+static mcpwm_gen_handle_t gen_motorR2;
+
+static mcpwm_gen_handle_t gen_motorL1;
+static mcpwm_gen_handle_t gen_motorL2;
+
+
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerR1(){
+	return cmp_motorR1; 
 	}
-	
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerL(){
-	return cmp_motorL; 
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerR2(){
+	return cmp_motorR2; 
 	}
 
-mcpwm_gen_handle_t driver_get_gen_handlerR(){
-	return gen_motorR; 
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerL1(){
+	return cmp_motorL1; 
 	}
-	
-mcpwm_gen_handle_t driver_get_gen_handlerL(){
-	return gen_motorL; 
+mcpwm_cmpr_handle_t driver_get_cmpr_handlerL2(){
+	return cmp_motorL2; 
+	}
+
+mcpwm_gen_handle_t driver_get_gen_handlerR1(){
+	return gen_motorR1; 
+	}
+mcpwm_gen_handle_t driver_get_gen_handlerR2(){
+	return gen_motorR2; 
+	}
+
+mcpwm_gen_handle_t driver_get_gen_handlerL1(){
+	return gen_motorL1; 
+	}
+mcpwm_gen_handle_t driver_get_gen_handlerL2(){
+	return gen_motorL2; 
 	}
 //rotina de configuracoes iniciais para timer, operador e gpio
 void driver_init(){
-    //configuracao dos gpios de saida
-    gpio_config_t io_conf = {
-        .pin_bit_mask = GPIO_OUTPUT_PIN_SEL,
-        .mode = GPIO_MODE_OUTPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE
-    };
-
-    gpio_config(&io_conf);
-
     //configuracao da frequencia do timer pwm
     //para este projeto, estaremos usando 20kHz
 
@@ -73,11 +82,21 @@ void driver_init(){
 
     mcpwm_new_operator(
         &operator_config,
-        &oper
+        &oper1
     );
 
+    mcpwm_new_operator(
+        &operator_config,
+        &oper2
+    );
+
+
     mcpwm_operator_connect_timer(
-        oper,
+        oper1,
+        timer
+    );
+    mcpwm_operator_connect_timer(
+        oper2,
         timer
     );
 
@@ -97,26 +116,39 @@ void motor_init(motor_t *motor){
     mcpwm_comparator_config_t cmp_config = {
         .flags.update_cmp_on_tez = true
     };
-
+	//comparador1
     mcpwm_new_comparator(
-        oper,
+        oper1,
         &cmp_config,
-        &motor->comp
+        &motor->comp1
     );
-
+	//comparador2
+    mcpwm_new_comparator(
+        oper2,
+        &cmp_config,
+        &motor->comp2
+    );
+    
     //configurando os geradores
     mcpwm_generator_config_t gen_config;
-
-    gen_config.gen_gpio_num = motor->pwm_gpio;
+	//gerador1
+    gen_config.gen_gpio_num = motor->pwm_gpio1;
     mcpwm_new_generator(
-        oper,
+        oper1,
         &gen_config,
-        &motor->gen
+        &motor->gen1
+    );
+	//gerador2
+    gen_config.gen_gpio_num = motor->pwm_gpio2;
+    mcpwm_new_generator(
+        oper2,
+        &gen_config,
+        &motor->gen2
     );
 
     //configurando PWM
     mcpwm_generator_set_action_on_timer_event(
-        motor->gen,
+        motor->gen1,
         MCPWM_GEN_TIMER_EVENT_ACTION(
             MCPWM_TIMER_DIRECTION_UP,
             MCPWM_TIMER_EVENT_EMPTY,
@@ -125,10 +157,28 @@ void motor_init(motor_t *motor){
     );
 
     mcpwm_generator_set_action_on_compare_event(
-        motor->gen,
+        motor->gen1,
         MCPWM_GEN_COMPARE_EVENT_ACTION(
             MCPWM_TIMER_DIRECTION_UP,
-            motor->comp,
+            motor->comp1,
+            MCPWM_GEN_ACTION_LOW
+        )
+    );
+
+    mcpwm_generator_set_action_on_timer_event(
+        motor->gen2,
+        MCPWM_GEN_TIMER_EVENT_ACTION(
+            MCPWM_TIMER_DIRECTION_UP,
+            MCPWM_TIMER_EVENT_EMPTY,
+            MCPWM_GEN_ACTION_HIGH
+        )
+    );
+
+    mcpwm_generator_set_action_on_compare_event(
+        motor->gen2,
+        MCPWM_GEN_COMPARE_EVENT_ACTION(
+            MCPWM_TIMER_DIRECTION_UP,
+            motor->comp2,
             MCPWM_GEN_ACTION_LOW
         )
     );
@@ -155,26 +205,26 @@ static void set_pwm(
 
 void motor_set_speed(motor_t *motor, int8_t speed){
     ESP_LOGI(TAG, "velocidade do motor: %d", speed);
-        if(speed > 30 && speed <= 100)
+        if(speed >= 25 && speed <= 100)
     {
-        set_pwm(motor->comp, speed);
-        gpio_set_level(motor->dir_gpio, 0);
+        set_pwm(motor->comp1, speed);
+	set_pwm(motor->comp2, 0);
     }
-    else if(speed < 30 && -speed <= 100)
+    else if(speed <= -25 && speed >= -100)
     {
-        set_pwm(motor->comp, -speed);
-        gpio_set_level(motor->dir_gpio, 1);
+	set_pwm(motor->comp1, 0);
+        set_pwm(motor->comp2, -speed);
     }
     else
     {
-        set_pwm(motor->comp, 0);
-        gpio_set_level(motor->dir_gpio, 0);
+        set_pwm(motor->comp1, 0);
+        set_pwm(motor->comp2, 0);
     }
 }
 
 void motor_stop(motor_t *motor){
-    set_pwm(motor->comp, 0);
-    gpio_set_level(motor->dir_gpio, 0);
+        set_pwm(motor->comp1, 0);
+        set_pwm(motor->comp2, 0);
 }
 
 

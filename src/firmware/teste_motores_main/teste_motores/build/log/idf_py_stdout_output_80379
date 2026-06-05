@@ -1,0 +1,113 @@
+Command: /home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python /home/nobor/.espressif/v6.0.1/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motores/build/teste_motores.elf /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motores/build/bootloader/bootloader.elf -m '/home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python' '/home/nobor/.espressif/v6.0.1/esp-idf/tools/idf.py' '-p' '/dev/ttyUSB0'
+�\0
+�ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6272
+load:0x40078000,len:15848
+load:0x40080400,len:3920
+entry 0x40080644
+[0;32mI (27) boot: ESP-IDF v6.0.1 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Jun  5 2026 02:27:13[0m
+[0;32mI (28) boot: Multicore bootloader[0m
+[0;32mI (29) boot: chip revision: v3.1[0m
+[0;32mI (32) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (35) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (49) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (62) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (75) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=09518h ( 38168) map[0m
+[0;32mI (100) esp_image: segment 1: paddr=00019540 vaddr=3ffb0000 size=02a0ch ( 10764) load[0m
+[0;32mI (104) esp_image: segment 2: paddr=0001bf54 vaddr=40080000 size=040c4h ( 16580) load[0m
+[0;32mI (111) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=0ed20h ( 60704) map[0m
+[0;32mI (133) esp_image: segment 4: paddr=0002ed48 vaddr=400840c4 size=06c18h ( 27672) load[0m
+[0;32mI (145) esp_image: segment 5: paddr=00035968 vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (151) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (151) boot: Disabling RNG early entropy source...[0m
+[0;32mI (163) cpu_start: Multicore app[0m
+[0;32mI (171) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (171) cpu_start: Pro cpu start user code[0m
+[0;32mI (171) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (173) app_init: Application information:[0m
+[0;32mI (177) app_init: Project name:     teste_motores[0m
+[0;32mI (181) app_init: App version:      370ecff-dirty[0m
+[0;32mI (186) app_init: Compile time:     Jun  5 2026 02:27:29[0m
+[0;32mI (191) app_init: ELF file SHA256:  6191f72eb...[0m
+[0;32mI (195) app_init: ESP-IDF:          v6.0.1[0m
+[0;32mI (199) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (203) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (207) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (211) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (217) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (222) heap_init: At 3FFB33D8 len 0002CC28 (179 KiB): DRAM[0m
+[0;32mI (227) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (233) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (238) heap_init: At 4008ACDC len 00015324 (84 KiB): IRAM[0m
+[0;32mI (245) spi_flash: detected chip: generic[0m
+[0;32mI (247) spi_flash: flash io: dio[0m
+[0;33mW (250) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (263) main_task: Started on CPU0[0m
+[0;32mI (273) main_task: Calling app_main()[0m
+[0;32mI (273) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (273) motor: velocidade do motor: 0[0m
+[0;32mI (273) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (273) motor: velocidade do motor: 0[0m
+[0;32mI (2503) motor: velocidade do motor: 50[0m
+[0;32mI (2503) motor: velocidade do motor: 50[0m
+[0;32mI (2503) movimentacao: comando andar para frente[0m
+[0;32mI (3283) movimentacao: comando frear[0m
+[0;32mI (3983) motor: velocidade do motor: -31[0m
+[0;32mI (3983) motor: velocidade do motor: -31[0m
+[0;32mI (3983) movimentacao: comando andar para tras[0m
+[0;32mI (6413) movimentacao: comando frear[0m
+[0;32mI (7893) motor: velocidade do motor: -31[0m
+[0;32mI (7893) motor: velocidade do motor: 31[0m
+[0;32mI (7893) movimentacao: comando virar sentido horario[0m
+[0;32mI (9853) movimentacao: comando frear[0m
+[0;32mI (10533) motor: velocidade do motor: 31[0m
+[0;32mI (10533) motor: velocidade do motor: -31[0m
+[0;32mI (10533) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (12793) movimentacao: comando frear[0m
+[0;32mI (15883) motor: velocidade do motor: -31[0m
+[0;32mI (15883) motor: velocidade do motor: 31[0m
+[0;32mI (15883) movimentacao: comando virar sentido horario[0m
+[0;32mI (17423) movimentacao: comando frear[0m
+[0;32mI (18543) motor: velocidade do motor: -31[0m
+[0;32mI (18543) motor: velocidade do motor: -31[0m
+[0;32mI (18543) movimentacao: comando andar para tras[0m
+[0;32mI (18663) motor: velocidade do motor: -31[0m
+[0;32mI (18663) motor: velocidade do motor: -31[0m
+[0;32mI (18663) movimentacao: comando andar para tras[0m
+[0;32mI (21173) movimentacao: comando frear[0m
+[0;32mI (22353) motor: velocidade do motor: 50[0m
+[0;32mI (22353) motor: velocidade do motor: 50[0m
+[0;32mI (22353) movimentacao: comando andar para frente[0m
+[0;32mI (24303) movimentacao: comando frear[0m
+[0;32mI (55373) motor: velocidade do motor: 50[0m
+[0;32mI (55373) motor: velocidade do motor: 50[0m
+[0;32mI (55373) movimentacao: comando andar para frente[0m
+[0;32mI (57023) movimentacao: comando frear[0m
+[0;32mI (58703) motor: velocidade do motor: -31[0m
+[0;32mI (58703) motor: velocidade do motor: -31[0m
+[0;32mI (58703) movimentacao: comando andar para tras[0m
+[0;32mI (60623) movimentacao: comando frear[0m
+[0;32mI (62793) motor: velocidade do motor: -31[0m
+[0;32mI (62793) motor: velocidade do motor: 31[0m
+[0;32mI (62793) movimentacao: comando virar sentido horario[0m
+[0;32mI (64403) movimentacao: comando frear[0m
+[0;32mI (66343) motor: velocidade do motor: 31[0m
+[0;32mI (66343) motor: velocidade do motor: -31[0m
+[0;32mI (66343) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (68383) movimentacao: comando frear[0m
+[0;32mI (70233) motor: velocidade do motor: 50[0m
+[0;32mI (70233) motor: velocidade do motor: 50[0m
+[0;32mI (70233) movimentacao: comando andar para frente[0m
+[0;32mI (72183) movimentacao: comando frear[0m

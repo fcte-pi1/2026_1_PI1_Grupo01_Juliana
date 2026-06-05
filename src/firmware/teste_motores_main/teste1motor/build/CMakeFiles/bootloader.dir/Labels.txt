@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader-complete.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/Users/nobor/FGA/Materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/CMakeFiles/bootloader-complete.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste1motor/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

@@ -1,7 +1,7 @@
 {
     "version":            "1.3",
     "project_name":       "teste_motores",
-    "project_version":    "cae4e04-dirty",
+    "project_version":    "370ecff-dirty",
     "project_path":       "/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motores",
     "idf_path":           "/home/nobor/.espressif/v6.0.1/esp-idf",
     "build_dir":          "/home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_motores/build",

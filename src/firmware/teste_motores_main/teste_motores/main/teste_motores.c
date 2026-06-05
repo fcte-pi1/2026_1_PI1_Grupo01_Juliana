@@ -10,16 +10,20 @@ void app_main(void)
 	driver_init();
 
 	motor_t motorR = {
-		PWM_R,
-		GPIO_DIR_R,
-		driver_get_cmpr_handlerR(),
-		driver_get_gen_handlerR()
+		PWM_R1,
+		PWM_R2,
+		driver_get_cmpr_handlerR1(),
+		driver_get_cmpr_handlerR2(),
+		driver_get_gen_handlerR1(),
+		driver_get_gen_handlerR2()
 	};
 	motor_t motorL = {
-		PWM_L,
-		GPIO_DIR_L,
-		driver_get_cmpr_handlerL(),
-		driver_get_gen_handlerL()
+		PWM_L1,
+		PWM_L2,
+		driver_get_cmpr_handlerL1(),
+		driver_get_cmpr_handlerL2(),
+		driver_get_gen_handlerL1(),
+		driver_get_gen_handlerL2()
 	};
 	
 	motor_init(&motorR);

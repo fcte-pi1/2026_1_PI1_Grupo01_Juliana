@@ -24,27 +24,27 @@ void app_main(void)
         motor_init(&motorR);
         motor_init(&motorL);
 
-	motor_set_speed(&motorR, 40);
-	motor_set_speed(&motorL, 40);
+	motor_set_speed(&motorR, 31);
+	motor_set_speed(&motorL, 31);
 	
-	vTaskDelay(pdMS_TO_TICKS(500));
+	vTaskDelay(pdMS_TO_TICKS(1500));
 
 	motor_stop(&motorR);
 	motor_stop(&motorL);
 
-	vTaskDelay(pdMS_TO_TICKS(500));
+	vTaskDelay(pdMS_TO_TICKS(1500));
 
 	motor_set_speed(&motorR, 40);
 	
-	vTaskDelay(pdMS_TO_TICKS(500));
+	vTaskDelay(pdMS_TO_TICKS(1500));
 
 	motor_stop(&motorR);
 
-	vTaskDelay(pdMS_TO_TICKS(500));
+	vTaskDelay(pdMS_TO_TICKS(1500));
 
 	motor_set_speed(&motorL, 40);
 
-	vTaskDelay(pdMS_TO_TICKS(500));
+	vTaskDelay(pdMS_TO_TICKS(1500));
 
 	motor_stop(&motorR);
 	motor_stop(&motorL);
