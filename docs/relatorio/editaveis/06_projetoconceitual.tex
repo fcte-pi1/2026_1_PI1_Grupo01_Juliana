@@ -530,46 +530,16 @@ Ao final da corrida, o sistema calcula as estatísticas finais, registra o resul
 A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:arquitetura_sistema} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
 
 \par
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[
-        node distance=2.4cm and 1.6cm,
-        box/.style={rectangle, rounded corners, minimum width=3.2cm, minimum height=1cm, text centered, font=\small\bfseries, drop shadow={shadow xshift=1pt, shadow yshift=-1pt, opacity=0.3}},
-        arrow/.style={-{Stealth[length=2.5mm]}, thick},
-        labelstyle/.style={font=\scriptsize, align=center}
-    ]
-        % Cores por camada
-        \definecolor{corEmbarcado}{RGB}{52, 152, 219}
-        \definecolor{corComunicacao}{RGB}{241, 196, 15}
-        \definecolor{corBackend}{RGB}{46, 204, 113}
-        \definecolor{corBD}{RGB}{155, 89, 182}
-        \definecolor{corFrontend}{RGB}{231, 76, 60}
+\begin{center}
+\includegraphics[
+    width=0.8\textwidth,
+    height=0.85\textheight,
+    keepaspectratio
+]{figuras/diagrama_arquitetura.png}
 
-        % Nós
-        \node[box, fill=corEmbarcado!20, draw=corEmbarcado!60] (esp) {\makecell{ESP32\\(Firmware)}};
-        \node[box, fill=corComunicacao!20, draw=corComunicacao!60, right=of esp] (comm) {Wi-Fi / MQTT};
-        \node[box, fill=corBackend!20, draw=corBackend!60, right=of comm] (api) {\makecell{FastAPI\\(Backend)}};
-        \node[box, fill=corBD!20, draw=corBD!60, below=of api] (db) {SQLite / PostgreSQL};
-        \node[box, fill=corFrontend!20, draw=corFrontend!60, above=of api] (front) {Frontend Web};
-
-        % Setas
-        \draw[arrow, corComunicacao!80!black] (esp) -- node[above, labelstyle] {MQTT} (comm);
-        \draw[arrow, corComunicacao!80!black] (comm) -- node[above, labelstyle] {MQTT} (api);
-        \draw[arrow, corBD!80!black] (api) -- node[right, labelstyle] {SQLAlchemy\\Alembic} (db);
-        \draw[arrow, corFrontend!80!black] (front) -- node[left, labelstyle] {HTTP/REST\\WebSocket} (api);
-
-        % Agrupamentos
-        \begin{scope}[on background layer]
-            \node[fill=corEmbarcado!10, rounded corners, draw=corEmbarcado!40, dashed, fit=(esp), inner sep=6pt, label={[font=\scriptsize\bfseries, corEmbarcado!80!black]above:Camada Embarcada}] {};
-            \node[fill=corComunicacao!10, rounded corners, draw=corComunicacao!40, dashed, fit=(comm), inner sep=6pt, label={[font=\scriptsize\bfseries, corComunicacao!80!black]above:Comunicação}] {};
-            \node[fill=corBackend!10, rounded corners, draw=corBackend!40, dashed, fit=(api), inner sep=6pt, label={[font=\scriptsize\bfseries, corBackend!80!black]below:Camada de Aplicação}] {};
-            \node[fill=corBD!10, rounded corners, draw=corBD!40, dashed, fit=(db), inner sep=6pt, label={[font=\scriptsize\bfseries, corBD!80!black]below:Persistência}] {};
-            \node[fill=corFrontend!10, rounded corners, draw=corFrontend!40, dashed, fit=(front), inner sep=6pt, label={[font=\scriptsize\bfseries, corFrontend!80!black]above:Apresentação}] {};
-        \end{scope}
-    \end{tikzpicture}
-    \caption{Diagrama de arquitetura do sistema Micromouse.}
-    \label{fig:arquitetura_sistema}
-\end{figure}
+\captionof{figure}{Diagrama de Arquitetura.}
+\label{fig:diagrama_arquitetura}
+\end{center}
 
 \begin{center}
 \small
@@ -660,6 +630,46 @@ A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (
 \subsubsection{Padrão Arquitetural.} Adotou-se o padrão em camadas (\textit{Layered Architecture}), variante cliente-servidor, por ser amplamente compreendido, de baixa complexidade para equipes acadêmicas e suficiente para os requisitos de escalabilidade do projeto. Não há necessidade de microsserviços dado o escopo reduzido e a equipe enxuta; um monolito bem modularizado atende às demandas com menor sobrecarga operacional.
 
 \subsubsection{Alinhamento com Hardware.} A arquitetura de software foi validada em conjunto com o subgrupo de hardware. Os pinos de GPIO do ESP32 foram mapeados para os drivers de motor (DRV8833) e sensores de distância (infravermelhos), garantindo que os módulos de software de controle e leitura correspondam ao esquemático elétrico. A tabela de alocação de pinos e os valores específicos de temporização (frequência do PWM para motores, taxa de amostragem dos sensores) serão definidos em conjunto com o subgrupo de Hardware na Sprint 3 e refletidos nas configurações das tarefas do FreeRTOS.     
+
+\subsubsection{Diagrama de Classes}
+
+O diagrama de classes apresenta a estrutura estática do sistema Micromouse, evidenciando os principais componentes do software embarcado, do backend e da interface web, bem como os relacionamentos existentes entre eles.
+
+No módulo embarcado, o ESP32 é responsável pela leitura dos sensores, execução do algoritmo de navegação e envio de dados de telemetria. No backend, a aplicação desenvolvida em FastAPI centraliza o processamento das informações recebidas, disponibiliza serviços para consulta e armazenamento dos dados e gerencia a comunicação com o banco de dados. A camada de persistência é composta pelas entidades de domínio que representam os labirintos, as corridas realizadas e os eventos de telemetria coletados durante a execução.
+
+O frontend web consome os serviços disponibilizados pelo backend para exibir informações em tempo real e permitir a consulta ao histórico de execuções. Os relacionamentos entre as classes demonstram a separação de responsabilidades adotada pela arquitetura, favorecendo a manutenção, escalabilidade e reutilização dos componentes.
+
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.8\textheight,
+    keepaspectratio
+]{figuras/diagrama_classe.png}
+
+\captionof{figure}{Diagrama de Classes do Sistema Micromouse.}
+\label{fig:diagrama_classe}
+\end{center}
+
+\subsubsection{Diagrama de Sequência}
+
+O diagrama de sequência descreve o fluxo de execução de uma corrida completa do Micromouse, desde a inicialização pelo usuário até o armazenamento dos resultados no banco de dados. O objetivo é representar a interação temporal entre os componentes do sistema e evidenciar o fluxo de comunicação responsável pela transmissão e visualização dos dados de telemetria.
+
+O processo inicia quando o operador posiciona o robô no labirinto e aciona o início da corrida. O ESP32 inicializa seus sensores e motores, inicia a execução do algoritmo de navegação e passa a coletar continuamente informações sobre posição, velocidade, tempo de execução e nível de bateria. Esses dados são enviados periodicamente ao backend através da rede sem fio.
+
+Ao receber os dados, o backend realiza o processamento necessário, registra os eventos de telemetria e transmite as atualizações para o frontend utilizando WebSocket. Essa abordagem permite que a interface web seja atualizada em tempo real, sem a necessidade de consultas periódicas ao servidor, reduzindo a latência percebida pelo usuário.
+
+Quando o robô atinge o objetivo do labirinto, as estatísticas finais da corrida são calculadas e enviadas ao backend, que realiza a persistência definitiva das informações no banco de dados. Em seguida, os resultados ficam disponíveis para consulta no histórico de corridas através da plataforma web.
+
+\begin{center}
+\includegraphics[
+    width=0.95\textwidth,
+    height=0.8\textheight,
+    keepaspectratio
+]{figuras/diagrama_sequencia.png}
+
+\captionof{figure}{Diagrama de Sequência da Corrida Completa com Fluxo WebSocket.}
+\label{fig:diagrama_sequencia}
+\end{center}
 
 \subsection{Roteiro de testes funcionais}
 
