@@ -206,9 +206,7 @@ executado no navegador) envia pacotes ao \textit{endpoint} \texttt{POST /telemet
 (criando-a no primeiro pacote e reutilizando-a nos seguintes) e repassa o dado, em
 tempo real, a todos os clientes conectados pelo canal \texttt{/ws/telemetria}; por fim,
 a interface web recebe o evento e atualiza o painel. Esse fluxo corresponde ao diagrama
-de sequência da corrida completa apresentado no capítulo de projeto do sistema.
-% TODO: substituir pela referência \ref{} ao diagrama de sequência quando a Tarefa
-% de diagramas UML (#21) for concluída.
+de sequência da corrida completa apresentado na Figura~\ref{fig:diagrama_sequencia}.
 
 A verificação cobre as quatro etapas desse contrato, da ingestão do pacote até o
 consumo pela interface, combinando testes de integração de \textit{backend} (que
