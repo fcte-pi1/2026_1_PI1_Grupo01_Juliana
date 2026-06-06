@@ -64,8 +64,10 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 
+    mouse_break(mtrR, mtrL);
+    
     odometria_update_xy(pos, desloc);
-    ESP_LOGI(TAG, "andou 1 celula");
+    ESP_LOGI(TAG, "andou 1 celula, desloc: %f", desloc);
 }
 
 void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
@@ -86,8 +88,10 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         vTaskDelay(pdMS_TO_TICKS(100));
     }
     
+    mouse_break(mtrR, mtrL);
+
     odometria_mudar_sentido(pos, 1);
-    ESP_LOGI(TAG, "virou 90 graus para a direita. orientacao atual: %s", odometria_orientacao_string(pos->orientacao));
+    ESP_LOGI(TAG, "virou 90 graus para a direita. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
 }
 
 void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
@@ -107,7 +111,9 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
 
         vTaskDelay(pdMS_TO_TICKS(100));
     }
-    
+
+    mouse_break(mtrR, mtrL);
+
     odometria_mudar_sentido(pos, 0);
-    ESP_LOGI(TAG, "virou 90 graus para a esquerda. orientacao atual: %s", odometria_orientacao_string(pos->orientacao));
+    ESP_LOGI(TAG, "virou 90 graus para a esquerda. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
 }

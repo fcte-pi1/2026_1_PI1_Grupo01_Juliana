@@ -12,8 +12,8 @@
 #define HZ_RES              1000000
 #define PERIOD_TICKS        500
 
-#define MOTOR_FWD_SPD 50 
-#define MOTOR_BWD_SPD 31
+#define MOTOR_FWD_SPD 60 
+#define MOTOR_BWD_SPD 60
 
 #include<stdint.h>
 #include<stdbool.h>

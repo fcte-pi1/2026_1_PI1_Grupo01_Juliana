@@ -19,6 +19,8 @@ typedef struct
 
 esp_err_t encoder_init(encoder_t *encoder, gpio_num_t gpio);
 
+void encoder_clean(encoder_t *encoder);
+
 float encoder_get_teta(encoder_t *encoder);
 
 float encoder_get_w(encoder_t *encoder, uint64_t dt);

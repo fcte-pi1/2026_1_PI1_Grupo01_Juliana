@@ -1,0 +1,174 @@
+Command: /home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python /home/nobor/.espressif/v6.0.1/esp-idf/tools/idf_monitor.py -p /dev//ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_odometria/build/teste_odometria.elf /home/nobor/Documents/faculdade/materias/PI1/2026_1_PI1_Grupo01_Juliana/src/firmware/teste_motores_main/teste_odometria/build/bootloader/bootloader.elf -m '/home/nobor/.espressif/tools/python/v6.0.1/venv/bin/python' '/home/nobor/.espressif/v6.0.1/esp-idf/tools/idf.py' '-p' '/dev//ttyUSB0'
+:    �ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0040,len:6272
+load:0x40078000,len:15848
+load:0x40080400,len:3920
+entry 0x40080644
+[0;32mI (27) boot: ESP-IDF v6.0.1 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time Jun  6 2026 17:22:06[0m
+[0;32mI (28) boot: Multicore bootloader[0m
+[0;32mI (29) boot: chip revision: v3.1[0m
+[0;32mI (32) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (35) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (39) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (42) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (49) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (56) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (62) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (69) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (75) boot: End of partition table[0m
+[0;32mI (79) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=0af20h ( 44832) map[0m
+[0;32mI (102) esp_image: segment 1: paddr=0001af48 vaddr=3ffb0000 size=02aa0h ( 10912) load[0m
+[0;32mI (107) esp_image: segment 2: paddr=0001d9f0 vaddr=40080000 size=02628h (  9768) load[0m
+[0;32mI (111) esp_image: segment 3: paddr=00020020 vaddr=400d0020 size=12b98h ( 76696) map[0m
+[0;32mI (141) esp_image: segment 4: paddr=00032bc0 vaddr=40082628 size=08c40h ( 35904) load[0m
+[0;32mI (156) esp_image: segment 5: paddr=0003b808 vaddr=50000000 size=00028h (    40) load[0m
+[0;32mI (162) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (162) boot: Disabling RNG early entropy source...[0m
+[0;32mI (174) cpu_start: Multicore app[0m
+[0;32mI (182) cpu_start: GPIO 3 and 1 are used as console UART I/O pins[0m
+[0;32mI (182) cpu_start: Pro cpu start user code[0m
+[0;32mI (182) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (184) app_init: Application information:[0m
+[0;32mI (188) app_init: Project name:     teste_odometria[0m
+[0;32mI (193) app_init: App version:      15578e5-dirty[0m
+[0;32mI (197) app_init: Compile time:     Jun  6 2026 17:22:24[0m
+[0;32mI (202) app_init: ELF file SHA256:  06c2e6192...[0m
+[0;32mI (206) app_init: ESP-IDF:          v6.0.1[0m
+[0;32mI (210) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (214) efuse_init: Max chip rev:     v3.99 [0m
+[0;32mI (218) efuse_init: Chip rev:         v3.1[0m
+[0;32mI (222) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (228) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (233) heap_init: At 3FFB3530 len 0002CAD0 (178 KiB): DRAM[0m
+[0;32mI (239) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (244) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (249) heap_init: At 4008B268 len 00014D98 (83 KiB): IRAM[0m
+[0;32mI (256) spi_flash: detected chip: generic[0m
+[0;32mI (258) spi_flash: flash io: dio[0m
+[0;33mW (261) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (275) main_task: Started on CPU0[0m
+[0;32mI (285) main_task: Calling app_main()[0m
+[0;32mI (285) teste_odometria: TICK_RATE: 100[0m
+[0;32mI (285) teste_odometria: Tick antes: 1[0m
+[0;32mI (1285) teste_odometria: Tick depois: 101[0m
+[0;32mI (1285) encoder: encoder: iniciado[0m
+[0;32mI (1285) encoder: encoder: iniciado[0m
+[0;32mI (1285) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (1285) motor: velocidade do motor: 0[0m
+[0;32mI (1285) motor: INICIANDO MOTOR DESLIGADO[0m
+[0;32mI (1295) motor: velocidade do motor: 0[0m
+[0;32mI (1295) odometria: INICIO: (0, 0) ORIENCACAO (null)[0m
+[0;32mI (1315) main_task: Returned from app_main()[0m
+[0;32mI (52455) teste_odometria: botao pressionado[0m
+[0;32mI (53355) teste_odometria: iniciando missao...[0m
+[0;32mI (53355) teste_odometria: Stack livre: 3156[0m
+[0;32mI (53355) motor: velocidade do motor: 60[0m
+[0;32mI (53355) motor: velocidade do motor: 60[0m
+[0;32mI (53355) movimentacao: comando andar para frente[0m
+[0;32mI (53355) encoder: pulsos lidos: 0[0m
+[0;32mI (53365) encoder: pulsos lidos: 6[0m
+[0;32mI (53465) encoder: pulsos lidos: 2[0m
+[0;32mI (53465) encoder: pulsos lidos: 1[0m
+[0;32mI (53565) encoder: pulsos lidos: 5[0m
+[0;32mI (53565) encoder: pulsos lidos: 5[0m
+[0;32mI (53665) encoder: pulsos lidos: 7[0m
+[0;32mI (53665) encoder: pulsos lidos: 6[0m
+[0;32mI (53765) encoder: pulsos lidos: 7[0m
+[0;32mI (53765) encoder: pulsos lidos: 8[0m
+[0;32mI (53865) movimentacao: comando frear[0m
+[0;32mI (53865) movimentacao: andou 1 celula, desloc: 0.251013[0m
+[0;32mI (54865) encoder: encoder resetado[0m
+[0;32mI (54865) encoder: encoder resetado[0m
+[0;32mI (54865) teste_odometria: Stack livre: 2916[0m
+[0;32mI (54865) motor: velocidade do motor: -60[0m
+[0;32mI (54865) motor: velocidade do motor: 60[0m
+[0;32mI (54865) movimentacao: comando virar sentido horario[0m
+[0;32mI (54875) encoder: pulsos lidos: 0[0m
+[0;32mI (54875) encoder: pulsos lidos: 0[0m
+[0;32mI (54975) encoder: pulsos lidos: 2[0m
+[0;32mI (54975) encoder: pulsos lidos: 2[0m
+[0;32mI (55075) encoder: pulsos lidos: 5[0m
+[0;32mI (55075) encoder: pulsos lidos: 5[0m
+[0;32mI (55175) encoder: pulsos lidos: 6[0m
+[0;32mI (55175) encoder: pulsos lidos: 7[0m
+[0;32mI (55275) movimentacao: comando frear[0m
+[0;32mI (55275) movimentacao: virou 90 graus para a direita. orientacao atual: LESTE, angulo(rad): 2.621802[0m
+[0;32mI (56275) encoder: encoder resetado[0m
+[0;32mI (56275) encoder: encoder resetado[0m
+[0;32mI (56275) teste_odometria: Stack livre: 2916[0m
+[0;32mI (56275) motor: velocidade do motor: 60[0m
+[0;32mI (56275) motor: velocidade do motor: -60[0m
+[0;32mI (56275) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (56285) encoder: pulsos lidos: 0[0m
+[0;32mI (56285) encoder: pulsos lidos: 0[0m
+[0;32mI (56385) encoder: pulsos lidos: 2[0m
+[0;32mI (56385) encoder: pulsos lidos: 2[0m
+[0;32mI (56485) encoder: pulsos lidos: 5[0m
+[0;32mI (56485) encoder: pulsos lidos: 6[0m
+[0;32mI (56585) encoder: pulsos lidos: 7[0m
+[0;32mI (56585) encoder: pulsos lidos: 6[0m
+[0;32mI (56685) movimentacao: comando frear[0m
+[0;32mI (56685) movimentacao: virou 90 graus para a esquerda. orientacao atual: NORTE, angulo(rad): 2.718906[0m
+[0;32mI (57685) encoder: encoder resetado[0m
+[0;32mI (57685) encoder: encoder resetado[0m
+[0;32mI (57685) teste_odometria: MISSAO CUMPRIDA COM EXITO! =D[0m
+[0;32mI (63375) teste_odometria: botao pressionado[0m
+[0;32mI (64275) teste_odometria: iniciando missao...[0m
+[0;32mI (64275) teste_odometria: Stack livre: 2916[0m
+[0;32mI (64275) motor: velocidade do motor: 60[0m
+[0;32mI (64275) motor: velocidade do motor: 60[0m
+[0;32mI (64275) movimentacao: comando andar para frente[0m
+[0;32mI (64275) encoder: pulsos lidos: 0[0m
+[0;32mI (64285) encoder: pulsos lidos: 0[0m
+[0;32mI (64385) encoder: pulsos lidos: 2[0m
+[0;32mI (64385) encoder: pulsos lidos: 3[0m
+[0;32mI (64485) encoder: pulsos lidos: 5[0m
+[0;32mI (64485) encoder: pulsos lidos: 4[0m
+[0;32mI (64585) encoder: pulsos lidos: 7[0m
+[0;32mI (64585) encoder: pulsos lidos: 7[0m
+[0;32mI (64685) encoder: pulsos lidos: 7[0m
+[0;32mI (64685) encoder: pulsos lidos: 8[0m
+[0;32mI (64785) movimentacao: comando frear[0m
+[0;32mI (64785) movimentacao: andou 1 celula, desloc: 0.229650[0m
+[0;32mI (65785) encoder: encoder resetado[0m
+[0;32mI (65785) encoder: encoder resetado[0m
+[0;32mI (65785) teste_odometria: Stack livre: 2916[0m
+[0;32mI (65785) motor: velocidade do motor: -60[0m
+[0;32mI (65785) motor: velocidade do motor: 60[0m
+[0;32mI (65785) movimentacao: comando virar sentido horario[0m
+[0;32mI (65795) encoder: pulsos lidos: 0[0m
+[0;32mI (65795) encoder: pulsos lidos: 0[0m
+[0;32mI (65895) encoder: pulsos lidos: 2[0m
+[0;32mI (65895) encoder: pulsos lidos: 2[0m
+[0;32mI (65995) encoder: pulsos lidos: 5[0m
+[0;32mI (65995) encoder: pulsos lidos: 5[0m
+[0;32mI (66095) encoder: pulsos lidos: 6[0m
+[0;32mI (66095) encoder: pulsos lidos: 7[0m
+[0;32mI (66195) movimentacao: comando frear[0m
+[0;32mI (66195) movimentacao: virou 90 graus para a direita. orientacao atual: LESTE, angulo(rad): 2.621802[0m
+[0;32mI (67195) encoder: encoder resetado[0m
+[0;32mI (67195) encoder: encoder resetado[0m
+[0;32mI (67195) teste_odometria: Stack livre: 2916[0m
+[0;32mI (67195) motor: velocidade do motor: 60[0m
+[0;32mI (67195) motor: velocidade do motor: -60[0m
+[0;32mI (67195) movimentacao: comando virar sentido anti-horario[0m
+[0;32mI (67205) encoder: pulsos lidos: 0[0m
+[0;32mI (67205) encoder: pulsos lidos: 0[0m
+[0;32mI (67305) encoder: pulsos lidos: 2[0m
+[0;32mI (67305) encoder: pulsos lidos: 2[0m
+[0;32mI (67405) encoder: pulsos lidos: 5[0m
+[0;32mI (67405) encoder: pulsos lidos: 5[0m
+[0;32mI (67505) encoder: pulsos lidos: 7[0m
+[0;32mI (67505) encoder: pulsos lidos: 7[0m
+[0;32mI (67605) movimentacao: comando frear[0m
+[0;32mI (67605) movimentacao: virou 90 graus para a esquerda. orientacao atual: NORTE, angulo(rad): 2.718906[0m
+[0;32mI (68605) encoder: encoder resetado[0m
+[0;32mI (68605) encoder: encoder resetado[0m
+[0;32mI (68605) teste_odometria: MISSAO CUMPRIDA COM EXITO! =D[0m

@@ -89,6 +89,13 @@ esp_err_t encoder_init(encoder_t *encoder, gpio_num_t gpio)
     return ESP_OK;
 }
 
+void encoder_clean(encoder_t *encoder){
+
+    pcnt_unit_clear_count(encoder->unit);
+    
+    ESP_LOGI(TAG, "encoder resetado");
+}
+
 //movimento estimado do eixo do motor [rad]
 //baseado na condicao de que a leitura e feita
 //com o carrinho parado...
