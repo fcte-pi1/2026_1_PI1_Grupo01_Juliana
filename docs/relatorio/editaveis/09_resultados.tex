@@ -14,13 +14,62 @@
 
 \section{Testes da estrutura}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos da estrutura foram atendidos, incluindo:}
+% \textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos da estrutura foram atendidos, incluindo:}
 
-\begin{itemize}
-    \item \textcolor{red}{Imagem com todas as peças separadas da estrutura (carcaça) do veículo;}
-    \item \textcolor{red}{Imagem que apresente a estrutura já montada (sem necessidade de partes internas, como eletrônica ou motores);}
-    \item \textcolor{red}{Ilustração contemplando o carro montado virtualmente em alguma ferramenta de CAD, no intuito de verificar se as peças foram construídas e montadas em conformidade com o projeto.}
-\end{itemize}
+% \begin{itemize}
+%     \item \textcolor{red}{Imagem com todas as peças separadas da estrutura (carcaça) do veículo;}
+%     \item \textcolor{red}{Imagem que apresente a estrutura já montada (sem necessidade de partes internas, como eletrônica ou motores);}
+%     \item \textcolor{red}{Ilustração contemplando o carro montado virtualmente em alguma ferramenta de CAD, no intuito de verificar se as peças foram construídas e montadas em conformidade com o projeto.}
+% \end{itemize}
+
+Esta seção apresenta os testes realizados para verificar se a estrutura mecânica do micromouse atende aos requisitos definidos durante o projeto. Foram avaliados aspectos relacionados à montagem da carcaça do veículo e ao labirinto modular.
+
+\subsection{Veículo Desmontado}
+
+O chassis do micromouse foi projetado em CAD como uma peça única para ser fabricada em impressão 3D utilizando material PLA. Durante esta entrega, procedeu-se à fabricação e testes preliminares dessa versão.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/impresso.jpg}
+    \caption{Chassi completo, peça única impressa em 3D.}
+    \label{fig:chassi_impresso}
+\end{figure}
+
+A Figura \ref{fig:chassi_desmontado} apresenta os componentes estruturais que compõem a montagem do micromouse.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/desmontado.jpeg}
+    \caption{Componentes estruturais do micromouse.}
+    \label{fig:chassi_desmontado}
+\end{figure}
+
+\subsubsection{Análise do protótipo em 3D}
+
+O chassi em 3D apresentou problemas dimensionais durante a montagem: as dimensões finais da peça não atendiam completamente os limites esperados no projeto, principalmente em relação ao comprimento e altura que prejudicaram a performance dos sensores de proximidade. Constatou-se que a peça não atenderia aos requisitos de tamanho para competição.
+
+Adicionalmente, o processo de impressão 3D gerou imperfeições nos encaixes destinados aos motores, exigindo pós-processamento (lixamento) para permitir o acoplamento adequado dos componentes. A elaboração de um novo protótipo em 3D, com ajustes dimensionais e reforço dos encaixes, está planejada para a próxima etapa do projeto.
+
+\subsubsection{Validação funcional com chassi provisório}
+
+Visando não comprometer a validação dos testes de montagem, conformidade e funcionalidade da estrutura durante esta etapa do projeto, foi utilizado um \textbf{chassi provisório em acrílico} que atende aos requisitos de encaixe dos componentes enquanto a versão final em 3D é otimizada. Este chassi permitiu validar o encaixe e acomodação de todos os componentes eletrônicos (bateria, motores, sensores, protoboard), a estabilidade estrutural durante operação e a confirmação de que a arquitetura projetada é viável
+
+\subsection{Chassi Montado (Provisório em Acrílico)}
+
+% A Figura \ref{fig:chassi_montado_acrilico} apresenta o chassi provisório em acrílico montado com todos os componentes eletrônicos acoplados.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.8\linewidth]{figuras/chassi_montado.jpeg}
+%     \caption{Chassi provisório em acrílico completamente montado com componentes eletrônicos.}
+%     \label{fig:chassi_montado_acrilico}
+% \end{figure}
+
+\subsection{Labirinto Modular}
+
+\subsection{Conclusão}
+
+
 
 \section{Testes de \textit{hardware}}
 
