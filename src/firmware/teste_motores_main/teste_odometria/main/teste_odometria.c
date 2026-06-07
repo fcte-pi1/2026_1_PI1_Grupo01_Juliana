@@ -28,8 +28,8 @@ encoder_t encoderL;
 
 pose_t pose;
 
-motor_t motorR;
-motor_t motorL;
+motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
+motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
 TaskHandle_t mission_task_handle;
 
@@ -176,24 +176,6 @@ void app_main(void)
 
     ESP_LOGI(TAG, "Tick depois: %lu", xTaskGetTickCount());
 
-    motorR = (motor_t){
-        PWM_R1,
-        PWM_R2,
-        driver_get_cmpr_handlerR1(),
-        driver_get_cmpr_handlerR2(),
-        driver_get_gen_handlerR1(),
-        driver_get_gen_handlerR2()
-    };
-
-    motorL = (motor_t){
-        PWM_L1,
-        PWM_L2,
-        driver_get_cmpr_handlerL1(),
-        driver_get_cmpr_handlerL2(),
-        driver_get_gen_handlerL1(),
-        driver_get_gen_handlerL2()
-    };
-
    gpio_config_t io_conf = {
        .pin_bit_mask = (1ULL << BOTAO_SELETOR),
        .mode = GPIO_MODE_INPUT,
@@ -221,6 +203,24 @@ void app_main(void)
 
     motor_init(&motorR);
     motor_init(&motorL);
+
+    motorR = (motor_t){
+        PWM_R1,
+        PWM_R2,
+        motorR.comp1,
+        motorR.comp2,
+        motorR.gen1,
+        motorR.gen2
+    };
+
+    motorL = (motor_t){
+        PWM_L1,
+        PWM_L2,
+        motorL.comp1,
+        motorL.comp2,
+        motorL.gen1,
+        motorL.gen2
+    };
 
    odometria_pos_init(&pose, 0, 0, NORTE);
 

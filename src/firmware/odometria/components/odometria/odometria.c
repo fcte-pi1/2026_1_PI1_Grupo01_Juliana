@@ -114,7 +114,7 @@ void odometria_pos_init(pose_t *pose, float x0, float y0, orientacao_t orientaca
     pose->orientacao = orientacao_inicial;
     pose->theta = 0;
 
-    ESP_LOGI(TAG, "INICIO: (%d, %d) ORIENCACAO %s", pose->x, pose->y, odometria_orientacao_string(pose->orientacao));
+    ESP_LOGI(TAG, "INICIO: (%f, %f) ORIENTACAO %s", pose->x, pose->y, odometria_orientacao_string(pose->orientacao));
 }
 
 void odometria_move_cell(){

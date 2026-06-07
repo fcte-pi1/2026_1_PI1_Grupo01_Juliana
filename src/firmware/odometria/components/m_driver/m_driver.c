@@ -13,48 +13,6 @@ static mcpwm_timer_handle_t timer = NULL;
 static mcpwm_oper_handle_t oper1 = NULL;
 static mcpwm_oper_handle_t oper2 = NULL;
 
-//comparadores (um par para cada motor)
-static mcpwm_cmpr_handle_t cmp_motorR1;
-static mcpwm_cmpr_handle_t cmp_motorR2;
-
-static mcpwm_cmpr_handle_t cmp_motorL1;
-static mcpwm_cmpr_handle_t cmp_motorL2;
-
-//geradores (um par para cada motor)
-static mcpwm_gen_handle_t gen_motorR1;
-static mcpwm_gen_handle_t gen_motorR2;
-
-static mcpwm_gen_handle_t gen_motorL1;
-static mcpwm_gen_handle_t gen_motorL2;
-
-
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerR1(){
-	return cmp_motorR1; 
-	}
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerR2(){
-	return cmp_motorR2; 
-	}
-
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerL1(){
-	return cmp_motorL1; 
-	}
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerL2(){
-	return cmp_motorL2; 
-	}
-
-mcpwm_gen_handle_t driver_get_gen_handlerR1(){
-	return gen_motorR1; 
-	}
-mcpwm_gen_handle_t driver_get_gen_handlerR2(){
-	return gen_motorR2; 
-	}
-
-mcpwm_gen_handle_t driver_get_gen_handlerL1(){
-	return gen_motorL1; 
-	}
-mcpwm_gen_handle_t driver_get_gen_handlerL2(){
-	return gen_motorL2; 
-	}
 //rotina de configuracoes iniciais para timer, operador e gpio
 void driver_init(){
     //configuracao da frequencia do timer pwm
@@ -130,9 +88,8 @@ void motor_init(motor_t *motor){
     );
     
     //configurando os geradores
-    mcpwm_generator_config_t gen_config;
-	//gerador1
-    gen_config.gen_gpio_num = motor->pwm_gpio1;
+    mcpwm_generator_config_t gen_config = { .gen_gpio_num = motor->pwm_gpio1 };
+
     mcpwm_new_generator(
         oper1,
         &gen_config,

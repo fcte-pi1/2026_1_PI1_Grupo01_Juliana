@@ -11,43 +11,12 @@
 
 	static const char *TAG = "teste_encoder";
 
-//#define BOTAO_SELETOR GPIO_NUM_16
-
-//static void IRAM_ATTR button_isr_handler()
-//{
-//    switch (expression)
-//    {
-//    case constant expression:
-//        /* code */
-//        break;
-//    
-//    default:
-//        break;
-//    }
-//}
+motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
+motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
 void app_main(void)
 {
-//    gpio_config_t io_conf = {
-//        .pin_bit_mask = (1ULL << BOTAO_SELETOR),
-//        .mode = GPIO_MODE_INPUT,
-//        .pull_up_en = GPIO_PULLUP_ENABLE,
-//        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-//        .intr_type = GPIO_INTR_NEGEDGE
-//    };
-
-//    gpio_config(&io_conf);
-
-//    gpio_install_isr_service(0);
-
-//    gpio_isr_handler_add(
-//        BOTAO_SELETOR,
-//        button_isr_handler,
-//        NULL
-//    );
-//
-
-	encoder_t encoderR;
+        encoder_t encoderR;
 	encoder_t encoderL;
 
 	encoder_init(&encoderR, GPIO_ENC_R);
@@ -55,59 +24,60 @@ void app_main(void)
 	
         driver_init();
 
-        motor_t motorR = {
-                PWM_R1,
-                PWM_R2,
-                driver_get_cmpr_handlerR1(),
-                driver_get_cmpr_handlerR2(),
-                driver_get_gen_handlerR1(),
-                driver_get_gen_handlerR2()
-        };
-        motor_t motorL = {
-                PWM_L1,
-                PWM_L2,
-                driver_get_cmpr_handlerL1(),
-                driver_get_cmpr_handlerL2(),
-                driver_get_gen_handlerL1(),
-                driver_get_gen_handlerL2()
-        };
-
         motor_init(&motorR);
         motor_init(&motorL);
 
-    while(1)
-    {
-        int in = getchar();
-        if(in == EOF){
-                vTaskDelay(pdMS_TO_TICKS(10));
-                continue;
+        motorR = (motor_t){
+                PWM_R1,
+                PWM_R2,
+                motorR.comp1,
+                motorR.comp2,
+                motorR.gen1,
+                motorR.gen2
+        };
 
-        }
+        motorL = (motor_t){
+                PWM_L1,
+                PWM_L2,
+                motorL.comp1,
+                motorL.comp2,
+                motorL.gen1,
+                motorL.gen2
+        };
 
-        switch (in){
-                case 'f':
-                        mouse_movefwd(&motorR, &motorL);
-                        break;
-                case 'b':
-                        mouse_movebwd(&motorR, &motorL);
-                        break;
-                case 'd':
-                        mouse_spin(&motorR, &motorL, 1);
-                        break;
-                case 'e':
-                        mouse_spin(&motorR, &motorL, 0);
-                        break;
-                case ' ':
-                        mouse_break(&motorR, &motorL);
-
-			ESP_LOGI(TAG, "angulo direita: %f", encoder_get_teta(&encoderR));
-			ESP_LOGI(TAG, "angulo esquerda: %f", encoder_get_teta(&encoderL));
-
-                        break;
-                default:
-                        break;
+        while(1)
+        {
+                int in = getchar();
+                if(in == EOF){
+                        vTaskDelay(pdMS_TO_TICKS(10));
+                        continue;
 
                 }
-            vTaskDelay(pdMS_TO_TICKS(10));
-    }
+
+                switch (in){
+                        case 'f':
+                                mouse_movefwd(&motorR, &motorL);
+                                break;
+                        case 'b':
+                                mouse_movebwd(&motorR, &motorL);
+                                break;
+                        case 'd':
+                                mouse_spin(&motorR, &motorL, 1);
+                                break;
+                        case 'e':
+                                mouse_spin(&motorR, &motorL, 0);
+                                break;
+                        case ' ':
+                                mouse_break(&motorR, &motorL);
+
+                                ESP_LOGI(TAG, "angulo direita: %f", encoder_get_teta(&encoderR));
+                                ESP_LOGI(TAG, "angulo esquerda: %f", encoder_get_teta(&encoderL));
+
+                                break;
+                        default:
+                                break;
+
+                        }
+                vTaskDelay(pdMS_TO_TICKS(10));
+        }
 }
