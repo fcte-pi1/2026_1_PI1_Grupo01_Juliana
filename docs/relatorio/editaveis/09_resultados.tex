@@ -85,14 +85,30 @@ O labirinto modular construído atende aos requisitos definidos no projeto para 
         \item \textcolor{red}{Definir interface de desenvolvimento;}
         \item \textcolor{red}{Rodar exemplo mínimo.}
     \end{itemize}
-    \item \textcolor{red}{Sensores (temperatura, pressão, posição, velocidade etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Realizar leitura básica de dados;}
-        \item \textcolor{red}{Validar/calibrar leituras;}
-        \item \textcolor{red}{Definir taxas de amostragem e quantidade de dados para transmissão e/ou armazenamento;}
-        \item \textcolor{red}{Validar taxas definidas e quantidade de dados;}
-        \item \textcolor{red}{Realizar processamento básico de dados (\textit{thresholding}, filtro média-móvel etc.).}
-    \end{itemize}
+    \item {Sensores (temperatura, pressão, posição, velocidade etc.):}
+\begin{itemize}
+\item {Realizar leitura básica de dados;}
+
+
+    Foi implementada a leitura básica dos sensores infravermelhos digitais com LM393 utilizando a ESP32 em linguagem C com ESP-IDF. As leituras são realizadas através das portas GPIO configuradas como entradas digitais, permitindo detectar a presença ou ausência de obstáculos - saída igual a 0 indica presença, saída igual a 1 indica ausência. Os dados são enviados via UART para monitoramento serial em tempo real.
+
+    \item {Validar/calibrar leituras;}
+    
+    A validação dos sensores foi realizada aproximando obstáculos em diferentes distâncias para verificar a alteração do nível lógico na saída digital. A calibração foi feita ajustando o potenciômetro presente no módulo LM393, permitindo configurar a sensibilidade e distância de detecção de acordo com a necessidade do robô. Devido ao tamanho do chassi, e priorizando a posição central da célula, a calibração obtida foi a mínima possível. Isto porque o objetivo foi detectar o menor espaço dentro da faixa de operação.
+    \item {Definir taxas de amostragem e quantidade de dados para transmissão e/ou armazenamento;}
+    
+    Inicialmente foi definida uma taxa de amostragem de aproximadamente 500 ms entre leituras. Essa configuração foi utilizada para facilitar a validação do funcionamento dos sensores e a observação dos dados transmitidos via UART.
+
+    \item {Validar taxas definidas e quantidade de dados;}
+    
+    A taxa de amostragem definida mostrou-se suficiente para validação funcional do sistema e monitoramento das leituras em bancada. Entretanto, observou-se que aplicações de navegação autônoma exigirão taxas de leitura mais rápidas para melhorar o tempo de resposta na detecção de obstáculos.
+
+    \item {Realizar processamento básico de dados (\textit{thresholding}, filtro média-móvel etc.).}
+    
+    O sistema utiliza processamento básico baseado em \textit{thresholding} digital realizado pelo comparador LM393, que converte automaticamente a leitura infravermelha em níveis lógicos binários. Futuramente pretende-se implementar técnicas simples de filtragem e \textit{debounce} para reduzir oscilações e falsos acionamentos durante a movimentação do robô.
+\end{itemize}
+```
+
     \item \textcolor{red}{Armazenamento (memória interna, cartão SD, pendrive etc.):}
     \begin{itemize}
         \item \textcolor{red}{Armazenar dados básicos;}
