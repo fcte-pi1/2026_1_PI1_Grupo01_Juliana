@@ -75,14 +75,14 @@ Os sensores de distância (infravermelhos) encontram-se dispostos na frontal e n
 
 
 O PLA (\textit{Polylactic Acid}) foi selecionado como material de
-fabricação do chassi pelos seguintes motivos:
+fabricação do chassi pelos seguintes motivos, considerando suas propriedades mecânicas e estabilidade dimensional \cite{farah2016pla_review}:
 
 \begin{itemize}
     \item \textbf{Relação peso/resistência:}
           O PLA apresenta estabilidade dimensional e resistência aos esforços mecânicos exigidos. Graças à sua rigidez estrutural, suporta impactos imprevistos contra paredes no labirinto fornecendo uma estrutura confiável ao mesmo tempo em que possui baixa densidade, o que não prejudica a aceleração dos motores.
 
     \item \textbf{Processabilidade por impressão 3D (FDM):}
-          Ao contrário do ABS, o PLA requer menores temperaturas de extrusão e não precisa de cabine fechada, evitando falhas por \textit{warp} (empenamento).
+          Ao contrário do ABS, o PLA requer menores temperaturas de extrusão e não precisa de cabine fechada, evitando falhas por \textit{warp} (empenamento) e favorecendo a obtenção de peças com melhor repetibilidade dimensional em aplicações de prototipagem; além disso, trata-se de um material amplamente empregado em processos de manufatura aditiva por FDM \cite{sandanamsamy2022fdm_pla}.
 
     \item \textbf{Custo e disponibilidade:}
           Pela sua ampla adoção técnica, o PLA é uma opção de custo acessível de prototipagem, sendo amplamente disponível para rápida compra e uso nos laboratórios da instituição.
@@ -187,7 +187,7 @@ foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\t
           O MDF é facilmente encontrado em qualquer marcenaria ou móveis não utilizados, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
 
     \item \textbf{Rigidez e estabilidade dimensional:}
-          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado.
+          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado, o que favorece um comportamento estrutural mais uniforme e compatível com aplicações que exigem rigidez e resistência mecânica \cite{sliseris2014mdf_strength}.
 
     \item \textbf{Facilidade de fabricação e acabamento:}
           Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, é facilmente cortado e usinado com ferramentas comuns, facilitando a produção em série dos módulos de parede e chão.
@@ -679,4 +679,3 @@ serão a base para a automação E2E e os testes de bancada do firmware nas
 entregas seguintes. Cada caso é identificado por um código no formato
 TF\textit{nn} e indica, quando aplicável, o requisito funcional (RF) e a
 história de usuário (HU) rastreados.
-
