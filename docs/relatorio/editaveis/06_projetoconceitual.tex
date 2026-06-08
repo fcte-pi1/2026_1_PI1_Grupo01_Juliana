@@ -29,46 +29,72 @@ projeto que orientaram os modelos em CAD.
 
 \subsection{Chassi do \textit{Micromouse}}
 
+O chassi foi projetado para abrigar os componentes eletrônicos e mecânicos do \textit{micromouse} dentro do limite dimensional estipulado pelas regras da competição (máximo de 25\,cm de comprimento e 25\,cm de largura), priorizando distribuição de massa equilibrada, proteção dos componentes e facilidade de manutenção.
 
-O chassi foi projetado para abrigar os componentes eletrônicos e
-mecânicos do \textit{micromouse} dentro do limite dimensional
-estipulado pelas regras da competição (máximo de 25 cm de
-comprimento e 25 cm de largura). O design é compacto e funcional, priorizando a distribuição de massa equilibrada, a proteção dos componentes e a facilidade de manutenção.
-As pranchas técnicas contendo as vistas ortogonais e o detalhamento completo das cotas de fabricação do chassi podem ser consultadas no \autoref{apendice_cad_chassi}
+\subsubsection{Primeiro Protótipo}
+
+O primeiro protótipo adotou geometria triangular para o chassi, com comprimento de 152\,mm e largura de 160\,mm. A estrutura possui altura de 15\,mm (sem componentes montados), distância entre eixos de 162\,mm e rodas de 68\,mm de diâmetro por 26\,mm de largura.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/chassi_fatiado.jpeg}
-    \caption{Vista explodida do chassi indicando a posição dos
-             principais componentes: motores, rodas,
-             placa ESP32, bateria e sensores IR.
-             }
-    \label{fig:chassi_explodido}
+    \includegraphics[width=0.75\linewidth]{figuras/1_prototipo_image.jpeg}
+    \caption{Modelo CAD do primeiro protótipo do chassi}
+    \label{fig:chassi_cad_v1}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.55\linewidth]{figuras/CHASSI_1_prototipo_entrega_2.pdf}
+    \caption{Prancha técnica do primeiro protótipo: vistas frontal, superior, lateral e isométrica com cotas de fabricação (escala 1:1, peso 0{,}67\,kg).}
+    \label{fig:chassi_draw_v1}
 \end{figure}
 
 \begin{table}[htbp]
-    \centering
-    \caption{Dimensões principais do chassi do \textit{micromouse}.}
-    \label{tab:dimensoes_chassi}
-    \begin{tabular}{lcc}
-        \hline
-        \textbf{Cota / Elemento}          & \textbf{Valor (mm)} & \textbf{Observação}          \\ \hline
-        Comprimento total                 & 152                 & Limite máx. 250 mm           \\
-        Largura total                     & 212                 & Limite máx. 250 mm           \\
-        Altura total (sem componentes)    & 15                 & Sem restrição pela regra     \\
-        Distância entre eixos             & 162                 &                              \\
-        Diâmetro da roda                  & 68                 &                              \\
-        Largura da roda                   & 26                 &                              \\
-        \hline
-    \end{tabular}
+\centering
+\caption{Dimensões principais do chassi — Primeiro Protótipo.}
+\label{tab:dimensoes_chassi_v1}
+\begin{tabular}{lcc}
+    \hline
+    \textbf{Cota / Elemento}       & \textbf{Valor (mm)} & \textbf{Observação}    \\ \hline
+    Comprimento total              & 152                 & Limite máx. 180\,mm    \\
+    Largura total                  & 160                 & Limite máx. 180\,mm    \\
+    Altura total (sem componentes) & 15                  &                        \\
+    Distância entre eixos          & 162                 &                        \\
+    Diâmetro da roda               & 68                  &                        \\
+    Largura da roda                & 26                  &                        \\
+    \hline
+\end{tabular}
 \end{table}
 
+\FloatBarrier 
 
-\subsubsection{Disposição dos Componentes}
+\subsubsection{Segundo Protótipo}
 
-A disposição dos componentes no chassi foi projetada para equilibrar a distribuição de massa, otimizar a tração e manobrabilidade, e facilitar a manutenção estrutural. Os motores de tração estão fixados de maneira centralizada ao longo das laterais, permitindo um giro com raio zero sobre o próprio eixo geométrico do robô.
-A bateria está posicionada no centro e na porção mais rebaixada possível da estrutura, rebaixando o centro de gravidade e aumentando a estabilidade dinâmica.
-Os sensores de distância (infravermelhos) encontram-se dispostos na frontal e nas laterais para realizar uma varredura constante das paredes sem apresentar pontos cegos. O microcontrolador ESP32 juntamente do driver de motor vêm instalados na plataforma superior, oferecendo fácil acesso à manutenção dos componentes eletrônicos, reprogramação da placa e melhorando a organização no roteamento de cabos.
+Com base nas limitações identificadas no primeiro protótipo, desenvolveu-se uma versão revisada com estrutura em dois andares. O primeiro andar (peça \textit{chassi}, 0{,}06\,kg) acomoda os motores, a bateria e os sensores IR, com largura frontal de 170\,mm, altura de 15{,}8\,mm e raio traseiro de 53{,}12\,mm. O segundo andar (peça \textit{2andar}, 0{,}08\,kg) abriga o ESP32, o driver de motor e os módulos eletrônicos auxiliares, com largura de 92\,mm e altura de 78{,}8\,mm. Essa separação melhora a organização do cabeamento, facilita a manutenção e reduz interferências entre os subsistemas de potência e controle.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.50\linewidth]{figuras/2_prototipo_image.jpeg}
+    \caption{Modelo CAD do segundo protótipo com estrutura em dois andares, evidenciando a disposição dos componentes eletrônicos e mecânicos.}
+    \label{fig:chassi_cad_v2}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.60\linewidth]{figuras/1andar.pdf}
+    \caption{Prancha técnica do segundo protótipo — primeiro andar: vistas frontal, traseira, isométrica e corte A-A (escala 1:1, peso 0{,}06\,kg).}
+    \label{fig:chassi_draw_1andar}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.60\linewidth]{figuras/2ANDAR.pdf}
+    \caption{Prancha técnica do segundo protótipo — segundo andar: vistas frontal, lateral, traseira e superior (escala 1:1, peso 0{,}08\,kg).}
+    \label{fig:chassi_draw_2andar}
+\end{figure}
+
+\FloatBarrier 
+
 
 
 \subsubsection{Justificativa do Material — PLA}
