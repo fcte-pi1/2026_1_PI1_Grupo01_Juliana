@@ -76,56 +76,144 @@ O labirinto modular construído atende aos requisitos definidos no projeto para 
 \end{figure}
 
 \section{Testes de \textit{hardware}}
+\label{sec:testes_hardware}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do \textit{hardware} foram atendidos, incluindo:}
+Os testes de \textit{hardware} tiveram como objetivo verificar, em bancada, se o
+conjunto embarcado do \textit{micromouse} estava apto a executar o \textit{firmware},
+ler sensores, acionar motores, registrar dados e transmitir informações de
+diagnóstico. Os ensaios foram realizados com a ESP32, sensores infravermelhos
+digitais com comparador LM393, sensor INA226, encoders dos motores DC, driver
+DRV8833 e monitoramento serial pelo ambiente ESP-IDF. As evidências completas dos
+testes executados no terminal estão reunidas no
+Apêndice~\ref{apendice_evidencias_testes_hardware}.
 
-\begin{enumerate}
-    \item \textcolor{red}{Processamento (Arduino, ESP32 etc):}
-    \begin{itemize}
-        \item \textcolor{red}{Definir interface de desenvolvimento;}
-        \item \textcolor{red}{Rodar exemplo mínimo.}
-    \end{itemize}
-    \item {Sensores (temperatura, pressão, posição, velocidade etc.):}
-\begin{itemize}
-\item {Realizar leitura básica de dados;}
+\subsection{Processamento}
 
+Para validar o núcleo de processamento do robô, realizou-se um ensaio de bancada
+com o microcontrolador isolado. O objetivo foi homologar o ambiente de
+desenvolvimento e certificar que a placa estava apta a receber, armazenar e
+executar os \textit{firmwares} desenvolvidos para o projeto.
 
-    Foi implementada a leitura básica dos sensores infravermelhos digitais com LM393 utilizando a ESP32 em linguagem C com ESP-IDF. As leituras são realizadas através das portas GPIO configuradas como entradas digitais, permitindo detectar a presença ou ausência de obstáculos - saída igual a 0 indica presença, saída igual a 1 indica ausência. Os dados são enviados via UART para monitoramento serial em tempo real.
+A programação, configuração e validação foram realizadas no Visual Studio Code,
+utilizando o ESP-IDF (Espressif IoT Development Framework) v6.0.1. A escolha do
+ESP-IDF justifica-se pela necessidade de acesso aos recursos avançados da ESP32,
+incluindo suporte ao FreeRTOS, gerenciamento de tarefas concorrentes, utilização
+dos núcleos de processamento e acesso direto aos periféricos embarcados.
 
-    \item {Validar/calibrar leituras;}
-    
-    A validação dos sensores foi realizada aproximando obstáculos em diferentes distâncias para verificar a alteração do nível lógico na saída digital. A calibração foi feita ajustando o potenciômetro presente no módulo LM393, permitindo configurar a sensibilidade e distância de detecção de acordo com a necessidade do robô. Devido ao tamanho do chassi, e priorizando a posição central da célula, a calibração obtida foi a mínima possível. Isto porque o objetivo foi detectar o menor espaço dentro da faixa de operação.
-    \item {Definir taxas de amostragem e quantidade de dados para transmissão e/ou armazenamento;}
-    
-    Inicialmente foi definida uma taxa de amostragem de aproximadamente 500 ms entre leituras. Essa configuração foi utilizada para facilitar a validação do funcionamento dos sensores e a observação dos dados transmitidos via UART.
+Como teste inicial de integridade, foi utilizado o exemplo oficial
+\texttt{hello\_world}. O microcontrolador foi conectado ao computador via USB,
+compilado com \texttt{idf.py build}, gravado na memória \textit{flash} com
+\texttt{idf.py flash} e monitorado pela interface serial com
+\texttt{idf.py monitor}. A compilação, gravação e execução ocorreram sem falhas,
+e as mensagens exibidas no monitor serial confirmaram o funcionamento do
+processador, da memória \textit{flash} e da comunicação serial. Assim, o núcleo
+de processamento foi considerado aprovado para as etapas de integração com
+sensores, atuadores e demais subsistemas embarcados.
 
-    \item {Validar taxas definidas e quantidade de dados;}
-    
-    A taxa de amostragem definida mostrou-se suficiente para validação funcional do sistema e monitoramento das leituras em bancada. Entretanto, observou-se que aplicações de navegação autônoma exigirão taxas de leitura mais rápidas para melhorar o tempo de resposta na detecção de obstáculos.
+\subsection{Sensores}
 
-    \item {Realizar processamento básico de dados (\textit{thresholding}, filtro média-móvel etc.).}
-    
-    O sistema utiliza processamento básico baseado em \textit{thresholding} digital realizado pelo comparador LM393, que converte automaticamente a leitura infravermelha em níveis lógicos binários. Futuramente pretende-se implementar técnicas simples de filtragem e \textit{debounce} para reduzir oscilações e falsos acionamentos durante a movimentação do robô.
-\end{itemize}
-```
+Foi implementada a leitura básica dos sensores infravermelhos digitais com LM393
+utilizando a ESP32 em linguagem C com ESP-IDF. As leituras foram realizadas por
+GPIOs configuradas como entradas digitais, permitindo detectar presença ou
+ausência de obstáculos; saída igual a 0 indica presença, enquanto saída igual a 1
+indica ausência. Os dados foram enviados via UART para monitoramento serial em
+tempo real.
 
-    \item \textcolor{red}{Armazenamento (memória interna, cartão SD, pendrive etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Armazenar dados básicos;}
-        \item \textcolor{red}{Armazenar e validar dados de sensores.}
-    \end{itemize}
-    \item \textcolor{red}{Atuadores (Motores DC, relés, LEDs etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Realizar acionamentos básicos;}
-        \item \textcolor{red}{Realizar acionamentos com base em dados de sensores;}
-        \item \textcolor{red}{Realizar processamento básico de dados (PWM etc.).}
-    \end{itemize}
-    \item \textcolor{red}{Comunicações (UART, I2C, SPI, USB, WiFi, Bluetooth etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Transmissão básica de dados;}
-        \item \textcolor{red}{Transmissão de dados de sensores dentro da taxa de amostragem.}
-    \end{itemize}
-\end{enumerate}
+A validação dos sensores infravermelhos foi feita aproximando obstáculos em
+diferentes distâncias para verificar a alteração do nível lógico na saída
+digital. A calibração foi realizada pelo potenciômetro presente no módulo LM393,
+permitindo ajustar a sensibilidade e a distância de detecção de acordo com a
+necessidade do robô. Devido às dimensões do chassi e à necessidade de manter o
+robô centralizado na célula, adotou-se a menor faixa de detecção estável obtida
+na calibração.
+
+Inicialmente, a taxa de amostragem utilizada foi de aproximadamente 500 ms entre
+leituras. Essa configuração facilitou a validação funcional e a observação dos
+dados transmitidos via UART. A taxa mostrou-se suficiente para os ensaios de
+bancada, embora a navegação autônoma deva empregar leituras mais frequentes para
+melhorar o tempo de resposta diante de obstáculos.
+
+Também foram testados sensores associados à navegação e ao consumo elétrico. Os
+encoders foram validados por meio da leitura de pulsos durante comandos de
+movimentação e giro; o terminal registrou pulsos independentes para os lados
+direito e esquerdo e ângulos calculados durante as manobras, conforme evidenciado
+na Figura~\ref{fig:teste_valida_dados_encoder}. Para medição elétrica, o sensor
+INA226 foi detectado no barramento I\textsuperscript{2}C no endereço
+\texttt{0x44}, permitindo registrar tensão, corrente e potência do conjunto em
+dois cenários: carrinho suspenso, com as rodas girando livremente e sem oposição
+externa, e carrinho apoiado no chão, no qual os motores precisam vencer a inércia
+do próprio robô para iniciar o movimento
+(Figuras~\ref{fig:teste_potencia_motores_sem_esforco}
+e~\ref{fig:teste_potencia_motores_com_esforco}).
+
+O processamento básico dos sensores infravermelhos utiliza
+\textit{thresholding} digital realizado pelo comparador LM393, que converte a
+leitura analógica do módulo em níveis lógicos binários. Para as próximas etapas,
+prevê-se a implementação de filtragem simples e \textit{debounce}, a fim de
+reduzir oscilações e falsos acionamentos durante a movimentação do robô.
+
+\subsection{Armazenamento}
+
+Os testes de armazenamento local foram implementados no diretório
+\texttt{src/firmware/storage\_test/}, com \textit{firmware} em C para ESP-IDF e
+um simulador em Python. O objetivo foi validar dois mecanismos de persistência
+do ESP32: a NVS (\textit{Non-Volatile Storage}), utilizada para dados básicos de
+configuração, e o SPIFFS (\textit{SPI Flash File System}), utilizado para
+persistência e validação de telemetria de sensores.
+
+No teste de NVS, o sistema grava e lê novamente um valor de referência,
+verificando a integridade do dado persistido. A execução local pelo simulador
+\texttt{simulate\_storage.py} foi considerada aprovada quando o console exibiu o
+resultado \texttt{[OK] [NVS TEST] Aprovado! Gravado=512, Lido=512}, indicando que
+o valor recuperado corresponde ao valor armazenado.
+
+No teste de SPIFFS, o sistema registra uma amostra de telemetria contendo dados
+de sensores e valida a leitura posterior do conteúdo gravado. A execução foi
+considerada aprovada quando o simulador exibiu
+\texttt{[OK] [SPIFFS TEST] Aprovado! Telemetria gravada e validada localmente com
+sucesso}. Além do teste local sem a placa física, o simulador permite uma etapa
+opcional de integração com o \textit{backend} FastAPI: com a API em execução na
+porta 8000, os dados persistidos podem ser sincronizados com o endpoint de
+telemetria, validando o fluxo entre o armazenamento local simulado e o sistema
+web.
+
+\subsection{Atuadores}
+
+Os motores DC foram testados individualmente utilizando o driver DRV8833. Os
+ensaios contemplaram movimento para frente, movimento para trás, giro à
+esquerda, giro à direita e parada controlada. Todos os comandos foram executados
+pelos motores e registrados no monitor serial.
+
+Após os testes básicos, foram implementadas rotinas de acionamento condicionadas
+às leituras dos sensores, como interrupção do movimento ao detectar obstáculo e
+correções de trajetória utilizando os encoders. O teste de odometria validou a
+integração entre acionamento dos motores, contagem de pulsos e atualização da
+orientação do robô. Nas evidências coletadas, o robô executa o avanço de uma
+célula com deslocamento calculado de aproximadamente $0{,}208$ m, freia, gira
+$90^\circ$ à direita, atualiza a orientação para Leste, gira $90^\circ$ à
+esquerda e retorna à orientação Norte
+(Figuras~\ref{fig:teste_odometria_1} e~\ref{fig:teste_odometria_2}).
+
+Foi implementado controle PWM para ajuste da velocidade dos motores. Nos ensaios
+registrados, foram avaliados duty cycles de 30\% e 60\%; os motores foram
+acionados com comando de velocidade 60 para frente e, nos giros, com velocidades
+opostas nos lados direito e esquerdo. Observou-se variação coerente da
+movimentação em função dos comandos aplicados, indicando que o controle de
+velocidade e sentido dos motores está operacional.
+
+\subsection{Comunicações}
+
+Foram realizados testes utilizando o barramento I\textsuperscript{2}C para
+comunicação com sensores embarcados, incluindo o INA226. O dispositivo respondeu
+corretamente aos comandos de leitura, permitindo a aquisição de tensão, corrente
+e potência durante os ensaios de consumo.
+
+A interface UART foi utilizada para depuração e monitoramento do sistema. Foram
+transmitidas mensagens contendo estado do sistema, leituras dos sensores,
+contagem de pulsos dos encoders, comandos de movimentação e informações de
+diagnóstico. As evidências do Apêndice~\ref{apendice_evidencias_testes_hardware}
+mostram o recebimento contínuo dessas mensagens durante os testes de odometria,
+encoder e potência.
 
 \section{Testes de consumo energético}
 \subsection{Teste de consumo energético usando o INA226}
