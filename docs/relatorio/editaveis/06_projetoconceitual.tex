@@ -33,20 +33,12 @@ O chassi foi projetado para abrigar os componentes eletrônicos e mecânicos do 
 
 \subsubsection{Primeiro Protótipo}
 
-O primeiro protótipo adotou geometria triangular para o chassi, com comprimento de 152\,mm e largura de 160\,mm. A estrutura possui altura de 15\,mm (sem componentes montados), distância entre eixos de 162\,mm e rodas de 68\,mm de diâmetro por 26\,mm de largura.
-
+O primeiro protótipo adotou geometria triangular para o chassi, com comprimento de 152\,mm e largura de 160\,mm. A estrutura possui altura de 15\,mm (sem componentes montados), distância entre eixos de 162\,mm e rodas de 68\,mm de diâmetro por 26\,mm de largura. Detalhes da prancha técnica estão especificados na Figura \ref{fig:chassi_draw_v1} no Apêndice \ref{apendice_cad_chassi}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\linewidth]{figuras/1_prototipo_image.jpeg}
     \caption{Modelo CAD do primeiro protótipo do chassi}
     \label{fig:chassi_cad_v1}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.55\linewidth]{figuras/CHASSI_1_prototipo_entrega_2.pdf}
-    \caption{Prancha técnica do primeiro protótipo: vistas frontal, superior, lateral e isométrica com cotas de fabricação (escala 1:1, peso 0{,}67\,kg).}
-    \label{fig:chassi_draw_v1}
 \end{figure}
 
 \begin{table}[htbp]
@@ -71,26 +63,13 @@ O primeiro protótipo adotou geometria triangular para o chassi, com comprimento
 \subsubsection{Segundo Protótipo}
 
 Com base nas limitações identificadas no primeiro protótipo, desenvolveu-se uma versão revisada com estrutura em dois andares. O primeiro andar (peça \textit{chassi}, 0{,}06\,kg) acomoda os motores, a bateria e os sensores IR, com largura frontal de 170\,mm, altura de 15{,}8\,mm e raio traseiro de 53{,}12\,mm. O segundo andar (peça \textit{2andar}, 0{,}08\,kg) abriga o ESP32, o driver de motor e os módulos eletrônicos auxiliares, com largura de 92\,mm e altura de 78{,}8\,mm. Essa separação melhora a organização do cabeamento, facilita a manutenção e reduz interferências entre os subsistemas de potência e controle.
+Detalhes da prancha técnica estão especificados nas Figura \ref{fig:chassi_draw_1andar} e Figura \ref{fig:chassi_draw_2andar} no Apêndice \ref{apendice_cad_chassi}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.50\linewidth]{figuras/2_prototipo_image.jpeg}
     \caption{Modelo CAD do segundo protótipo com estrutura em dois andares, evidenciando a disposição dos componentes eletrônicos e mecânicos.}
     \label{fig:chassi_cad_v2}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.60\linewidth]{figuras/1andar.pdf}
-    \caption{Prancha técnica do segundo protótipo — primeiro andar: vistas frontal, traseira, isométrica e corte A-A (escala 1:1, peso 0{,}06\,kg).}
-    \label{fig:chassi_draw_1andar}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.60\linewidth]{figuras/2ANDAR.pdf}
-    \caption{Prancha técnica do segundo protótipo — segundo andar: vistas frontal, lateral, traseira e superior (escala 1:1, peso 0{,}08\,kg).}
-    \label{fig:chassi_draw_2andar}
 \end{figure}
 
 \FloatBarrier 
@@ -196,8 +175,7 @@ Trata-se de um ambiente físico que reproduz fielmente as medidas e característ
 \subsubsection{Decisões de Modularidade}
 
 O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos
-cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão. O detalhamento
-dimensional e os desenhos técnicos em CAD das peças individuais que compõem os módulos de chão e parede encontram-se disponíveis no \autoref{apendice_cad_chassi}
+cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
 
 A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dimensões da competição, é essencial para transferir rigidez à estrutura de cada módulo.
 
