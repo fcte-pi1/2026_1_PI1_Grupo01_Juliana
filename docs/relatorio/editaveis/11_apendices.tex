@@ -76,6 +76,48 @@
     \label{fig:esq_alimentacao}
 \end{figure}
 
+\chapter{Evidências dos Testes de Hardware}
+\label{apendice_evidencias_testes_hardware}
+
+Este apêndice reúne os registros do monitor serial utilizados para comprovar os
+testes de bancada do módulo de \textit{hardware}, incluindo validação de
+encoders, odometria e consumo elétrico do conjunto de motores e sensores.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_valida_dados_encoder.jpeg}
+    \caption{Validação dos dados dos encoders durante comandos de avanço, frenagem e giro, com registro de pulsos lidos e ângulos calculados para os lados direito e esquerdo.}
+    \label{fig:teste_valida_dados_encoder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_odometria_1.jpeg}
+    \caption{Primeira parte do teste de odometria, com inicialização do sistema, avanço de uma célula e início da leitura de pulsos dos encoders.}
+    \label{fig:teste_odometria_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_odometria_2.jpeg}
+    \caption{Segunda parte do teste de odometria, evidenciando giros de $90^\circ$, atualização da orientação do robô e conclusão do ensaio com sucesso.}
+    \label{fig:teste_odometria_2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_sensor_potencia_motores_sem_esforço.jpeg}
+    \caption{Teste do sensor de potência com o carrinho suspenso, no qual os motores giram sem oposição do piso, registrando tensão, corrente e potência pelo INA226.}
+    \label{fig:teste_potencia_motores_sem_esforco}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_sensor_potencia_motores_com_esforço.jpeg}
+    \caption{Teste do sensor de potência com o carrinho apoiado no chão, no qual os motores precisam vencer a inércia do robô para iniciar o deslocamento.}
+    \label{fig:teste_potencia_motores_com_esforco}
+\end{figure}
+
 % \textcolor{red}{Apêndices e anexos são materiais complementares ao texto que só devem ser incluídos quando forem imprescindíveis à compreensão deste:}
 
 % \textcolor{red}{
