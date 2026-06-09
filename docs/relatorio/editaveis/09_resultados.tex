@@ -128,8 +128,31 @@ O labirinto modular construído atende aos requisitos definidos no projeto para 
 \end{enumerate}
 
 \section{Testes de consumo energético}
+\subsection{Teste de consumo energético usando o INA226}
+Para a validação do consumo energético real e do comportamento da fonte de alimentação escolhida, o robô foi testado com o sensor de potência INA226. O módulo comunicou-se com o microcontrolador ESP32, permitindo o registro em tempo real das variáveis de interesse durante a execução da rotina de movimentação.
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se as demandas energéticas do projeto foram atendidas.}
+A Tabela a seguir apresenta os dados empíricos coletados via terminal durante a fase de testes com os motores operando com esforço resistivo.
+
+\begin{table}[hbt!]
+    \centering
+    \caption{Dados de Telemetria Aferidos via INA226 (Teste de Esforço)}
+    \label{tab:dados_ina226_real}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \hline
+        \textbf{Estado de Operação} & \textbf{Tensão (V)} & \textbf{Corrente (mA)} & \textbf{Potência (W)} \\ 
+        \hline
+        Repouso (Standby) & 6,66 & 11,6 & 0,077 \\
+        Movimentação (PWM 60) & 5,33 & 526,5 & 2,808 \\
+        \hline
+    \end{tabular}
+    \par\vspace{0.2cm}
+    Fonte: Elaborada pelos autores.
+\end{table}
+
+Os dados obtidos foram, surpreendentemente abaixo dos estimados teoricamente ($1050$ mA).
+
+No estado de repouso (Standby), o sistema puxou $11,8$ mA. Durante o teste em vazio, a corrente subiu para $425,8$ mA, representação da energia necessária  para vencer a inércia e o atrito interno da caixa de redução dos motores.Ao ser colocado no solo (com esforço), a exigência de torque elevou a corrente para $526,5$ mA. Adicionalmente, observou-se o impacto da resistência interna das baterias: a tensão de barramento no teste físico sofreu uma queda considerada natural, passando de $6,61$ V em repouso para $5,33$ V sob carga máxima.Mesmo com essa variação, o barramento manteve-se acima dos níveis críticos de regulação, permitindo que o microcontrolador e os sensores continuassem funcionando sem falhas, concluindo a rotina com êxito.
 
 \section{Testes de \textit{software}}
 \label{sec:testes_software}
