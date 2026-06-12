@@ -4,26 +4,27 @@
 \chapter{Detalhamento e Vistas do Projeto Estrutural}
 \label{apendice_cad_chassi}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Chassi.pdf}
-    \caption{Vista isométrica do chassi do \textit{micromouse} modelado em CAD. Dimensões em milímetros.}
-    \label{fig:chassi}
+    \includegraphics[width=0.55\linewidth]{figuras/CHASSI_1_prototipo_entrega_2.pdf}
+    \caption{Prancha técnica do primeiro protótipo: vistas frontal, superior, lateral e isométrica com cotas de fabricação (escala 1:1, peso 0{,}67\,kg).}
+    \label{fig:chassi_draw_v1}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Parede.pdf}
-    \caption{CAD do módulo de parede individual, com as principais cotas indicadas.}
-    \label{fig:labirinto_parede}
+    \includegraphics[width=0.60\linewidth]{figuras/1andar.pdf}
+    \caption{Prancha técnica do segundo protótipo — primeiro andar: vistas frontal, traseira, isométrica e corte A-A (escala 1:1, peso 0{,}06\,kg).}
+    \label{fig:chassi_draw_1andar}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/Chao.pdf}
-    \caption{CAD do módulo de chão individual, com as principais cotas indicadas.}
-    \label{fig:labirinto_chao}
+    \includegraphics[width=0.60\linewidth]{figuras/2ANDAR.pdf}
+    \caption{Prancha técnica do segundo protótipo — segundo andar: vistas frontal, lateral, traseira e superior (escala 1:1, peso 0{,}08\,kg).}
+    \label{fig:chassi_draw_2andar}
 \end{figure}
+
 
 
 % \textcolor{red}{Apêndices e anexos são materiais complementares ao texto que só devem ser incluídos quando forem imprescindíveis à compreensão deste:}
@@ -50,30 +51,72 @@
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_topmodule_1-P1_2026-05-11}
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_topmodule_1-P1_2026-06-08.png}
     \caption{Representação da Ligação dos Componentes no Microcontrolador}
     \label{fig:esq_topmodule}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_sensores_1-P1_2026-05-11}
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_sensores_1-P1_2026-06-08.png}
     \caption{Representação Esquemática dos Sensores}
     \label{fig:esq_sensores}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_motores_driver_1-P1_2026-05-11}
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_motores_driver_1-P1_2026-06-08.png}
     \caption{Representação Esquemática do Driver e Motores}
     \label{fig:esq_motores}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-05-11}
+    \includegraphics[width=0.8\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-06-08.png}
     \caption{Representação Esquemática da Alimentação do \textit{Micromouse}}
     \label{fig:esq_alimentacao}
+\end{figure}
+
+\chapter{Evidências dos Testes de Hardware}
+\label{apendice_evidencias_testes_hardware}
+
+Este apêndice reúne os registros do monitor serial utilizados para comprovar os
+testes de bancada do módulo de \textit{hardware}, incluindo validação de
+encoders, odometria e consumo elétrico do conjunto de motores e sensores.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_valida_dados_encoder.jpeg}
+    \caption{Validação dos dados dos encoders durante comandos de avanço, frenagem e giro, com registro de pulsos lidos e ângulos calculados para os lados direito e esquerdo.}
+    \label{fig:teste_valida_dados_encoder}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_odometria_1.jpeg}
+    \caption{Primeira parte do teste de odometria, com inicialização do sistema, avanço de uma célula e início da leitura de pulsos dos encoders.}
+    \label{fig:teste_odometria_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_odometria_2.jpeg}
+    \caption{Segunda parte do teste de odometria, evidenciando giros de $90^\circ$, atualização da orientação do robô e conclusão do ensaio com sucesso.}
+    \label{fig:teste_odometria_2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_sensor_potencia_motores_sem_esforço.jpeg}
+    \caption{Teste do sensor de potência com o carrinho suspenso, no qual os motores giram sem oposição do piso, registrando tensão, corrente e potência pelo INA226.}
+    \label{fig:teste_potencia_motores_sem_esforco}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/teste_sensor_potencia_motores_com_esforço.jpeg}
+    \caption{Teste do sensor de potência com o carrinho apoiado no chão, no qual os motores precisam vencer a inércia do robô para iniciar o deslocamento.}
+    \label{fig:teste_potencia_motores_com_esforco}
 \end{figure}
 
 % \textcolor{red}{Apêndices e anexos são materiais complementares ao texto que só devem ser incluídos quando forem imprescindíveis à compreensão deste:}
@@ -207,6 +250,37 @@
 \end{longtable}
 \end{small}
 \end{landscape}
+
+\chapter{Evidências de Testes e Cobertura de Código}
+\label{apendice_evidencias_testes}
+
+Este apêndice reúne as evidências de execução das suítes de testes automatizados e
+de cobertura de código-fonte do \textit{software}, geradas pelo \textit{pipeline} de
+Integração Contínua e referenciadas na Seção~\ref{sec:testes_software}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth, keepaspectratio]{figuras/cobertura_backend.png}
+    \caption{Relatório de cobertura do \textit{backend} (\texttt{pytest-cov}): $98\%$ de
+    cobertura total, acima do mínimo de $70\%$.}
+    \label{fig:cobertura_backend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/cobertura_frontend.png}
+    \caption{Relatório de cobertura do \textit{frontend} (\texttt{Vitest}): $93{,}28\%$ de
+    \textit{statements} e $97{,}03\%$ de linhas, acima do mínimo de $70\%$.}
+    \label{fig:cobertura_frontend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, keepaspectratio]{figuras/e2e_playwright.png}
+    \caption{Relatório dos testes de sistema E2E (\texttt{Playwright}): 19 casos
+    aprovados, distribuídos nas quatro suítes funcionais.}
+    \label{fig:e2e_playwright}
+\end{figure}
 
 % \textcolor{red}{Apêndices e anexos são materiais complementares ao texto que só devem ser incluídos quando forem imprescindíveis à compreensão deste:}
 
