@@ -4,6 +4,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "driver/gpio.h"
 
 #include "encoder.h"
 #include "m_driver.h"
@@ -15,18 +16,24 @@ static const char *TAG = "movimentacao";
 //funcoes especificas
 
 void mouse_movefwd(motor_t *motorR, motor_t *motorL){
+    gpio_set_level(SEL, 0); // garantir que o freio esta desativado
+
     motor_set_speed(motorR, MOTOR_FWD_SPD);
     motor_set_speed(motorL, MOTOR_FWD_SPD);
     ESP_LOGI(TAG, "comando andar para frente");
 }
 
 void mouse_movebwd(motor_t *motorR, motor_t *motorL){
+    gpio_set_level(SEL, 0); // garantir que o freio esta desativado
+    
     motor_set_speed(motorR, -MOTOR_BWD_SPD);
     motor_set_speed(motorL, -MOTOR_BWD_SPD);
     ESP_LOGI(TAG, "comando andar para tras");
 }
 
 void mouse_spin(motor_t *motorR, motor_t *motorL, bool sentido){
+    gpio_set_level(SEL, 0); // garantir que o freio esta desativado
+
     if(sentido){
         motor_set_speed(motorR, -MOTOR_BWD_SPD);
         motor_set_speed(motorL, MOTOR_BWD_SPD);
@@ -38,9 +45,18 @@ void mouse_spin(motor_t *motorR, motor_t *motorL, bool sentido){
     }
 }
 
-void mouse_break(motor_t *motorR, motor_t *motorL){
+void mouse_coast(motor_t *motorR, motor_t *motorL){
     motor_stop(motorR);
     motor_stop(motorL);
+    ESP_LOGI(TAG, "comando coast");
+}
+
+//freio ativo
+void mouse_break(motor_t *motorR, motor_t *motorL){
+    mouse_coast(motorR, motorL); // primeiramente cessar o pwm enviado ao driver
+
+    gpio_set_level(SEL, 1); // pino SEL do multiplexador => 1;
+                            // entradas do driver em nivel alto (freio ativo)
     ESP_LOGI(TAG, "comando frear");
 }
 

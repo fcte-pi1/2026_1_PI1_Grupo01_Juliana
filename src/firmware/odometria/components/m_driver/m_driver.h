@@ -5,12 +5,13 @@
 #define PWM_R2              18
 #define PWM_L1              23
 #define PWM_L2		    17
+#define SEL                 27
 
 #define HZ_RES              1000000
 #define PERIOD_TICKS        500
 
-#define MOTOR_FWD_SPD 60 
-#define MOTOR_BWD_SPD 60
+#define MOTOR_FWD_SPD 50 
+#define MOTOR_BWD_SPD 50
 
 #include<stdint.h>
 #include<stdbool.h>
@@ -31,21 +32,21 @@ typedef struct{
 
 void driver_init();
 
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerR1();
+// mcpwm_cmpr_handle_t driver_get_cmpr_handlerR1();
 
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerR2();
+// mcpwm_cmpr_handle_t driver_get_cmpr_handlerR2();
 
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerL1();
+// mcpwm_cmpr_handle_t driver_get_cmpr_handlerL1();
 
-mcpwm_cmpr_handle_t driver_get_cmpr_handlerL2();
+// mcpwm_cmpr_handle_t driver_get_cmpr_handlerL2();
 
-mcpwm_gen_handle_t driver_get_gen_handlerR1();
+// mcpwm_gen_handle_t driver_get_gen_handlerR1();
 
-mcpwm_gen_handle_t driver_get_gen_handlerR2();
+// mcpwm_gen_handle_t driver_get_gen_handlerR2();
 
-mcpwm_gen_handle_t driver_get_gen_handlerL1();
+// mcpwm_gen_handle_t driver_get_gen_handlerL1();
 
-mcpwm_gen_handle_t driver_get_gen_handlerL2();
+// mcpwm_gen_handle_t driver_get_gen_handlerL2();
 
 void motor_init(motor_t *motor);
 

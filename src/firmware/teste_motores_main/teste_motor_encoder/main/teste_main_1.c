@@ -67,11 +67,18 @@ void app_main(void)
                                 mouse_spin(&motorR, &motorL, 0);
                                 break;
                         case ' ':
-                                mouse_break(&motorR, &motorL);
+                                mouse_coast(&motorR, &motorL);
 
                                 ESP_LOGI(TAG, "angulo direita: %f", encoder_get_teta(&encoderR));
                                 ESP_LOGI(TAG, "angulo esquerda: %f", encoder_get_teta(&encoderL));
 
+                                break;
+                        case 'p':
+			        mouse_break(&motorR, &motorL);
+
+                                ESP_LOGI(TAG, "angulo direita: %f", encoder_get_teta(&encoderR));
+                                ESP_LOGI(TAG, "angulo esquerda: %f", encoder_get_teta(&encoderL));
+                                
                                 break;
                         default:
                                 break;

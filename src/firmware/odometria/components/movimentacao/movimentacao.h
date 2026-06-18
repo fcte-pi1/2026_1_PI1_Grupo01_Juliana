@@ -11,6 +11,8 @@ void mouse_movebwd(motor_t *motorR, motor_t *motorL);
 
 void mouse_spin(motor_t *motorR, motor_t *motorL, bool sentido);
 
+void mouse_coast(motor_t *motorR, motor_t *motorL);
+
 void mouse_break(motor_t *motorR, motor_t *motorL);
 
 void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos);

@@ -8,7 +8,6 @@
 motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
 motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
-
 void app_main(void)
 {
 	driver_init();
@@ -57,6 +56,9 @@ void app_main(void)
 			mouse_spin(&motorR, &motorL, 0);
 			break;
 		case ' ':
+			mouse_coast(&motorR, &motorL);
+			break;
+		case 'p':
 			mouse_break(&motorR, &motorL);
 			break;
 		default:
