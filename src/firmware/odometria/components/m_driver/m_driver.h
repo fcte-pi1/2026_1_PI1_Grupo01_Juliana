@@ -1,9 +1,6 @@
 #ifndef M_DRIVER_H
 #define M_DRIVER_H
 
-
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_DIR_R) | (1ULL<<GPIO_DIR_L))
-
 #define PWM_R1              19
 #define PWM_R2              18
 #define PWM_L1              23
