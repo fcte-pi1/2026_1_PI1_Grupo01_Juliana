@@ -15,6 +15,33 @@ The React Compiler is not enabled on this template because of its impact on dev 
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
+## 🌐 Configuração de rede (backend por IP)
+
+As URLs do backend (API REST e WebSocket de telemetria) são configuráveis por
+variável de ambiente. Sem configuração, o frontend assume o backend **no mesmo
+host** em que a página foi aberta, na porta `8000` — ou seja, o acesso pela rede
+já funciona automaticamente ao abrir o site por `http://<IP-da-máquina>:5173`.
+
+Para fixar um backend específico, copie o exemplo e ajuste:
+
+```bash
+cp .env.example .env
+# edite .env, ex.:
+# VITE_API_URL=http://192.168.0.10:8000
+# VITE_WS_URL=ws://192.168.0.10:8000/ws/telemetria
+```
+
+O Vite só expõe variáveis com prefixo `VITE_`. O `.env` real **não** é
+versionado. Para servir a aplicação na rede (acessível de outro dispositivo),
+rode o Vite com `--host`:
+
+```bash
+npm run dev -- --host
+```
+
+> Lembre-se de liberar a origem do frontend no `CORS_ORIGINS` do backend
+> (veja o README do backend).
+
 ## ✅ Testes automatizados (Vitest + Testing Library)
 
 > 🤖 **Precisa do robô / ESP32 / backend rodando para os testes? NÃO.**

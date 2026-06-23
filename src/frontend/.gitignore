@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Variáveis de ambiente (mantém apenas o exemplo versionado)
+.env
+.env.*
+!.env.example
+
 # Artefatos de testes
 coverage
 test-results

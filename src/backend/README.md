@@ -110,6 +110,38 @@ http://localhost:8000
 
 ---
 
+## 🌐 Configuração de rede (acesso por outra máquina)
+
+Por padrão o backend só aceita requisições do frontend local
+(`http://localhost:5173`). Para que o ESP32 ou outro computador na mesma rede
+acessem a API, há dois ajustes:
+
+**1. Liberar a origem do frontend no CORS.** As origens são lidas da variável
+de ambiente `CORS_ORIGINS` (lista separada por vírgula). Copie o exemplo e
+ajuste:
+
+```bash
+cp .env.example .env
+# edite .env e inclua o endereço do frontend pela rede, ex.:
+# CORS_ORIGINS=http://localhost:5173,http://192.168.0.10:5173
+```
+
+O `.env` é carregado automaticamente na inicialização (via `python-dotenv`) e
+**não** é versionado. Sem ele, vale o default local.
+
+**2. Expor o servidor na rede.** O `uvicorn` sobe em `127.0.0.1` por padrão
+(inacessível de fora). Use `--host 0.0.0.0` para escutar em todas as interfaces:
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0
+```
+
+Descubra o IP da máquina (ex.: `ipconfig getifaddr en0` no macOS,
+`hostname -I` no Linux) e acesse de outro dispositivo por
+`http://<IP-da-máquina>:8000`.
+
+---
+
 ## ✅ Testes automatizados (pytest + cobertura)
 
 > 🤖 **Precisa do robô / ESP32 / sensores para rodar os testes? NÃO.**

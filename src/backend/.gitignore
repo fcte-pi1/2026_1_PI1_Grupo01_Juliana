@@ -4,3 +4,8 @@ htmlcov/
 .coverage
 .coverage.*
 coverage.xml
+
+# Variáveis de ambiente (mantém apenas o exemplo versionado)
+.env
+.env.*
+!.env.example

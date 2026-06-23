@@ -2,107 +2,436 @@
 
 \section{Características Gerais}
 
-\textcolor{red}{Introduzir os principais pontos deste capítulo. Cada teste deve conter explicações completas que garantam sua repetibilidade:
-\begin{itemize}
-    \item Hipóteses levantadas
-    \item Condições de contorno
-    \item Resultados esperados
-    \item Materiais e métodos
-    \item Precisão e acurácia das medidas obtidas.
-\end{itemize}
-}
+Este capítulo tem como objetivo apresentar os procedimentos de verificação e validação aplicados aos subsistemas do projeto. A etapa de testes é fundamental para garantir que o robô atenda aos requisitos de projeto, navegando pelo labirinto de forma autônoma e eficiente. Para assegurar a repetibilidade e o rigor metodológico, cada experimento documentado a seguir detalha as hipóteses levantadas, as condições de contorno estabelecidas durante a execução, os resultados esperados, os materiais e métodos empregados, bem como a análise da precisão e acurácia das medidas obtidas.
 
 \section{Testes da estrutura}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos da estrutura foram atendidos, incluindo:}
+% \textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos da estrutura foram atendidos, incluindo:}
 
-\begin{itemize}
-    \item \textcolor{red}{Imagem com todas as peças separadas da estrutura (carcaça) do veículo;}
-    \item \textcolor{red}{Imagem que apresente a estrutura já montada (sem necessidade de partes internas, como eletrônica ou motores);}
-    \item \textcolor{red}{Ilustração contemplando o carro montado virtualmente em alguma ferramenta de CAD, no intuito de verificar se as peças foram construídas e montadas em conformidade com o projeto.}
-\end{itemize}
+% \begin{itemize}
+%     \item \textcolor{red}{Imagem com todas as peças separadas da estrutura (carcaça) do veículo;}
+%     \item \textcolor{red}{Imagem que apresente a estrutura já montada (sem necessidade de partes internas, como eletrônica ou motores);}
+%     \item \textcolor{red}{Ilustração contemplando o carro montado virtualmente em alguma ferramenta de CAD, no intuito de verificar se as peças foram construídas e montadas em conformidade com o projeto.}
+% \end{itemize}
+
+Esta seção apresenta os testes realizados para verificar se a estrutura mecânica do micromouse atende aos requisitos definidos durante o projeto. Foram avaliados aspectos relacionados à montagem da carcaça do veículo e ao labirinto modular.
+
+\subsection{Veículo Desmontado}
+
+O chassi do micromouse foi projetado em CAD como uma peça única para ser fabricada em impressão 3D utilizando material PLA. Durante esta entrega, procedeu-se à fabricação e testes preliminares dessa versão.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figuras/impresso.jpg}
+    \caption{Chassi completo, peça única impressa em 3D.}
+    \label{fig:chassi_impresso}
+\end{figure}
+
+A Figura \ref{fig:chassi_desmontado} apresenta os componentes estruturais que compõem a montagem do micromouse.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figuras/desmontado.jpeg}
+    \caption{Componentes estruturais do micromouse.}
+    \label{fig:chassi_desmontado}
+\end{figure}
+
+\subsubsection{Análise do protótipo em 3D}
+
+O chassi em 3D apresentou problemas dimensionais durante a montagem: as dimensões finais da peça não atendiam completamente os limites esperados no projeto, principalmente em relação ao comprimento e altura que prejudicaram a performance dos sensores de proximidade. Constatou-se que a peça não atenderia aos requisitos de tamanho para competição.
+
+Adicionalmente, o processo de impressão 3D gerou imperfeições nos encaixes destinados aos motores, exigindo pós-processamento (lixamento) para permitir o acoplamento adequado dos componentes. A elaboração de um novo protótipo em 3D, com ajustes dimensionais e reforço dos encaixes, está planejada para a próxima etapa do projeto.
+
+\subsubsection{Validação funcional com chassi provisório}
+
+Visando não comprometer a validação dos testes de montagem, conformidade e funcionalidade da estrutura durante esta etapa do projeto, foi utilizado um \textbf{chassi provisório em acrílico} que atende aos requisitos de encaixe dos componentes enquanto a versão final em 3D é otimizada. Este chassi permitiu validar o encaixe e acomodação de todos os componentes eletrônicos (bateria, motores, sensores, protoboard), a estabilidade estrutural durante operação e a confirmação de que a arquitetura projetada é viável
+
+\subsection{Chassi Montado (Provisório em Acrílico)}
+
+A Figura \ref{fig:chassi_montado_acrilico} apresenta o chassi provisório em acrílico montado com todos os componentes eletrônicos acoplados.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/chassi_montado.png}
+    \caption{Chassi provisório em acrílico completamente montado com componentes eletrônicos.}
+    \label{fig:chassi_montado_acrilico}
+\end{figure}
+
+\subsection{Labirinto Modular}
+O labirinto modular construído atende aos requisitos definidos no projeto para a validação do circuito do micromouse, oferecendo uma estrutura resistente e adequada aos ensaios de navegação do robô. Fabricado em madeira, o conjunto apresentou boa rigidez mecânica e respeitou as especificações dimensionais previstas, com células de $18\text{ cm}$ de lado, paredes de $5\text{ cm}$ de altura e $1{,}2\text{ cm}$ de espessura, totalizando uma área de $72\text{ cm} \times 72\text{ cm}$ em conformidade com o modelo projetado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{figuras/labirinto.png}
+    \caption{Labirinto modular construído para os testes estruturais do micromouse.}
+    \label{fig:labirinto_resultados}
+\end{figure}
 
 \section{Testes de \textit{hardware}}
+\label{sec:testes_hardware}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do \textit{hardware} foram atendidos, incluindo:}
+Os testes de \textit{hardware} tiveram como objetivo verificar, em bancada, se o
+conjunto embarcado do \textit{micromouse} estava apto a executar o \textit{firmware},
+ler sensores, acionar motores, registrar dados e transmitir informações de
+diagnóstico. Os ensaios foram realizados com a ESP32, sensores infravermelhos
+digitais com comparador LM393, sensor INA226, encoders dos motores DC, driver
+DRV8833 e monitoramento serial pelo ambiente ESP-IDF. As evidências completas dos
+testes executados no terminal estão reunidas no
+Apêndice~\ref{apendice_evidencias_testes_hardware}.
 
-\begin{enumerate}
-    \item \textcolor{red}{Processamento (Arduino, ESP32 etc):}
-    \begin{itemize}
-        \item \textcolor{red}{Definir interface de desenvolvimento;}
-        \item \textcolor{red}{Rodar exemplo mínimo.}
-    \end{itemize}
-    \item \textcolor{red}{Sensores (temperatura, pressão, posição, velocidade etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Realizar leitura básica de dados;}
-        \item \textcolor{red}{Validar/calibrar leituras;}
-        \item \textcolor{red}{Definir taxas de amostragem e quantidade de dados para transmissão e/ou armazenamento;}
-        \item \textcolor{red}{Validar taxas definidas e quantidade de dados;}
-        \item \textcolor{red}{Realizar processamento básico de dados (\textit{thresholding}, filtro média-móvel etc.).}
-    \end{itemize}
-    \item \textcolor{red}{Armazenamento (memória interna, cartão SD, pendrive etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Armazenar dados básicos;}
-        \item \textcolor{red}{Armazenar e validar dados de sensores.}
-    \end{itemize}
-    \item \textcolor{red}{Atuadores (Motores DC, relés, LEDs etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Realizar acionamentos básicos;}
-        \item \textcolor{red}{Realizar acionamentos com base em dados de sensores;}
-        \item \textcolor{red}{Realizar processamento básico de dados (PWM etc.).}
-    \end{itemize}
-    \item \textcolor{red}{Comunicações (UART, I2C, SPI, USB, WiFi, Bluetooth etc.):}
-    \begin{itemize}
-        \item \textcolor{red}{Transmissão básica de dados;}
-        \item \textcolor{red}{Transmissão de dados de sensores dentro da taxa de amostragem.}
-    \end{itemize}
-\end{enumerate}
+\subsection{Processamento}
+
+Para validar o núcleo de processamento do robô, realizou-se um ensaio de bancada
+com o microcontrolador isolado. O objetivo foi homologar o ambiente de
+desenvolvimento e certificar que a placa estava apta a receber, armazenar e
+executar os \textit{firmwares} desenvolvidos para o projeto.
+
+A programação, configuração e validação foram realizadas no Visual Studio Code,
+utilizando o ESP-IDF (Espressif IoT Development Framework) v6.0.1. A escolha do
+ESP-IDF justifica-se pela necessidade de acesso aos recursos avançados da ESP32,
+incluindo suporte ao FreeRTOS, gerenciamento de tarefas concorrentes, utilização
+dos núcleos de processamento e acesso direto aos periféricos embarcados.
+
+Como teste inicial de integridade, foi utilizado o exemplo oficial
+\texttt{hello\_world}. O microcontrolador foi conectado ao computador via USB,
+compilado com \texttt{idf.py build}, gravado na memória \textit{flash} com
+\texttt{idf.py flash} e monitorado pela interface serial com
+\texttt{idf.py monitor}. A compilação, gravação e execução ocorreram sem falhas,
+e as mensagens exibidas no monitor serial confirmaram o funcionamento do
+processador, da memória \textit{flash} e da comunicação serial. Assim, o núcleo
+de processamento foi considerado aprovado para as etapas de integração com
+sensores, atuadores e demais subsistemas embarcados.
+
+\subsection{Sensores}
+
+Foi implementada a leitura básica dos sensores infravermelhos digitais com LM393
+utilizando a ESP32 em linguagem C com ESP-IDF. As leituras foram realizadas por
+GPIOs configuradas como entradas digitais, permitindo detectar presença ou
+ausência de obstáculos; saída igual a 0 indica presença, enquanto saída igual a 1
+indica ausência. Os dados foram enviados via UART para monitoramento serial em
+tempo real.
+
+A validação dos sensores infravermelhos foi feita aproximando obstáculos em
+diferentes distâncias para verificar a alteração do nível lógico na saída
+digital. A calibração foi realizada pelo potenciômetro presente no módulo LM393,
+permitindo ajustar a sensibilidade e a distância de detecção de acordo com a
+necessidade do robô. Devido às dimensões do chassi e à necessidade de manter o
+robô centralizado na célula, adotou-se a menor faixa de detecção estável obtida
+na calibração.
+
+Inicialmente, a taxa de amostragem utilizada foi de aproximadamente 500 ms entre
+leituras. Essa configuração facilitou a validação funcional e a observação dos
+dados transmitidos via UART. A taxa mostrou-se suficiente para os ensaios de
+bancada, embora a navegação autônoma deva empregar leituras mais frequentes para
+melhorar o tempo de resposta diante de obstáculos.
+
+Também foram testados sensores associados à navegação e ao consumo elétrico. Os
+encoders foram validados por meio da leitura de pulsos durante comandos de
+movimentação e giro; o terminal registrou pulsos independentes para os lados
+direito e esquerdo e ângulos calculados durante as manobras, conforme evidenciado
+na Figura~\ref{fig:teste_valida_dados_encoder}. Para medição elétrica, o sensor
+INA226 foi detectado no barramento I\textsuperscript{2}C no endereço
+\texttt{0x44}, permitindo registrar tensão, corrente e potência do conjunto em
+dois cenários: carrinho suspenso, com as rodas girando livremente e sem oposição
+externa, e carrinho apoiado no chão, no qual os motores precisam vencer a inércia
+do próprio robô para iniciar o movimento
+(Figuras~\ref{fig:teste_potencia_motores_sem_esforco}
+e~\ref{fig:teste_potencia_motores_com_esforco}).
+
+O processamento básico dos sensores infravermelhos utiliza
+\textit{thresholding} digital realizado pelo comparador LM393, que converte a
+leitura analógica do módulo em níveis lógicos binários. Para as próximas etapas,
+prevê-se a implementação de filtragem simples e \textit{debounce}, a fim de
+reduzir oscilações e falsos acionamentos durante a movimentação do robô.
+
+\subsection{Armazenamento}
+
+Os testes de armazenamento local foram implementados no diretório
+\path{src/firmware/storage\_test/}, com \textit{firmware} em C para ESP-IDF e
+um simulador em Python. O objetivo foi validar dois mecanismos de persistência
+do ESP32: a NVS (\textit{Non-Volatile Storage}), utilizada para dados básicos de
+configuração, e o SPIFFS (\textit{SPI Flash File System}), utilizado para
+persistência e validação de telemetria de sensores.
+
+No teste de NVS, o sistema grava e lê novamente um valor de referência,
+verificando a integridade do dado persistido. A execução local pelo simulador
+\texttt{simulate\_storage.py} foi considerada aprovada quando o console exibiu o
+resultado \texttt{[OK] [NVS TEST] Aprovado! Gravado=512, Lido=512}, indicando que
+o valor recuperado corresponde ao valor armazenado.
+
+No teste de SPIFFS, o sistema registra uma amostra de telemetria contendo dados
+de sensores e valida a leitura posterior do conteúdo gravado. A execução foi
+considerada aprovada quando o simulador exibiu
+\texttt{[OK] [SPIFFS TEST] Aprovado! Telemetria gravada e validada localmente com
+sucesso}. Além do teste local sem a placa física, o simulador permite uma etapa
+opcional de integração com o \textit{backend} FastAPI: com a API em execução na
+porta 8000, os dados persistidos podem ser sincronizados com o endpoint de
+telemetria, validando o fluxo entre o armazenamento local simulado e o sistema
+web.
+
+\subsection{Atuadores}
+
+Os motores DC foram testados individualmente utilizando o driver DRV8833. Os
+ensaios contemplaram movimento para frente, movimento para trás, giro à
+esquerda, giro à direita e parada controlada. Todos os comandos foram executados
+pelos motores e registrados no monitor serial.
+
+Após os testes básicos, foram implementadas rotinas de acionamento condicionadas
+às leituras dos sensores, como interrupção do movimento ao detectar obstáculo e
+correções de trajetória utilizando os encoders. O teste de odometria validou a
+integração entre acionamento dos motores, contagem de pulsos e atualização da
+orientação do robô. Nas evidências coletadas, o robô executa o avanço de uma
+célula com deslocamento calculado de aproximadamente $0{,}208$ m, freia, gira
+$90^\circ$ à direita, atualiza a orientação para Leste, gira $90^\circ$ à
+esquerda e retorna à orientação Norte
+(Figuras~\ref{fig:teste_odometria_1} e~\ref{fig:teste_odometria_2}).
+
+Foi implementado controle PWM para ajuste da velocidade dos motores. Nos ensaios
+registrados, foram avaliados duty cycles de 30\% e 60\%; os motores foram
+acionados com comando de velocidade 60 para frente e, nos giros, com velocidades
+opostas nos lados direito e esquerdo. Observou-se variação coerente da
+movimentação em função dos comandos aplicados, indicando que o controle de
+velocidade e sentido dos motores está operacional.
+
+\subsection{Comunicações}
+
+Foram realizados testes utilizando o barramento I\textsuperscript{2}C para
+comunicação com sensores embarcados, incluindo o INA226. O dispositivo respondeu
+corretamente aos comandos de leitura, permitindo a aquisição de tensão, corrente
+e potência durante os ensaios de consumo.
+
+A interface UART foi utilizada para depuração e monitoramento do sistema. Foram
+transmitidas mensagens contendo estado do sistema, leituras dos sensores,
+contagem de pulsos dos encoders, comandos de movimentação e informações de
+diagnóstico. As evidências do Apêndice~\ref{apendice_evidencias_testes_hardware}
+mostram o recebimento contínuo dessas mensagens durante os testes de odometria,
+encoder e potência.
 
 \section{Testes de consumo energético}
+\subsection{Teste de consumo energético usando o INA226}
+Para a validação do consumo energético real e do comportamento da fonte de alimentação escolhida, o robô foi testado com o sensor de potência INA226. O módulo comunicou-se com o microcontrolador ESP32, permitindo o registro em tempo real das variáveis de interesse durante a execução da rotina de movimentação.
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se as demandas energéticas do projeto foram atendidas.}
+A Tabela a seguir apresenta os dados empíricos coletados via terminal durante a fase de testes com os motores operando com esforço resistivo.
+
+\begin{table}[hbt!]
+    \centering
+    \caption{Dados de Telemetria Aferidos via INA226 (Teste de Esforço)}
+    \label{tab:dados_ina226_real}
+    \vspace{0.2cm}
+    \begin{tabular}{lccc}
+        \hline
+        \textbf{Estado de Operação} & \textbf{Tensão (V)} & \textbf{Corrente (mA)} & \textbf{Potência (W)} \\ 
+        \hline
+        Repouso (Standby) & 6,66 & 11,6 & 0,077 \\
+        Movimentação (PWM 60) & 5,33 & 526,5 & 2,808 \\
+        \hline
+    \end{tabular}
+    \par\vspace{0.2cm}
+    Fonte: Elaborada pelos autores.
+\end{table}
+
+Os dados obtidos foram, surpreendentemente abaixo dos estimados teoricamente ($1050$ mA).
+
+No estado de repouso (Standby), o sistema puxou $11,8$ mA. Durante o teste em vazio, a corrente subiu para $425,8$ mA, representação da energia necessária  para vencer a inércia e o atrito interno da caixa de redução dos motores.Ao ser colocado no solo (com esforço), a exigência de torque elevou a corrente para $526,5$ mA. Adicionalmente, observou-se o impacto da resistência interna das baterias: a tensão de barramento no teste físico sofreu uma queda considerada natural, passando de $6,61$ V em repouso para $5,33$ V sob carga máxima.Mesmo com essa variação, o barramento manteve-se acima dos níveis críticos de regulação, permitindo que o microcontrolador e os sensores continuassem funcionando sem falhas, concluindo a rotina com êxito.
 
 \section{Testes de \textit{software}}
+\label{sec:testes_software}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do \textit{software} foram atendidos.
-Considerando a implementação de $50\%$ do \textit{backlog} do produto (funcional):}
+O \textit{backlog} do produto definido no primeiro ponto de controle (PC1) é composto por seis histórias
+de usuário (HU01--HU06). Nesta entrega foram efetivamente implementadas e validadas
+por testes automatizados as quatro histórias do módulo de \textit{software}
+(web/\textit{backend}): HU03, HU04, HU05 e HU06, o que corresponde a $66{,}7\%$ do
+\textit{backlog} funcional (acima do mínimo de $50\%$). As histórias HU01
+(resolução autônoma) e HU02 (mapeamento incremental) pertencem ao módulo embarcado
+e dependem da integração final com a placa ESP32, estando planejadas para a etapa
+seguinte; por isso não compõem o conjunto validado nesta seção.
 
-\begin{itemize}
-    \item \textcolor{red}{Listar as histórias de usuários implementadas.}
-    \item \textcolor{red}{Listar a associação entre as histórias de usuários e os protótipos, deixando claro qual é a funcionalidade que será acessada pelo usuário/professor(a) por meio da interface gráfica.}
-    \item \textcolor{red}{Listar os suítes de testes automatizados em nível:}
-    \begin{itemize}
-        \item \textcolor{red}{Unitário e integração, com cobertura de código-fonte de pelo menos $70\%$;}
-        \item \textcolor{red}{Sistema, do tipo funcional (end-to-end E2E).}
-    \end{itemize}
-\end{itemize}
+\begin{table}[H]
+    \centering
+    \caption{Associação entre histórias de usuário implementadas, protótipos e
+    funcionalidades acessadas na interface gráfica.}
+    \label{tab:hu_prototipo_gui}
+    \footnotesize
+    \begin{tabular}{|c|p{3.6cm}|c|p{3.6cm}|p{3.4cm}|}
+        \hline
+        \textbf{HU} & \textbf{História de usuário} & \textbf{Protótipo} &
+        \textbf{Funcionalidade acessada na GUI} &
+        \textbf{Suíte de testes que valida} \\ \hline
 
-\textcolor{red}{\textbf{Observações:}}
-\begin{enumerate}
-    \item \textcolor{red}{Em relação ao \textit{backlog} do produto, será considerado como referência aquele descrito no primeiro ponto de controle, contemplando as correções e \textit{feedbacks} da-os professora(e)s. O ideal seria a real atualização entre o planejado X realizado.}
-    \item \textcolor{red}{Os testes mencionados nesta subseção dizem respeito aos testes de \textit{software}. O Roteiro de testes funcionais, entregue no primeiro ponto de controle deve ser corrigido a partir do apontamento da-os professora(e)s. Além disso, ele deve guiar a execução dos testes E2E automatizados. O conjunto de casos de testes funcionais documentados devem estar coerentes com a automação via interface gráfica de entrada de dados.}
-\end{enumerate}
+        HU03 & Telemetria em tempo real: trajeto, tempo, velocidade média e
+        bateria durante a corrida. & Figura~\ref{fig:telemetria_fig} &
+        Tela \textit{Telemetria ao Vivo}: grade do labirinto,
+        métricas e status de conexão atualizados via WebSocket. &
+        Unitário (\textit{Telemetry}, \textit{useTelemetry}); E2E
+        \texttt{telemetria.spec.js}; \textit{backend} POST \texttt{/telemetria}
+        e WS \texttt{/ws/telemetria}. \\ \hline
 
-\textcolor{red}{Exemplos de ferramentas de teste funcionais E2E:}
-\begin{itemize}
-    \item \textcolor{red}{Selenium} 
-    \item \textcolor{red}{Cypress}
-    \item \textcolor{red}{Playwright}
-\end{itemize}
+        HU04 & Persistência e consulta de histórico de corridas com filtro por
+        tamanho. & Figura~\ref{fig:historicocorridas_fig} &
+        Tela \textit{Histórico}: tabela de corridas
+        e filtro por dimensão do labirinto. &
+        Unitário (\textit{History}, \textit{useHistory}); E2E
+        \texttt{history.spec.js}; \textit{backend} GET \texttt{/corridas}. \\ \hline
 
-\textcolor{red}{Exemplos de ferramentas de testes em nível unitário e integração:}
-\begin{itemize}
-    \item \textcolor{red}{Jest}
-    \item \textcolor{red}{unittest}
-    \item \textcolor{red}{pytest}
-    \item \textcolor{red}{tox}
-    \item \textcolor{red}{gTest}
-    \item \textcolor{red}{Catch2}
-\end{itemize}
+        HU05 & Monitoramento do nível de bateria no painel web. &
+        Figura~\ref{fig:monitoramentobateria_fig} &
+        Indicador de bateria na tela \textit{Telemetria ao Vivo}, alimentado pelo 
+        campo \texttt{nivel\_bateria} da telemetria. &
+        Coberta pelos testes de telemetria (unitário e E2E); validada com dados
+        simulados. \\ \hline
+
+        HU06 & Indicador de desafio cumprido (Sim/Não) ao atingir o centro do
+        labirinto. & Figura~\ref{fig:desafiocumprido_fig} &
+        Campo \textit{Desafio Cumprido} na tela \textit{Telemetria ao Vivo}, 
+        calculado ao atingir a região central. &
+        Unitário (\textit{Telemetry}); E2E \texttt{telemetria.spec.js}
+        (casos ``Sim'' e ``Não''). \\ \hline
+    \end{tabular}
+\end{table}
+
+A estratégia de testes do \textit{software} cobre três níveis: testes unitários e de
+integração (de componentes e de rotas), com medição de cobertura de código-fonte, e
+testes de sistema do tipo funcional (\textit{end-to-end}, E2E), que exercitam a
+aplicação pela interface gráfica. Todas as suítes são executadas automaticamente a
+cada \textit{push} ou \textit{pull request} por um \textit{pipeline} de Integração
+Contínua (GitHub Actions), que reprova a alteração caso a cobertura fique abaixo de
+$70\%$.
+
+\subsection{Testes unitários e de integração}
+
+No \textit{backend} (FastAPI), os testes foram escritos com \texttt{pytest} e
+\texttt{pytest-cov}, empregando banco SQLite em memória e \textit{fixtures} que
+substituem a sessão de banco real, de modo a não depender de infraestrutura externa.
+No \textit{frontend} (React), foram utilizados \texttt{Vitest} e \textit{Testing
+Library} sobre o ambiente \texttt{jsdom}. A Tabela~\ref{tab:suites_unit} resume as
+suítes e a cobertura obtida, ambas acima do mínimo exigido de $70\%$; os relatórios
+de cobertura correspondentes constam do Apêndice~\ref{apendice_evidencias_testes}
+(Figuras~\ref{fig:cobertura_backend} e~\ref{fig:cobertura_frontend}).
+
+\begin{table}[H]
+    \centering
+    \caption{Suítes de testes unitários e de integração e cobertura de código.}
+    \label{tab:suites_unit}
+    \small
+    \begin{tabular}{|l|p{3.0cm}|p{5.2cm}|c|c|}
+        \hline
+        \textbf{Camada} & \textbf{Ferramentas} & \textbf{Principais suítes} &
+        \textbf{Testes} & \textbf{Cobertura} \\ \hline
+        \textit{Backend} & \texttt{pytest}, \texttt{pytest-cov} &
+        telemetria (POST e WebSocket), encerramento de corrida (gatilho,
+        agregados e transição de \textit{resultado}), \textit{models} e
+        \textit{schemas}, histórico/consulta e \textit{health} & 83 & $98\%$ \\ \hline
+        \textit{Frontend} & \texttt{Vitest}, \textit{Testing Library} &
+        páginas \textit{Telemetry} e \textit{History}, componentes \textit{Layout} e
+        \textit{MazeMap}, \textit{hooks} e roteamento & 37 & $93\%$ \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Testes de sistema (E2E)}
+
+Os testes de sistema foram automatizados com \texttt{Playwright}, executados em modo
+\textit{headless} (compatível com a Integração Contínua). As suítes automatizam os
+casos funcionais de \textit{software} do roteiro de testes
+(Apêndice~\ref{apendice_roteiro_detalhado}); os casos do módulo embarcado (TF01 e
+TF02) dependem da integração com a ESP32 e serão validados posteriormente. A suíte
+completa soma 19 casos. As suítes que exercitam o fluxo de telemetria, por validarem
+a integração entre os módulos, são detalhadas na Seção~\ref{sec:testes_integracao};
+as suítes funcionais da aplicação web (consulta de histórico e navegação) constam da
+Tabela~\ref{tab:suites_e2e}.
+
+\begin{table}[H]
+    \centering
+    \caption{Suítes de testes de sistema (E2E) automatizadas com Playwright.}
+    \label{tab:suites_e2e}
+    \small
+    \begin{tabular}{|l|p{9.3cm}|}
+        \hline
+        \textbf{Suíte} & \textbf{Cenários validados} \\ \hline
+        \texttt{history.spec.js} & Consulta do histórico e filtro por tamanho de
+        labirinto, incluindo a restauração da listagem completa (4 casos). \\ \hline
+        \texttt{smoke.spec.js} & Carregamento básico da aplicação e navegação inicial
+        entre as telas (2 casos). \\ \hline
+    \end{tabular}
+\end{table}
+
+A execução das suítes, a verificação do limiar de cobertura e a coleta das evidências
+(relatórios de cobertura e do Playwright) são realizadas automaticamente pelo
+\textit{pipeline} de Integração Contínua, garantindo que a \textit{branch} principal
+permaneça sempre com os testes verdes. O relatório de execução dos testes E2E é
+apresentado na Figura~\ref{fig:e2e_playwright} (Apêndice~\ref{apendice_evidencias_testes}).
 
 \section{Testes de integração}
+\label{sec:testes_integracao}
 
-\textcolor{red}{Apresentar com detalhes os testes feitos para conferir se os objetivos do projeto como um todo foram atendidos.}
+A integração da comunicação de telemetria foi validada entre os componentes de
+\textit{software} (API, persistência, WebSocket e \textit{frontend}), com a fonte de
+dados simulada por um dublê de WebSocket e um cliente de teste que reproduzem o
+contrato \texttt{TelemetriaOut}. A integração com o \textit{firmware} real da ESP32 está
+planejada para a \textit{sprint}-5 (\#22 e \#23).
+
+O fluxo de telemetria é o principal ponto de integração do sistema, pois atravessa
+todas as camadas do \textit{software}: o sistema embarcado, a API, o banco de dados, o
+canal de tempo real e a interface web. Por isso, esta seção concentra a verificação
+desse caminho de ponta a ponta. O fluxo é o seguinte: um emissor de telemetria (um
+simulador em \textit{Python} que mimetiza o \textit{firmware}, ou um dublê de WebSocket
+executado no navegador) envia pacotes ao \textit{endpoint} \texttt{POST /telemetria}; o
+\textit{backend} valida o pacote, persiste o evento, resolve a corrida associada
+(criando-a no primeiro pacote e reutilizando-a nos seguintes) e repassa o dado, em
+tempo real, a todos os clientes conectados pelo canal \texttt{/ws/telemetria}; por fim,
+a interface web recebe o evento e atualiza o painel. Esse fluxo corresponde ao diagrama
+de sequência da corrida completa apresentado na Figura~\ref{fig:diagrama_sequencia}.
+
+A verificação cobre as quatro etapas desse contrato, da ingestão do pacote até o
+consumo pela interface, combinando testes de integração de \textit{backend} (que
+exercitam diretamente a API, a persistência e o \textit{broadcast}) com testes de
+sistema fim a fim. Ao todo, treze casos automatizados de E2E (doze do fluxo ao vivo e um
+de robustez de reconexão) somam-se aos testes de integração de \textit{backend} para
+cobrir o caminho completo da telemetria. A Tabela~\ref{tab:testes_integracao} detalha
+cada teste, os componentes que ele integra e os cenários validados.
+
+\begin{table}[H]
+    \centering
+    \caption{Testes de integração do fluxo de telemetria, validados com dados simulados.}
+    \label{tab:testes_integracao}
+    \small
+    \begin{tabular}{|p{4.2cm}|p{3.6cm}|p{5.2cm}|}
+        \hline
+        \textbf{Teste / nível} & \textbf{Componentes integrados} &
+        \textbf{Cenários validados} \\ \hline
+        Ingestão (\texttt{POST /telemetria}, \textit{backend}) &
+        API e camada de persistência (banco de dados) &
+        Pacote aceito (\texttt{201}); evento de telemetria gravado; corrida criada no
+        primeiro pacote e reutilizada nos seguintes. \\ \hline
+        \textit{Broadcast} (WebSocket \texttt{/ws/telemetria}, \textit{backend}) &
+        API, gerenciador de conexões e múltiplos clientes &
+        Repasse do pacote a todos os clientes conectados; descarte de conexões inativas
+        sem afetar os demais; tratamento de \textit{payload} inválido e de
+        \texttt{labirinto\_id} inexistente. \\ \hline
+        Fim a fim ao vivo (\texttt{telemetria.spec.js}, E2E) &
+        WebSocket e \textit{frontend} (painel) &
+        Atualização em tempo real de posição, velocidade média, bateria e tempo;
+        renderização do \textit{grid}; indicador de desafio cumprido; robustez a
+        mensagens inválidas (12 casos). \\ \hline
+        Robustez de conexão (\texttt{reconexao.spec.js}, E2E) &
+        WebSocket e \textit{frontend} &
+        Sinalização da perda de conexão, reconexão automática e retomada das
+        atualizações na interface (1 caso). \\ \hline
+        Emissor $\rightarrow$ \textit{backend} (simulador de armazenamento) &
+        \textit{Firmware} simulado e API &
+        Envio ao \texttt{POST /telemetria} dos dados persistidos localmente, com
+        criação e consulta da corrida resultante. \\ \hline
+    \end{tabular}
+\end{table}
+
+Os resultados de execução dessas suítes constam do relatório de testes E2E
+(Figura~\ref{fig:e2e_playwright}) e do relatório de cobertura do \textit{backend}
+(Figura~\ref{fig:cobertura_backend}), ambos no
+Apêndice~\ref{apendice_evidencias_testes}.
+
+A integração completa com o \textit{hardware} físico (o envio dos pacotes pela
+ESP32 a partir das leituras reais dos sensores) será validada na \textit{sprint}-5
+(\#22 e \#23), quando a placa estiver plenamente configurada. Nesta entrega, a
+comunicação foi verificada de ponta a ponta com dados simulados, garantindo que o
+contrato de integração entre os módulos está correto.
 
 %\textcolor{red}{Com relação ao \textit{software}, será necessário apresentar pacotes de componentes de \textit{software}, suas funções e características, e explicar as decisões de projeto.}
-
