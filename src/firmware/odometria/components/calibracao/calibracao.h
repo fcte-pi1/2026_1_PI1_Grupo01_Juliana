@@ -22,7 +22,12 @@
 // --------------------------------------------------------------------------
 // Parametros ajustaveis (tune conforme o seu carrinho)
 // --------------------------------------------------------------------------
-#define CALIB_PWM_TESTE      70    // PWM usado nos testes de acionamento
+// 0 = no boot NAO aciona os motores (evita brownout/reset por pico de corrente).
+//     O controle de rumo por encoder continua ativo com ganhos padrao.
+// 1 = roda validacao + trim no boot (carrinho suspenso, fonte estável).
+#define CALIBRACAO_MOTORES_NO_BOOT  0
+
+#define CALIB_PWM_TESTE      50    // PWM usado nos testes de acionamento
 #define CALIB_TEMPO_MS       500   // duracao de cada teste de acionamento [ms]
 #define CALIB_MIN_PULSOS     5     // minimo de pulsos p/ considerar o encoder "vivo"
 #define CALIB_RUIDO_MAX      2     // pulsos toleraveis com o carrinho parado

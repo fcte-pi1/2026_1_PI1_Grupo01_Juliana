@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "esp_log.h"
+#include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -99,7 +100,7 @@ static void mission_task(void *arg)
 static void iniciar_missao(void)
 {
     if (mission_handle == NULL) {
-        xTaskCreate(mission_task, "mission_task", 4096, NULL, 5, &mission_handle);
+        xTaskCreate(mission_task, "mission_task", 6144, NULL, 5, &mission_handle);
     }
 }
 
@@ -135,6 +136,8 @@ static void supervisor_task(void *arg)
 
 void app_main(void)
 {
+    ESP_LOGW(TAG, "motivo do ultimo reset: %d (1=PANIC 12=BROWNOUT)", esp_reset_reason());
+
     // perifericos de movimentacao
     encoder_init(&encoderR, GPIO_ENC_R);
     encoder_init(&encoderL, GPIO_ENC_L);
@@ -158,23 +161,26 @@ void app_main(void)
 
     odometria_pos_init(&pose, 0, 0, NORTE);
 
-    // --- verificacao/validacao dos encoders e compensacao do desvio ---
-    // Rode de preferencia com o carrinho suspenso (rodas livres) na 1a vez.
+    // compensacao de desvio: controle de rumo por encoder (sempre ativo).
+    calib_t cal;
+    calibracao_padrao(&cal);
+
+#if CALIBRACAO_MOTORES_NO_BOOT
+    // aciona motores no boot: so com carrinho suspenso e fonte estável.
+    vTaskDelay(pdMS_TO_TICKS(1000));
     calib_status_t st = calibracao_validar_encoders(&motorR, &motorL,
                                                     &encoderR, &encoderL);
     ESP_LOGI(TAG, "validacao dos encoders: %s", calibracao_status_str(st));
-
-    calib_t cal;
     if (st == CALIB_OK || st == CALIB_ASSIMETRIA) {
-        // encoders confiaveis: mede o trim para igualar as rodas
         calibracao_estimar_trim(&motorR, &motorL, &encoderR, &encoderL, &cal);
     } else {
-        // encoder com problema: segue com valores neutros (sem trim),
-        // mas o controle de rumo por encoder continua ativo no que der.
         ESP_LOGW(TAG, "encoder com falha (%s): usando calibracao neutra",
                  calibracao_status_str(st));
         calibracao_padrao(&cal);
     }
+#else
+    ESP_LOGI(TAG, "calibracao de motores no boot desligada (CALIBRACAO_MOTORES_NO_BOOT=0)");
+#endif
     movimentacao_aplicar_calibracao(&cal);
     resetar_estado();
 

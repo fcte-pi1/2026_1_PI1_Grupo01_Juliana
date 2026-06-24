@@ -125,7 +125,7 @@ float encoder_get_teta(encoder_t *encoder){
 
     float teta = (pulsos * 2.0f * M_PI) / ENCODER_PULSOS_POR_VOLTA;
     
-    ESP_LOGI(TAG, "pulsos lidos: %d", pulsos);
+    ESP_LOGD(TAG, "pulsos lidos: %d", pulsos);
     return teta;
 }
 
