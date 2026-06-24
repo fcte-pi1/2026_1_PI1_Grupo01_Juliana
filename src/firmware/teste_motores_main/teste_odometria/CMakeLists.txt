@@ -7,6 +7,7 @@ set(EXTRA_COMPONENT_DIRS
         ../../odometria/components/odometria
         ../../odometria/components/m_driver
         ../../odometria/components/encoder
+        ../../odometria/components/seletor_modo
         )
 
 

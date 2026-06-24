@@ -5,6 +5,5 @@ idf_component_register(SRCS "teste_odometria.c"
                         movimentacao
                         m_driver
                         encoder
-                        esp_timer
-                        esp_driver_ledc
+                        seletor_modo
                     )
