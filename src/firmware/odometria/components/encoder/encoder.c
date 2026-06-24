@@ -96,6 +96,20 @@ void encoder_clean(encoder_t *encoder){
     ESP_LOGI(TAG, "encoder resetado");
 }
 
+//leitura nao-destrutiva: devolve a contagem atual sem zerar.
+int encoder_peek_count(encoder_t *encoder){
+
+    int count = 0;
+
+    if (encoder == NULL){
+        return 0;
+    }
+
+    pcnt_unit_get_count(encoder->unit, &count);
+
+    return count;
+}
+
 //movimento estimado do eixo do motor [rad]
 //baseado na condicao de que a leitura e feita
 //com o carrinho parado...
@@ -109,7 +123,7 @@ float encoder_get_teta(encoder_t *encoder){
 
     int pulsos = count;
 
-    float teta = (pulsos * M_PI)/10.0f;
+    float teta = (pulsos * 2.0f * M_PI) / ENCODER_PULSOS_POR_VOLTA;
     
     ESP_LOGI(TAG, "pulsos lidos: %d", pulsos);
     return teta;

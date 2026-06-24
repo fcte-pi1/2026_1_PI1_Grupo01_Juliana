@@ -6,4 +6,5 @@ idf_component_register(SRCS "teste_odometria.c"
                         m_driver
                         encoder
                         seletor_modo
+                        calibracao
                     )

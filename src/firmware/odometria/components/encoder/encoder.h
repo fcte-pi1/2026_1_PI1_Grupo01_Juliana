@@ -4,6 +4,11 @@
 #define GPIO_ENC_R 35
 #define GPIO_ENC_L 32
 
+// pulsos gerados pelo encoder a cada volta completa do eixo da roda.
+// IMPORTANTE: este valor precisa bater com a conversao usada em
+// encoder_get_teta(). Ajuste aqui caso troque o disco/encoder.
+#define ENCODER_PULSOS_POR_VOLTA 20
+
 #include "driver/gpio.h"
 #include "driver/pulse_cnt.h"
 
@@ -20,6 +25,11 @@ typedef struct
 esp_err_t encoder_init(encoder_t *encoder, gpio_num_t gpio);
 
 void encoder_clean(encoder_t *encoder);
+
+// le a contagem acumulada SEM zerar (nao-destrutiva).
+// util para o controlador amostrar os dois encoders varias vezes
+// dentro de um mesmo movimento sem perder pulsos.
+int encoder_peek_count(encoder_t *encoder);
 
 float encoder_get_teta(encoder_t *encoder);
 

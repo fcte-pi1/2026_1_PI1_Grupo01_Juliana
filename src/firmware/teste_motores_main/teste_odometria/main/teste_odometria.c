@@ -8,6 +8,7 @@
 #include "encoder.h"
 #include "odometria.h"
 #include "movimentacao.h"
+#include "calibracao.h"
 #include "seletor_modo.h"
 
 static const char *TAG = "main";
@@ -33,22 +34,60 @@ static void resetar_estado(void)
     odometria_pos_init(&pose, 0, 0, NORTE);
 }
 
+// missao principal realizada no teste:
+// avancar 1 bloco -> virar 90o horario -> virar 90o antihorario
+static void start_mission(void)
+{
+    ESP_LOGI(TAG, "iniciando missao...");
+
+    //DEBUG
+    ESP_LOGI(TAG, "Stack livre: %u",
+         uxTaskGetStackHighWaterMark(NULL));
+
+    //step 1
+    movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    encoder_clean(&encoderR);
+    encoder_clean(&encoderL);
+
+    //DEBUG
+    ESP_LOGI(TAG, "Stack livre: %u",
+         uxTaskGetStackHighWaterMark(NULL));
+
+    //step 2
+    movimentacao_turn_clws(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    encoder_clean(&encoderR);
+    encoder_clean(&encoderL);
+
+    //DEBUG
+    ESP_LOGI(TAG, "Stack livre: %u",
+         uxTaskGetStackHighWaterMark(NULL));
+
+    //step 3
+    movimentacao_turn_ctclws(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    encoder_clean(&encoderR);
+    encoder_clean(&encoderL);
+
+    ESP_LOGI(TAG, "MISSAO CUMPRIDA COM EXITO! =D");
+}
+
 // Missao de navegacao parametrizada pelo modo atual (lado 4 ou 8).
-// Aqui no futuro entra o flood-fill; por enquanto percorre 'lado' celulas
-// para demonstrar que o tamanho do labirinto muda conforme o modo escolhido.
+// Aqui no futuro entra o flood-fill; por enquanto executa a rotina de teste
+// de movimento (start_mission), que valida andar/girar do carrinho.
 static void mission_task(void *arg)
 {
     uint8_t lado = seletor_modo_lado();
     ESP_LOGI(TAG, "iniciando missao no modo %dx%d", lado, lado);
 
-    for (uint8_t i = 0; i < lado; i++) {
-        movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
-        encoder_clean(&encoderR);
-        encoder_clean(&encoderL);
-
-        vTaskDelay(pdMS_TO_TICKS(300));
-    }
+    start_mission();
 
     ESP_LOGI(TAG, "missao %dx%d finalizada", lado, lado);
 
@@ -118,6 +157,26 @@ void app_main(void)
     };
 
     odometria_pos_init(&pose, 0, 0, NORTE);
+
+    // --- verificacao/validacao dos encoders e compensacao do desvio ---
+    // Rode de preferencia com o carrinho suspenso (rodas livres) na 1a vez.
+    calib_status_t st = calibracao_validar_encoders(&motorR, &motorL,
+                                                    &encoderR, &encoderL);
+    ESP_LOGI(TAG, "validacao dos encoders: %s", calibracao_status_str(st));
+
+    calib_t cal;
+    if (st == CALIB_OK || st == CALIB_ASSIMETRIA) {
+        // encoders confiaveis: mede o trim para igualar as rodas
+        calibracao_estimar_trim(&motorR, &motorL, &encoderR, &encoderL, &cal);
+    } else {
+        // encoder com problema: segue com valores neutros (sem trim),
+        // mas o controle de rumo por encoder continua ativo no que der.
+        ESP_LOGW(TAG, "encoder com falha (%s): usando calibracao neutra",
+                 calibracao_status_str(st));
+        calibracao_padrao(&cal);
+    }
+    movimentacao_aplicar_calibracao(&cal);
+    resetar_estado();
 
     // o supervisor precisa existir antes de ligar a interrupcao do botao,
     // pois e ele quem recebe a notificacao da ISR
