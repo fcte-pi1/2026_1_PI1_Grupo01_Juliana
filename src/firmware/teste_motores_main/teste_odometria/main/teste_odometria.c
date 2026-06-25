@@ -82,22 +82,17 @@ void start_mission(){
 
     ESP_LOGI(TAG, "iniciando missao...");
 
-    //DEBUG
-    ESP_LOGI(TAG, "Stack livre: %u",
-         uxTaskGetStackHighWaterMark(NULL));
+    play_tone(A4_FREQ, TEMPO);
 
     //step 1
    movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+   play_tone(A4_FREQ, TEMPO);
 
    vTaskDelay(pdMS_TO_TICKS(1000));
     
     encoder_clean(&encoderR);
     encoder_clean(&encoderL);
-
-    //DEBUG
-    ESP_LOGI(TAG, "Stack livre: %u",
-         uxTaskGetStackHighWaterMark(NULL));
-
 
    //step 2
     movimentacao_turn_clws(&motorR, &motorL, &encoderR, &encoderL, &pose);
@@ -106,11 +101,6 @@ void start_mission(){
 
     encoder_clean(&encoderR);
     encoder_clean(&encoderL);
-
-    //DEBUG
-    ESP_LOGI(TAG, "Stack livre: %u",
-         uxTaskGetStackHighWaterMark(NULL));
-
 
     //step 3
     movimentacao_turn_ctclws(&motorR, &motorL, &encoderR, &encoderL, &pose);
@@ -122,6 +112,8 @@ void start_mission(){
 
     ESP_LOGI(TAG, "MISSAO CUMPRIDA COM EXITO! =D");
 
+    play_tone(E4_FREQ, TEMPO);
+    
     busy = false;
 }
 
@@ -166,35 +158,27 @@ void mission_task(void *arg)
 
 void app_main(void)
 {
-//DEBUG
-    ESP_LOGI(TAG, "TICK_RATE: %d", configTICK_RATE_HZ);
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << BOTAO_SELETOR),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_NEGEDGE
+    };
 
-    //DEBUG
-    ESP_LOGI(TAG, "Tick antes: %lu", xTaskGetTickCount());
+    gpio_config(&io_conf);
 
-    vTaskDelay(pdMS_TO_TICKS(1000));
+    gpio_install_isr_service(0);
 
-    ESP_LOGI(TAG, "Tick depois: %lu", xTaskGetTickCount());
+    gpio_isr_handler_add(
+        BOTAO_SELETOR,
+        button_isr_handler,
+        NULL
+    );
 
-   gpio_config_t io_conf = {
-       .pin_bit_mask = (1ULL << BOTAO_SELETOR),
-       .mode = GPIO_MODE_INPUT,
-       .pull_up_en = GPIO_PULLUP_ENABLE,
-       .pull_down_en = GPIO_PULLDOWN_DISABLE,
-       .intr_type = GPIO_INTR_NEGEDGE
-   };
+    buzzer_init();
 
-   gpio_config(&io_conf);
-
-   gpio_install_isr_service(0);
-
-   gpio_isr_handler_add(
-       BOTAO_SELETOR,
-       button_isr_handler,
-       NULL
-   );
-
-   buzzer_init();
+    play_tone(A4_FREQ, TEMPO);
 
 	encoder_init(&encoderR, GPIO_ENC_R);
 	encoder_init(&encoderL, GPIO_ENC_L);
@@ -233,6 +217,8 @@ void app_main(void)
     5,
     &mission_task_handle
     );
+
+    play_tone(A3_FREQ, TEMPO);
 
     vTaskDelay(pdMS_TO_TICKS(10));
 }
