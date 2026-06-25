@@ -69,9 +69,23 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
           desloc_R = 0,
           desloc_L = 0;
 
+    // int speed = BASE_SPD;
+
     mouse_movefwd(mtrR, mtrL);
 
     while(desloc < target){
+
+        /* //possivel mudança: controle bem rudimentar (com risco de explodir a velocidade)
+        if (desloc_R-desloc_L >= 5) {
+            speed = speed+5;
+            motor_set_speed(mtrL, speed);
+        } else if (desloc_R-desloc_L <= 5) {
+            speed = speed+5;
+            motor_set_speed(mtrR, speed) 
+        }
+        
+        */
+
         desloc_R += encoder_get_deslocamento(encR, RAIO_R);
         desloc_L += encoder_get_deslocamento(encL, RAIO_R);
 
