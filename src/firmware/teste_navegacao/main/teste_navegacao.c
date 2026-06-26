@@ -1,4 +1,6 @@
 //codigo feito para testar integração odometria+sensores
+// FUNCOES RELACIONADAS AO SENSOR DE POTENCIA ESTAO COMENTADAS
+// POR ENQUANTO
 
 #include <stdio.h>
 
@@ -13,8 +15,6 @@
 #include "movimentacao.h"
 #include "power_module.h"
 #include "infrared.h"
-
-// #include "telemetry_data_nvs.h"
 
 static const char *TAG = "teste_navegacao";
 
@@ -71,31 +71,6 @@ static void IRAM_ATTR button_isr_handler(void *arg)
         portYIELD_FROM_ISR();
     }
 }
-
-// void telemetry_task(void *arg)
-// {
-//     float voltage_v = 0.0;
-//     float current_a = 0.0;
-
-//     while (1)
-//     {
-//         // 1. Lemos os dados reais do sensor passando o endereço das variáveis (&)
-//         ina226_get_bus_voltage(&ina, &voltage_v);
-//         ina226_get_current(&ina, &current_a);
-
-//         // 2. Convertemos os floats (Volts/Amperes) para inteiros (Milivolts/Miliamperes)
-//         // O "cast" (uint16_t) garante que o ESP32 descarte as casas decimais corretamente
-//         uint16_t voltage_mv = (uint16_t)(voltage_v * 1000.0f);
-//         int16_t current_ma = (int16_t)(current_a * 1000.0f);
-
-//         // 3. Salvamos na memória NVS usando a função do Canvas
-//         telemetry_save_sample(voltage_mv, current_ma);
-
-//         // 4. Aguardamos 500ms antes de ler novamente (2 amostras por segundo)
-//         // Isso evita encher a memória muito rápido
-//         vTaskDelay(pdMS_TO_TICKS(500));
-//     }
-// }
 
 void buzzer_init(){
 
@@ -228,14 +203,6 @@ void app_main(void)
 
     play_tone(E4_FREQ, 50);
 
-    // vTaskDelay(pdMS_TO_TICKS(100));
-
-    // play_tone(E4_FREQ, 50);
-
-    // ESP_ERROR_CHECK(telemetry_init());
-
-    // play_tone(A4_FREQ, TEMPO);
-
     driver_init();
 
     motor_init(&motorR);
@@ -272,20 +239,6 @@ void app_main(void)
     5,
     &mission_task_handle
     );
-
-    // // criacao da task que vai ficar lendo o INA226 e salvando em segundo plano
-    // xTaskCreate(
-    //     telemetry_task,
-    //     "telemetry_task",
-    //     4096,
-    //     NULL,
-    //     2, // Prioridade baixa, para não atrapalhar os motores e sensores
-    //     NULL
-    // );
-
-    // telemetry_print_all();
-
-    // ESP_ERROR_CHECK(telemetry_clear());
 
     while(1){
         vTaskDelay(pdMS_TO_TICKS(3000));
