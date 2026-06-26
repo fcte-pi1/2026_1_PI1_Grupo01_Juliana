@@ -204,11 +204,11 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
         NULL
     );    
 
-    // gpio_isr_handler_add(
-    //     IR_FRONT,
-    //     ir_isr,
-    //     (void *)IR_FRONT
-    // );
+    gpio_isr_handler_add(
+        IR_FRONT,
+        ir_isr,
+        (void *)IR_FRONT
+    );
 
     // gpio_isr_handler_add(
     //     IR_L,
