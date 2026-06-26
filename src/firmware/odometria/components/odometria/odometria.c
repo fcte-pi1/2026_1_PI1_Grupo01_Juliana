@@ -6,28 +6,13 @@
 #include "m_driver.h"
 #include "odometria.h"
 
+#include "esp_timer.h"
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 
 static const char *TAG = "odometria";
-
-/* motor_t motorR = {
-    .pwm_gpio = PWM_R,
-    .dir_gpio = GPIO_R
-
-    .gen = gen_motorR
-    .comp = comp_motorR
-};
-
-motor_t motorL = {
-    .pwm_gpio = PWM_L,
-    .dir_gpio = GPIO_L
-
-    .gen = gen_motorL
-    .comp = comp_motorL
-}; */
 
 void odometria_update_xy(pose_t *pose, float deslocamento){
     switch (pose->orientacao)
@@ -48,6 +33,12 @@ void odometria_update_xy(pose_t *pose, float deslocamento){
     default:
         break;
     }
+}
+
+void odometria_update_vm(pose_t *pose, float vm_novo){
+    float sum_vm = pose->vm + vm_novo;
+
+    pose->vm = sum_vm / pose->cell_count;
 }
 
 void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 - sentido anti-horario
@@ -90,8 +81,6 @@ void odometria_mudar_sentido(pose_t *pose, bool dir){ //1 - sentido horario; 0 -
     }
 }
 
-//funcoes acessiveis
-
 const char* odometria_orientacao_string(orientacao_t o){
     switch (o)
     {
@@ -108,15 +97,22 @@ const char* odometria_orientacao_string(orientacao_t o){
     }
 }
 
+//retorna tempo de execucao ate agora em segundos
+float odometria_get_segundos(){
+    int64_t tempo_atual = esp_timer_get_time();
+
+    float time = tempo_atual/1000000;
+
+    return time;
+}
+
 void odometria_pos_init(pose_t *pose, float x0, float y0, orientacao_t orientacao_inicial){
     pose->x = x0;
     pose->y = y0;
     pose->orientacao = orientacao_inicial;
-    pose->theta = 0;
+    // pose->theta = 0;
+    pose->vm = 0;
+    pose->cell_count = 0;
 
     ESP_LOGI(TAG, "INICIO: (%f, %f) ORIENTACAO %s", pose->x, pose->y, odometria_orientacao_string(pose->orientacao));
-}
-
-void odometria_move_cell(){
-
 }
