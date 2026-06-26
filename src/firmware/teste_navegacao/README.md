@@ -78,6 +78,9 @@ Durante a inicialização o firmware executa:
 
 Após inicializado, o firmware realiza testes periódicos de movimentação enquanto permanece apto a responder ao botão externo.
 
+## Comportamento Esperado
+O micromouse deverá realizar os bips de inicialização e, após alguns segundos, começar a avançar o equivalente a uma célula do labirinto (aprox. 18cm - 2,4cm). Ele deverá repetir esse comportamento até que os sensores frontais acusem algum obstáculo. Nesse momento, ele realizará a rotina de interrupção que deverá alterar a trajetória do robô de maneira adequada.
+
 ---
 
 # Seleção do labirinto
