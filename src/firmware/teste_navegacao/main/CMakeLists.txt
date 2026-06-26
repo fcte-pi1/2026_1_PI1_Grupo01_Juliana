@@ -8,5 +8,4 @@ idf_component_register(SRCS "teste_navegacao.c"
                         encoder
                         infrared
                         esp_driver_ledc
-                        # telemetry_data_nvs
                         )
