@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import useHistory from '../hooks/useHistory';
 
-const TAMANHOS = ['todos', '4x4', '8x8', '16x16'];
+const TAMANHOS = ['todos', '4x4', '8x8'];
 
 function formatarTempo(segundos) {
   if (segundos == null || isNaN(segundos)) return '—';

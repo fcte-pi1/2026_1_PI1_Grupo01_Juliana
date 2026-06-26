@@ -2,7 +2,7 @@ import { useState } from 'react';
 import MazeMap from '../components/MazeMap';
 import useTelemetry, { STATUS } from '../hooks/useTelemetry';
 
-const TAMANHOS = [4, 8, 16];
+const TAMANHOS = [4, 8];
 
 const STATUS_INFO = {
   [STATUS.conectando]: { texto: 'Conectando…', cor: 'var(--warning)' },

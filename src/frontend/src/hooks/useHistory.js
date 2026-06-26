@@ -7,7 +7,7 @@ const API_URL =
   `http://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:8000`;
 
 // Busca o histórico de corridas no endpoint GET /corridas.
-// `tamanho` pode ser '4x4', '8x8', '16x16' ou 'todos' (sem filtro).
+// `tamanho` pode ser '4x4', '8x8' ou 'todos' (sem filtro).
 export default function useHistory(tamanho) {
   const [corridas, setCorridas] = useState([]);
   const [carregando, setCarregando] = useState(true);

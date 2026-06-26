@@ -19,12 +19,6 @@ describe('MazeMap', () => {
     expect(screen.getByRole('grid').children).toHaveLength(64)
   })
 
-  it('renderiza 256 celulas para grid 16x16', () => {
-    render(<MazeMap size={16} />)
-    expect(screen.getByText('Mapa do Labirinto (16x16)')).toBeInTheDocument()
-    expect(screen.getByRole('grid').children).toHaveLength(256)
-  })
-
   it('grid tem colunas corretas para o tamanho informado', () => {
     render(<MazeMap size={8} />)
     expect(screen.getByRole('grid')).toHaveStyle('grid-template-columns: repeat(8, 1fr)')
