@@ -19,15 +19,23 @@ typedef enum{
 } orientacao_t;
 
 typedef struct{
-    float theta;
-    float x;
-    float y;
+    // float theta; atributo a ser adicionado em caso de giroscopio
+    float x; // posicao em x
+    float y; // posicao em y
+    float vm; // velocidade media total
+    int cell_count; // conta numero de deslocamentos de celula para auxiliar
+                    // no calculo de velocidade media total
+
     orientacao_t orientacao;
 } pose_t;
+
+float odometria_get_segundos();
 
 void odometria_pos_init(pose_t *pose, float x0, float y0, orientacao_t orientacao_inicial);
 
 void odometria_update_xy(pose_t *pose, float deslocamento);
+
+void odometria_update_vm(pose_t *pose, float vm_novo);
 
 void odometria_mudar_sentido(pose_t *pose, bool dir);
 

@@ -6,6 +6,7 @@
 
 static const char *TAG = "potencia e i2c";
 
+// funcao para debug
 void scan_devices(i2c_master_bus_handle_t bus)
 {
     uint8_t dummy = 0;
