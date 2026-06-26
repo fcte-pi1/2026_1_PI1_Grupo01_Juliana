@@ -55,7 +55,7 @@ static void sensor_task(void *arg)
 
             switch(sensor)
             {
-                /*
+                
                 case IR_FRONT:
                     if(gpio_get_level(IR_R) == 1){
                         movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
@@ -72,22 +72,38 @@ static void sensor_task(void *arg)
                         //GIRA 180 GRAUS
                         movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
                                                 ctx->eL, ctx->p);
+
+                        vTaskDelay(pdMS_TO_TICKS(50));
+
                         movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
                                                 ctx->eL, ctx->p);
 
                     }
                     break;
-                */
 
                 case IR_FR:
-                    if(gpio_get_level(IR_FL)==0 && gpio_get_level(IR_R)==1){
-                        movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else if (gpio_get_level(IR_FL)==0 && gpio_get_level(IR_L)==1){
-                        movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else {
-                        if(gpio_get_level(IR_FR) == 0){
+                    // if(gpio_get_level(IR_FL)==0 && gpio_get_level(IR_R)==1){
+                    //     movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
+                    //                             ctx->eL, ctx->p);
+                    // } else if (gpio_get_level(IR_FL)==0 && gpio_get_level(IR_L)==1){
+                    //     movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
+                    //                             ctx->eL, ctx->p);
+                    // } else {
+                    //     if(gpio_get_level(IR_FR) == 0){
+                    //         mouse_movebwd(ctx->mR, ctx->mL);
+
+                    //         vTaskDelay(pdMS_TO_TICKS(300));
+                            
+                    //         mouse_break(ctx->mR, ctx->mL);
+
+                    //         mouse_spin(ctx->mR, ctx->mL, 0);
+
+                    //         vTaskDelay(pdMS_TO_TICKS(300));
+                    //     }
+                    //     mouse_break(ctx->mR, ctx->mL);
+                    // }
+
+                    if(gpio_get_level(IR_FR) == 0){
                             mouse_movebwd(ctx->mR, ctx->mL);
 
                             vTaskDelay(pdMS_TO_TICKS(300));
@@ -99,31 +115,43 @@ static void sensor_task(void *arg)
                             vTaskDelay(pdMS_TO_TICKS(300));
                         }
                         mouse_break(ctx->mR, ctx->mL);
-                    }
 
                     break;
 
                 case IR_FL:
-                    if(gpio_get_level(IR_FR)==0 && gpio_get_level(IR_R)==1){
-                        movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else if (gpio_get_level(IR_FR)==0 && gpio_get_level(IR_L)==1){
-                        movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else {
-                        if(gpio_get_level(IR_FL) == 0){
-                            mouse_movebwd(ctx->mR, ctx->mL);
+                    // if(gpio_get_level(IR_FR)==0 && gpio_get_level(IR_R)==1){
+                    //     movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
+                    //                             ctx->eL, ctx->p);
+                    // } else if (gpio_get_level(IR_FR)==0 && gpio_get_level(IR_L)==1){
+                    //     movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
+                    //                             ctx->eL, ctx->p);
+                    // } else {
+                    //     if(gpio_get_level(IR_FL) == 0){
+                    //         mouse_movebwd(ctx->mR, ctx->mL);
 
-                            vTaskDelay(pdMS_TO_TICKS(300));
+                    //         vTaskDelay(pdMS_TO_TICKS(300));
                             
-                            mouse_break(ctx->mR, ctx->mL);
+                    //         mouse_break(ctx->mR, ctx->mL);
 
-                            mouse_spin(ctx->mR, ctx->mL, 1);
+                    //         mouse_spin(ctx->mR, ctx->mL, 1);
 
-                            vTaskDelay(pdMS_TO_TICKS(300));
-                        }
+                    //         vTaskDelay(pdMS_TO_TICKS(300));
+                    //     }
+                    //     mouse_break(ctx->mR, ctx->mL);
+                    // }
+
+                    if(gpio_get_level(IR_FL) == 0){
+                        mouse_movebwd(ctx->mR, ctx->mL);
+
+                        vTaskDelay(pdMS_TO_TICKS(300));
+                        
                         mouse_break(ctx->mR, ctx->mL);
+
+                        mouse_spin(ctx->mR, ctx->mL, 1);
+
+                        vTaskDelay(pdMS_TO_TICKS(300));
                     }
+                    mouse_break(ctx->mR, ctx->mL);
 
                     break;
                 
@@ -137,11 +165,11 @@ static void sensor_task(void *arg)
 void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
     gpio_config_t io_conf_front = {
         .pin_bit_mask =
-        //(1ULL << IR_FRONT) |
+        (1ULL << IR_FRONT) |
         (1ULL << IR_FR) |
         (1ULL << IR_FL),
         .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_NEGEDGE
     };
@@ -150,10 +178,10 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
         (1ULL << IR_R) |
         (1ULL << IR_L),
         .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_DISABLE
-        // .intr_type = GPIO_INTR_POSEDGE
+        // .intr_type = GPIO_INTR_POSEDGE //ATIVAR QUANDO FOR TESTAR NO LABIRINTO
     };
 
     contexto.mR = mR;
@@ -176,11 +204,11 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
         NULL
     );    
 
-    // gpio_isr_handler_add(
-    //     IR_FRONT,
-    //     ir_isr,
-    //     (void *)IR_FRONT
-    // );
+    gpio_isr_handler_add(
+        IR_FRONT,
+        ir_isr,
+        (void *)IR_FRONT
+    );
 
     // gpio_isr_handler_add(
     //     IR_L,
