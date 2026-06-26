@@ -9,6 +9,7 @@ set(EXTRA_COMPONENT_DIRS
         ../odometria/components/encoder
         ../odometria/components/infrared
         ../odometria/components/power_module
+        # ../odometria/components/telemetry_data_nvs
         )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
