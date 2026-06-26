@@ -5,12 +5,6 @@
 #define RAIO_R 0.034 // raio das rodas [m]
 #define W_EIXOS 0.110 // distancia entre os eixos [m]
 
-/* typedef enum{
-    ID4X4 = 0,
-    ID8X8 = 1,
-    ID16X16 = 2,
-} lab_id_t; */
-
 typedef enum{
     NORTE = 0,
     LESTE = 1,
