@@ -34,8 +34,8 @@ describe('Layout', () => {
     const linkTelemetria = screen.getByText('Telemetria ao Vivo')
     const linkHistorico = screen.getByText('Histórico')
 
-    expect(linkTelemetria).toHaveStyle('color: #61dafb')
-    expect(linkHistorico).toHaveStyle('color: #ccc')
+    expect(linkTelemetria).toHaveClass('active')
+    expect(linkHistorico).not.toHaveClass('active')
   })
 
   it('link Historico esta ativo na rota /historico', () => {
@@ -43,8 +43,8 @@ describe('Layout', () => {
     const linkTelemetria = screen.getByText('Telemetria ao Vivo')
     const linkHistorico = screen.getByText('Histórico')
 
-    expect(linkHistorico).toHaveStyle('color: #61dafb')
-    expect(linkTelemetria).toHaveStyle('color: #ccc')
+    expect(linkHistorico).toHaveClass('active')
+    expect(linkTelemetria).not.toHaveClass('active')
   })
 
   it('navega de Telemetria para Historico e volta', async () => {

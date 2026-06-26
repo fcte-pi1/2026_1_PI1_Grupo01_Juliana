@@ -68,7 +68,7 @@ function telemetria(overrides = {}) {
   }
 }
 
-const COR_POSICAO = '#1565c0'
+const COR_POSICAO = '#2563eb'
 
 // ===========================================================================
 // 1. Renderização inicial
