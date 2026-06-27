@@ -33,6 +33,17 @@ void driver_init(){
         &timer
     );
 
+    //configurando o pino de saida para freio
+    gpio_config_t io_conf = {
+    .pin_bit_mask = (1ULL << SEL),
+    .mode = GPIO_MODE_OUTPUT,
+    .pull_up_en = GPIO_PULLUP_DISABLE,
+    .pull_down_en = GPIO_PULLDOWN_DISABLE,
+    .intr_type = GPIO_INTR_DISABLE
+    };
+
+    gpio_config(&io_conf);
+    
     //configurando os operadores
     mcpwm_operator_config_t operator_config = {
         .group_id = 0

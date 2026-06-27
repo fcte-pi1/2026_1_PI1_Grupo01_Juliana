@@ -1,18 +1,25 @@
-#include <stdio.h>
+//codigo feito para testar integração odometria+sensores
+// FUNCOES RELACIONADAS AO SENSOR DE POTENCIA ESTAO COMENTADAS
+// POR ENQUANTO
+
 #include <stdio.h>
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/ledc.h"
+
 #include "m_driver.h"
 #include "encoder.h"
 #include "odometria.h"
 #include "movimentacao.h"
+#include "power_module.h"
+#include "infrared.h"
+#include "navigation.h"
 
-static const char *TAG = "teste_odometria";
+static const char *TAG = "teste_navegacao";
 
-bool busy = false;
+volatile bool busy = false;
 
 #define BOTAO_SELETOR   GPIO_NUM_25
 #define BUZZER_GPIO     GPIO_NUM_33
@@ -23,15 +30,48 @@ bool busy = false;
 
 #define TEMPO           300
 
+// TIPO DE LABIRINTO
+typedef enum{
+    ID4X4 = 0,
+    ID8X8 = 1
+} lab_id_t;
+
+lab_id_t id = ID4X4;
+
+pose_t pose;
+
 encoder_t encoderR;
 encoder_t encoderL;
 
-pose_t pose;
+// ina226_t ina;
+
+// static i2c_master_bus_handle_t bus_handle;
 
 motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
 motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
 TaskHandle_t mission_task_handle;
+
+//INTERRUPCAO SINALIZA TASK DO BOTAO
+static void IRAM_ATTR button_isr_handler(void *arg)
+{
+    if (busy){
+        return;
+    }
+
+    busy = true;
+
+    BaseType_t high_task_wakeup = pdFALSE;
+
+    vTaskNotifyGiveFromISR(
+        mission_task_handle,
+        &high_task_wakeup
+    );
+
+    if (high_task_wakeup) {
+        portYIELD_FROM_ISR();
+    }
+}
 
 void buzzer_init(){
 
@@ -76,70 +116,19 @@ void play_tone(uint32_t freq, uint32_t duracao_ms){
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
 }
 
-//missao principal realizada no teste:
-// avancar 1 bloco -> virar 90o horario -> virar 90o antihorario
-void start_mission(){
+void set_maze_id(uint8_t id){
+    if(id == ID8X8){
+        id--;
+        play_tone(E4_FREQ, TEMPO);
 
-    ESP_LOGI(TAG, "iniciando missao...");
-
-    play_tone(A4_FREQ, TEMPO);
-
-    //step 1
-   movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
-   play_tone(A4_FREQ, TEMPO);
-
-   vTaskDelay(pdMS_TO_TICKS(1000));
-    
-    encoder_clean(&encoderR);
-    encoder_clean(&encoderL);
-
-   //step 2
-    movimentacao_turn_clws(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
-    vTaskDelay(pdMS_TO_TICKS(1000));
-
-    encoder_clean(&encoderR);
-    encoder_clean(&encoderL);
-
-    //step 3
-    movimentacao_turn_ctclws(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
-    vTaskDelay(pdMS_TO_TICKS(1000));
-
-    encoder_clean(&encoderR);
-    encoder_clean(&encoderL);
-
-    ESP_LOGI(TAG, "MISSAO CUMPRIDA COM EXITO! =D");
-
-    play_tone(E4_FREQ, TEMPO);
-    
-    busy = false;
-}
-
-//INTERRUPCAO SINALIZA TASK
-static void IRAM_ATTR button_isr_handler(void *arg)
-{
-
-    if (busy){
-        return;
-    }
-
-    busy = true;
-
-    BaseType_t high_task_wakeup = pdFALSE;
-
-    vTaskNotifyGiveFromISR(
-        mission_task_handle,
-        &high_task_wakeup
-    );
-
-    if (high_task_wakeup) {
-        portYIELD_FROM_ISR();
+    } else {
+        id++;
+        play_tone(A4_FREQ, TEMPO);
+        
     }
 }
 
-//TASK REALIZADA AO RECEBER A INTERRUPCAO
+//TASK REALIZADA AO RECEBER A INTERRUPCAO DO BOTAO
 void mission_task(void *arg)
 {
     while (1)
@@ -148,11 +137,9 @@ void mission_task(void *arg)
 
         ESP_LOGI(TAG, "botao pressionado");
 
-        play_tone(A3_FREQ, TEMPO);
-        play_tone(E4_FREQ, TEMPO);
-        play_tone(A4_FREQ, TEMPO);
+        set_maze_id(id);
 
-        start_mission();
+        busy = false;
     }
 }
 
@@ -178,15 +165,57 @@ void app_main(void)
 
     buzzer_init();
 
+    // i2c_master_bus_config_t bus_config = {
+    //     .i2c_port = I2C_PORT,
+    //     .sda_io_num = I2C_SDA,
+    //     .scl_io_num = I2C_SCL,
+    //     .clk_source = I2C_CLK_SRC_DEFAULT
+    // };
+    
+    // ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &bus_handle));
+    
     play_tone(A4_FREQ, TEMPO);
 
-	encoder_init(&encoderR, GPIO_ENC_R);
-	encoder_init(&encoderL, GPIO_ENC_L);
+    encoder_init(&encoderR, GPIO_ENC_R);
+    encoder_init(&encoderL, GPIO_ENC_L);
+
+    play_tone(A3_FREQ, 50);
+
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    play_tone(A3_FREQ, 50);
+
+    // esp_err_t err = ina226_init(
+    //     &ina, 
+    //     bus_handle,
+    //     INA_ADDRESS, 
+    //     SHUNT, 
+    //     MAX_CURRENT
+    // );
+    
+    // if (err == ESP_OK) {
+    //     ESP_LOGI(TAG, "INA226 inicializado com sucesso!");
+    // } else {
+    //     ESP_LOGE(TAG, "Falha ao inicializar INA226");
+    // }   
+
+    // play_tone(E4_FREQ, TEMPO);
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+
+    play_tone(E4_FREQ, 50);
 
     driver_init();
 
     motor_init(&motorR);
     motor_init(&motorL);
+
+    odometria_pos_init(&pose, 0, 0, NORTE);
+
+    navigation_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    IR_init();
+
 
     motorR = (motor_t){
         PWM_R1,
@@ -206,10 +235,8 @@ void app_main(void)
         motorL.gen2
     };
 
-   odometria_pos_init(&pose, 0, 0, NORTE);
-
-   //criacao da task sinalizada por interrupcao
-   xTaskCreate(
+    //criacao da task sinalizada por interrupcao
+    xTaskCreate(
     mission_task,
     "mission_task",
     4096,
@@ -218,8 +245,14 @@ void app_main(void)
     &mission_task_handle
     );
 
-    play_tone(A3_FREQ, TEMPO);
+    while(1){
+        vTaskDelay(pdMS_TO_TICKS(3000));
 
-    vTaskDelay(pdMS_TO_TICKS(10));
+        play_tone(A3_FREQ, TEMPO);
+
+        movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+
 }
-

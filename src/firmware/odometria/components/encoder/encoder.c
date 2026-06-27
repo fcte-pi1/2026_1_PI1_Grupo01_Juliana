@@ -116,7 +116,7 @@ float encoder_get_teta(encoder_t *encoder){
 }
 
 //velocidade angular media [rad/s]
-float encoder_get_w(encoder_t *encoder, uint64_t dt){
+float encoder_get_w(encoder_t *encoder, float dt){
     
     float dteta = encoder_get_teta(encoder);
 
@@ -126,7 +126,7 @@ float encoder_get_w(encoder_t *encoder, uint64_t dt){
 }
 
 //velocidade linear media [m/s]
-float encoder_get_v(encoder_t *encoder, uint64_t dt, float raio){
+float encoder_get_v(encoder_t *encoder, float dt, float raio){
     float w = encoder_get_w(encoder, dt);
     float v = w * raio;
 
