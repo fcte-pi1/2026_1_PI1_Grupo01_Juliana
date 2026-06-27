@@ -3,4 +3,5 @@ idf_component_register(SRCS "infrared.c"
                     REQUIRES
                         esp_driver_gpio
                         movimentacao
+                        navigation
                     )

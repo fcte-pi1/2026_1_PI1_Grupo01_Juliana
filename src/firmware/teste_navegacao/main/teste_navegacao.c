@@ -15,6 +15,7 @@
 #include "movimentacao.h"
 #include "power_module.h"
 #include "infrared.h"
+#include "navigation.h"
 
 static const char *TAG = "teste_navegacao";
 
@@ -35,7 +36,7 @@ typedef enum{
     ID8X8 = 1
 } lab_id_t;
 
-lab_id_t id;
+lab_id_t id = ID4X4;
 
 pose_t pose;
 
@@ -138,6 +139,7 @@ void mission_task(void *arg)
 
         set_maze_id(id);
 
+        busy = false;
     }
 }
 
@@ -208,9 +210,12 @@ void app_main(void)
     motor_init(&motorR);
     motor_init(&motorL);
 
-    IR_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
     odometria_pos_init(&pose, 0, 0, NORTE);
+
+    navigation_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    IR_init();
+
 
     motorR = (motor_t){
         PWM_R1,

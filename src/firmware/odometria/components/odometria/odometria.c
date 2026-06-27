@@ -36,7 +36,7 @@ void odometria_update_xy(pose_t *pose, float deslocamento){
 }
 
 void odometria_update_vm(pose_t *pose, float vm_novo){
-    float sum_vm = pose->vm + vm_novo;
+    float sum_vm = (pose->vm * (pose->cell_count -1)) + vm_novo;
 
     pose->vm = sum_vm / pose->cell_count;
 }
@@ -101,7 +101,7 @@ const char* odometria_orientacao_string(orientacao_t o){
 float odometria_get_segundos(){
     int64_t tempo_atual = esp_timer_get_time();
 
-    float time = tempo_atual/1000000;
+    float time = tempo_atual/1000000.0f;
 
     return time;
 }

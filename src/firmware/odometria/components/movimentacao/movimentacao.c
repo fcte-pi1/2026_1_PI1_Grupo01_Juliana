@@ -60,7 +60,7 @@ void mouse_break(motor_t *motorR, motor_t *motorL){
     ESP_LOGI(TAG, "comando frear");
 }
 
-float mouse_get_linear_speed(encoder_t *encR, encoder_t *encL, int64_t dt){
+float mouse_get_linear_speed(encoder_t *encR, encoder_t *encL, float dt){
     float   spdR = encoder_get_v(encR, dt, RAIO_R),
             spdL = encoder_get_v(encL, dt, RAIO_R);
         
