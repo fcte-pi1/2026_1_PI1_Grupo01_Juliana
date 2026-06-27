@@ -68,7 +68,7 @@ function telemetria(overrides = {}) {
   }
 }
 
-const COR_POSICAO = '#1565c0'
+const COR_POSICAO = '#2563eb'
 
 // ===========================================================================
 // 1. Renderização inicial
@@ -204,10 +204,10 @@ describe('Telemetry (T10) — grid do labirinto', () => {
     render(<Telemetry />)
 
     const seletor = screen.getByLabelText(/Tamanho do labirinto/i)
-    fireEvent.change(seletor, { target: { value: '16' } })
+    fireEvent.change(seletor, { target: { value: '8' } })
 
-    expect(screen.getByRole('heading', { name: /Mapa do Labirinto \(16x16\)/ })).toBeInTheDocument()
-    expect(screen.getByRole('grid').children).toHaveLength(256)
+    expect(screen.getByRole('heading', { name: /Mapa do Labirinto \(8x8\)/ })).toBeInTheDocument()
+    expect(screen.getByRole('grid').children).toHaveLength(64)
   })
 
   it('recalcula "Desafio Cumprido" conforme o tamanho selecionado', () => {
@@ -219,8 +219,8 @@ describe('Telemetry (T10) — grid do labirinto', () => {
     ws.emitTelemetria(telemetria({ posicao_x: 1, posicao_y: 1 }))
     expect(screen.getByText('Sim')).toBeInTheDocument()
 
-    // No 16x16 a mesma posição não é o centro -> desafio deixa de estar cumprido.
-    fireEvent.change(screen.getByLabelText(/Tamanho do labirinto/i), { target: { value: '16' } })
+    // No 8x8 a mesma posição não é o centro -> desafio deixa de estar cumprido.
+    fireEvent.change(screen.getByLabelText(/Tamanho do labirinto/i), { target: { value: '8' } })
     expect(screen.getByText('Não')).toBeInTheDocument()
   })
 })

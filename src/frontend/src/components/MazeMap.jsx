@@ -1,10 +1,10 @@
 import { ehChegada } from '../utils/maze';
 
 const CORES = {
-  posicao: '#1565c0', // posição atual do robô
-  chegada: '#c8e6c9', // bloco 2x2 central (objetivo)
-  inicio: '#ffe0b2', // primeira célula do trajeto
-  trajeto: '#bbdefb', // células já visitadas
+  posicao: '#2563eb', // var(--primary)
+  chegada: '#10b981', // var(--success)
+  inicio: '#f59e0b',  // var(--warning)
+  trajeto: '#bfdbfe', 
   vazia: 'white',
 };
 
@@ -25,10 +25,12 @@ export default function MazeMap({ size = 4, trajeto = [], posicaoAtual = null })
   }
 
   return (
-    <div style={styles.container}>
-      <h3 style={styles.titulo}>Mapa do Labirinto ({size}x{size})</h3>
+    <div className="data-panel" style={{ padding: '1rem' }}>
+      <h3 style={{ margin: '0 0 0.5rem', color: 'var(--header-bg)' }}>Mapa do Labirinto ({size}x{size})</h3>
       {trajeto.length === 0 && (
-        <p style={styles.aviso}>Aguardando dados de telemetria do ESP32…</p>
+        <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+          Aguardando dados de telemetria...
+        </p>
       )}
 
       <div
@@ -63,40 +65,34 @@ function ItemLegenda({ cor, texto }) {
 }
 
 const styles = {
-  container: {
-    width: '100%',
-    padding: '1rem',
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    backgroundColor: '#fafafa',
-  },
-  titulo: { margin: '0 0 0.25rem', color: '#444' },
-  aviso: { fontSize: '14px', color: '#999', marginTop: 0 },
   grid: {
     display: 'grid',
     gap: '2px',
-    width: 'min(360px, 100%)',
+    width: '100%',
+    maxWidth: '400px',
     aspectRatio: '1 / 1',
-    margin: '0.5rem 0',
-    backgroundColor: '#999',
-    border: '2px solid #999',
+    margin: '0 auto 1rem',
+    backgroundColor: 'var(--border)',
+    border: '2px solid var(--border)',
+    borderRadius: '4px',
+    overflow: 'hidden'
   },
   cell: {
-    border: '1px solid #e0e0e0',
+    backgroundColor: 'white',
   },
   legenda: {
     display: 'flex',
     flexWrap: 'wrap',
     gap: '12px',
-    fontSize: '13px',
-    color: '#555',
+    fontSize: '0.85rem',
+    color: 'var(--text-muted)',
+    justifyContent: 'center'
   },
-  legendaItem: { display: 'inline-flex', alignItems: 'center', gap: '4px' },
+  legendaItem: { display: 'inline-flex', alignItems: 'center', gap: '6px' },
   legendaCor: {
-    width: '14px',
-    height: '14px',
-    borderRadius: '3px',
-    border: '1px solid #ccc',
+    width: '12px',
+    height: '12px',
+    borderRadius: '2px',
     display: 'inline-block',
   },
 };

@@ -5,57 +5,27 @@ export default function Layout() {
 
   return (
     <div>
-      <header style={styles.header}>
+      <header className="layout-header">
         <h2>Micromouse Telemetria</h2>
-        <nav style={styles.nav}>
+        <nav className="nav-links">
           <Link 
             to="/" 
-            style={location.pathname === '/' ? styles.activeLink : styles.link}
+            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
           >
             Telemetria ao Vivo
           </Link>
           <Link 
             to="/historico" 
-            style={location.pathname === '/historico' ? styles.activeLink : styles.link}
+            className={`nav-link ${location.pathname === '/historico' ? 'active' : ''}`}
           >
             Histórico
           </Link>
         </nav>
       </header>
       
-      <main style={styles.main}>
-        {/* O Outlet renderiza a página atual baseada na rota */}
+      <main className="main-content">
         <Outlet /> 
       </main>
     </div>
   );
 }
-
-const styles = {
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1rem 2rem',
-    backgroundColor: '#282c34',
-    color: 'white'
-  },
-  nav: {
-    display: 'flex',
-    gap: '20px'
-  },
-  link: {
-    color: '#ccc',
-    textDecoration: 'none',
-    fontWeight: 'bold'
-  },
-  activeLink: {
-    color: '#61dafb',
-    textDecoration: 'none',
-    fontWeight: 'bold',
-    borderBottom: '2px solid #61dafb'
-  },
-  main: {
-    padding: '2rem'
-  }
-};
