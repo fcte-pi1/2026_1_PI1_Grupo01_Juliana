@@ -23,9 +23,9 @@ void encoder_clean(encoder_t *encoder);
 
 float encoder_get_teta(encoder_t *encoder);
 
-float encoder_get_w(encoder_t *encoder, int64_t dt);
+float encoder_get_w(encoder_t *encoder, float dt);
 
-float encoder_get_v(encoder_t *encoder, int64_t dt, float raio);
+float encoder_get_v(encoder_t *encoder, float dt, float raio);
 
 float encoder_get_deslocamento(encoder_t *encoder, float raio);
 
