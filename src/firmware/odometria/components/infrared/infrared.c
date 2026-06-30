@@ -28,6 +28,9 @@ static void IRAM_ATTR ir_isr(void *arg){
 
     BaseType_t high_task_wakeup = pdFALSE;
 
+    // Evita novas interrupções deste sensor
+    gpio_intr_disable(sensor);
+
     xQueueSendFromISR(
         sensor_queue,
         &sensor,
@@ -52,6 +55,8 @@ static void sensor_task(void *arg)
                 portMAX_DELAY))
         {
             mouse_break(ctx->mR, ctx->mL);
+
+            vTaskDelay(pdMS_TO_TICKS(50));
 
             switch(sensor)
             {
@@ -158,6 +163,11 @@ static void sensor_task(void *arg)
                 default:
                     break;
             }
+            // Aguarda estabilizar o sinal
+            vTaskDelay(pdMS_TO_TICKS(30));
+
+            // Reabilita a interrupção
+            gpio_intr_enable(sensor);
         }
     }
 }

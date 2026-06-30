@@ -35,7 +35,7 @@ typedef enum{
     ID8X8 = 1
 } lab_id_t;
 
-lab_id_t id;
+lab_id_t id_teste = ID4X4;
 
 pose_t pose;
 
@@ -142,14 +142,16 @@ void play_tone(uint32_t freq, uint32_t duracao_ms){
 
 void set_maze_id(uint8_t id){
     if(id == ID8X8){
-        id--;
+        id = ID4X4;
         play_tone(E4_FREQ, TEMPO);
 
     } else {
-        id++;
+        id = ID8X8;
         play_tone(A4_FREQ, TEMPO);
         
     }
+
+    busy = false;
 }
 
 //TASK REALIZADA AO RECEBER A INTERRUPCAO DO BOTAO
@@ -161,7 +163,7 @@ void mission_task(void *arg)
 
         ESP_LOGI(TAG, "botao pressionado");
 
-        set_maze_id(id);
+        set_maze_id(id_teste);
 
     }
 }
