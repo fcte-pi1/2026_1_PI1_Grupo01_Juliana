@@ -30,6 +30,8 @@ build/
 *.map
 flasher_args.json # Generated in build directory
 sdkconfig.old
+# sdkconfig e gerado pelo idf.py por maquina; nao versionar (.defaults e .ci sao mantidos)
+sdkconfig
 
 # ESP-IDF dependencies
 # For older versions or manual component management
