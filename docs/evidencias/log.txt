@@ -1,0 +1,9 @@
+OK 1) frontend conectou no WebSocket do backend
+POST telemetria (0,0) -> HTTP 201
+   corrida aberta: id=3
+OK 2) telemetria recebida ao vivo (print 02)
+   CHECK bateria = 85%: PASS
+   CHECK desafio cumprido = Sim: PASS
+   CHECK posição = (1, 1): PASS
+OK 4) POST encerrar -> HTTP 200 | duracao=6s velocidade_media=0.42333333333333334 resultado=concluida
+OK 5) histórico reflete a corrida 3 finalizada: PASS
