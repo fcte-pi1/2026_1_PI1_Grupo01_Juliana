@@ -71,9 +71,12 @@ static void sensor_task(void *arg)
                     } else {
                         mouse_movebwd(ctx->mR, ctx->mL);
 
-                        vTaskDelay(pdMS_TO_TICKS(300));
+                        vTaskDelay(pdMS_TO_TICKS(100));
                         
                         mouse_break(ctx->mR, ctx->mL);
+
+                        vTaskDelay(pdMS_TO_TICKS(100));
+                        
                         //GIRA 180 GRAUS
                         movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
                                                 ctx->eL, ctx->p);
@@ -109,11 +112,9 @@ static void sensor_task(void *arg)
                     // }
 
                     if(gpio_get_level(IR_FR) == 0){
-                            mouse_movebwd(ctx->mR, ctx->mL);
-
-                            vTaskDelay(pdMS_TO_TICKS(300));
-                            
                             mouse_break(ctx->mR, ctx->mL);
+
+                            vTaskDelay(pdMS_TO_TICKS(100));
 
                             mouse_spin(ctx->mR, ctx->mL, 0);
 
@@ -146,11 +147,9 @@ static void sensor_task(void *arg)
                     // }
 
                     if(gpio_get_level(IR_FL) == 0){
-                        mouse_movebwd(ctx->mR, ctx->mL);
-
-                        vTaskDelay(pdMS_TO_TICKS(300));
-                        
                         mouse_break(ctx->mR, ctx->mL);
+
+                        vTaskDelay(pdMS_TO_TICKS(100));
 
                         mouse_spin(ctx->mR, ctx->mL, 1);
 
