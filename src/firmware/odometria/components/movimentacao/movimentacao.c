@@ -13,6 +13,15 @@
 
 static const char *TAG = "movimentacao";
 
+// Tempo maximo de seguranca para cada primitiva de movimento [s].
+// Se o deslocamento alvo nao for atingido nesse tempo (encoder travado,
+// roda presa, fio solto, ruido impedindo a contagem de pulsos), a funcao
+// freia e aborta em vez de manter os motores ligados indefinidamente.
+// Atravessar 1 celula (15,6 cm) ou girar 90 graus leva ~1-2 s; estes
+// limites dao folga sem deixar o robo "fugir".
+#define MOVE_CELL_TIMEOUT_S 3.0f
+#define TURN_TIMEOUT_S      2.5f
+
 //funcoes especificas
 
 void mouse_movefwd(motor_t *motorR, motor_t *motorL){
@@ -86,7 +95,14 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
 
     mouse_movefwd(mtrR, mtrL);
 
+    bool timeout = false;
+
     while(desloc < target){
+
+        if (odometria_get_segundos() - previoustime > MOVE_CELL_TIMEOUT_S) {
+            timeout = true;
+            break;
+        }
 
         /* //possivel mudança: controle bem rudimentar (com risco de explodir a velocidade)
         if (desloc_R-desloc_L >= 5) {
@@ -107,7 +123,13 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     }
 
     mouse_break(mtrR, mtrL);
-    
+
+    if (timeout) {
+        ESP_LOGW(TAG, "TIMEOUT ao andar 1 celula apos %.1fs (desloc=%.3f de %.3f). "
+                      "Encoder travado/roda presa? Abortando movimento.",
+                 MOVE_CELL_TIMEOUT_S, desloc, target);
+    }
+
     time = odometria_get_segundos() - previoustime;
 
     meanspeed = mouse_get_linear_speed(encR, encL, time);
@@ -128,18 +150,32 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
               desloc_R = 0,
               desloc_L = 0;
 
+    float t_inicio = odometria_get_segundos();
+    bool timeout = false;
+
     mouse_spin(mtrR, mtrL, 1);
 
     while (theta < target_theta){
+        if (odometria_get_segundos() - t_inicio > TURN_TIMEOUT_S) {
+            timeout = true;
+            break;
+        }
+
         desloc_R += encoder_get_deslocamento(encR, RAIO_R);
         desloc_L += encoder_get_deslocamento(encL, RAIO_R);
-        
+
         theta = (desloc_R + desloc_L)/W_EIXOS;
 
         vTaskDelay(pdMS_TO_TICKS(100));
     }
-    
+
     mouse_break(mtrR, mtrL);
+
+    if (timeout) {
+        ESP_LOGW(TAG, "TIMEOUT ao virar a direita apos %.1fs (theta=%.3f de %.3f). "
+                      "Encoder travado/roda presa? Abortando giro.",
+                 TURN_TIMEOUT_S, theta, target_theta);
+    }
 
     odometria_mudar_sentido(pos, 1);
     ESP_LOGI(TAG, "virou 90 graus para a direita. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
@@ -152,18 +188,32 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
               desloc_R = 0,
               desloc_L = 0;
 
+    float t_inicio = odometria_get_segundos();
+    bool timeout = false;
+
     mouse_spin(mtrR, mtrL, 0);
 
     while (theta < target_theta){
+        if (odometria_get_segundos() - t_inicio > TURN_TIMEOUT_S) {
+            timeout = true;
+            break;
+        }
+
         desloc_R += encoder_get_deslocamento(encR, RAIO_R);
         desloc_L += encoder_get_deslocamento(encL, RAIO_R);
-        
+
         theta = (desloc_R + desloc_L)/W_EIXOS;
 
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 
     mouse_break(mtrR, mtrL);
+
+    if (timeout) {
+        ESP_LOGW(TAG, "TIMEOUT ao virar a esquerda apos %.1fs (theta=%.3f de %.3f). "
+                      "Encoder travado/roda presa? Abortando giro.",
+                 TURN_TIMEOUT_S, theta, target_theta);
+    }
 
     odometria_mudar_sentido(pos, 0);
     ESP_LOGI(TAG, "virou 90 graus para a esquerda. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
