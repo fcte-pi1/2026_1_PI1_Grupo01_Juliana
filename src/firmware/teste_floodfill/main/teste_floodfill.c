@@ -202,7 +202,10 @@ static void sentir_paredes(int l, int c, orientacao_t head)
     int direita  = (head + 1) % 4;
     int esquerda = (head + 3) % 4;
 
-    bool pf = ha_parede(SENSOR_FRENTE);
+    // frente: o sensor frontal (34) e instavel; reforca com os dois diagonais.
+    // se FL (26) e FR (16) veem parede juntos, ha parede na frente mesmo que o
+    // frontal falhe (FL ou FR sozinho = parede lateral, nao conta como frente).
+    bool pf = ha_parede(SENSOR_FRENTE) || (ha_parede(GPIO_NUM_26) && ha_parede(GPIO_NUM_16));
     bool pd = ha_parede(SENSOR_DIREITA);
     bool pe = ha_parede(SENSOR_ESQUERDA);
 
