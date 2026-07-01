@@ -28,7 +28,7 @@
 #include "encoder.h"
 #include "odometria.h"
 #include "movimentacao.h"
-#include "infrared.h" // apenas para reaproveitar os #defines dos pinos IR_*
+// #include "infrared.h" // apenas para reaproveitar os #defines dos pinos IR_*
 
 static const char *TAG = "teste_floodfill";
 
@@ -51,9 +51,9 @@ static const char *TAG = "teste_floodfill";
 #define IR_NIVEL_PAREDE  0
 
 // Quais pinos usar para cada direcao (definidos em infrared.h).
-#define SENSOR_FRENTE    IR_FRONT
-#define SENSOR_ESQUERDA  IR_L
-#define SENSOR_DIREITA   IR_R
+#define SENSOR_FRENTE    GPIO_NUM_34
+#define SENSOR_ESQUERDA  GPIO_NUM_14
+#define SENSOR_DIREITA   GPIO_NUM_13
 
 // Buzzer de sinalizacao (mesmo pino do resto do firmware).
 #define BUZZER_GPIO      GPIO_NUM_33
@@ -144,8 +144,8 @@ static void bip(uint32_t freq, uint32_t ms)
 static void sensores_init(void)
 {
     gpio_config_t cfg = {
-        .pin_bit_mask = (1ULL << IR_FRONT) | (1ULL << IR_FL) | (1ULL << IR_FR) |
-                        (1ULL << IR_L) | (1ULL << IR_R),
+        .pin_bit_mask = (1ULL << GPIO_NUM_34) | (1ULL << GPIO_NUM_26) | (1ULL << GPIO_NUM_16) |
+                        (1ULL << GPIO_NUM_14) | (1ULL << GPIO_NUM_13),
         .mode         = GPIO_MODE_INPUT,
         .pull_up_en   = GPIO_PULLUP_DISABLE,   // os modulos IR ja drivam a linha
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
@@ -209,9 +209,9 @@ static void sentir_paredes(int l, int c, orientacao_t head)
     ESP_LOGI(TAG,
              "sensores brutos -> FRONT:%d FL:%d FR:%d L:%d R:%d | "
              "parede frente:%d esq:%d dir:%d",
-             gpio_get_level(IR_FRONT), gpio_get_level(IR_FL),
-             gpio_get_level(IR_FR), gpio_get_level(IR_L),
-             gpio_get_level(IR_R), pf, pe, pd);
+             gpio_get_level(GPIO_NUM_34), gpio_get_level(GPIO_NUM_26),
+             gpio_get_level(GPIO_NUM_16), gpio_get_level(GPIO_NUM_14),
+             gpio_get_level(GPIO_NUM_13), pf, pe, pd);
 
     if (pf) marcar_parede(l, c, frente);
     if (pd) marcar_parede(l, c, direita);

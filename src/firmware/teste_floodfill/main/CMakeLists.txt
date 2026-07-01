@@ -5,6 +5,6 @@ idf_component_register(SRCS "teste_floodfill.c"
                         movimentacao
                         m_driver
                         encoder
-                        infrared
+                        # infrared
                         esp_driver_ledc
                         )

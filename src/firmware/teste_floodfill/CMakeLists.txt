@@ -7,7 +7,7 @@ set(EXTRA_COMPONENT_DIRS
         ../odometria/components/odometria
         ../odometria/components/m_driver
         ../odometria/components/encoder
-        ../odometria/components/infrared
+        # ../odometria/components/infrared
         )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
