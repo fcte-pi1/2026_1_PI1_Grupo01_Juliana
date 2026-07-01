@@ -1,0 +1,3 @@
+## Dependencias gerenciadas (baixadas pelo component manager no build).
+dependencies:
+  espressif/esp_websocket_client: "^1.5.0"
