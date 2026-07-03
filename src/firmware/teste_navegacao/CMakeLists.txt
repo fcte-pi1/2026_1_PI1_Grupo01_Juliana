@@ -10,6 +10,7 @@ set(EXTRA_COMPONENT_DIRS
         ../odometria/components/infrared
         ../odometria/components/power_module
         ../odometria/components/telemetry_data_nvs
+        ../odometria/components/seletor_modo
         )
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)

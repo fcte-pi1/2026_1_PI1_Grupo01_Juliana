@@ -2,7 +2,9 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/semphr.h" // Necessário para o Mutex
 #include "driver/gpio.h"
+#include "esp_log.h"
 
 #include "movimentacao.h"
 #include "m_driver.h"
@@ -10,171 +12,153 @@
 #include "encoder.h"
 #include "infrared.h"
 
-static QueueHandle_t sensor_queue;
+static const char *TAG = "IR_CONTROL";
+
+// Substituímos a Queue por um Handle direto para a Task
+static TaskHandle_t ir_task_handle = NULL;
+
+// Mutex global para proteger o acesso aos motores.
+// usar "extern SemaphoreHandle_t motor_mutex;" no seu arquivo teste_navegacao.c
+SemaphoreHandle_t motor_mutex = NULL;
 
 typedef struct {
-    motor_t *mR;
-    motor_t *mL;
-    encoder_t *eR;
-    encoder_t *eL;
-    pose_t *p;
+motor_t *mR;
+motor_t *mL;
+encoder_t *eR;
+encoder_t *eL;
+pose_t *p;
 } contexto_t;
 
 static contexto_t contexto;
 
-//TASK SINALIZA INTERRUPCAO DOS SENSORES FRONTAIS
+// TASK SINALIZA INTERRUPCAO DOS SENSORES
 static void IRAM_ATTR ir_isr(void *arg){
-    gpio_num_t sensor = (gpio_num_t)arg;
+    uint32_t sensor = (uint32_t)arg; // uint32_t para passar na notificação
 
     BaseType_t high_task_wakeup = pdFALSE;
 
-    // Evita novas interrupções deste sensor
-    gpio_intr_disable(sensor);
+    // Evita novas interrupções deste sensor enquanto ele é processado
+    gpio_intr_disable((gpio_num_t)sensor);
 
-    xQueueSendFromISR(
-        sensor_queue,
-        &sensor,
-        &high_task_wakeup
-    );
+    // Envia o pino do sensor diretamente para a Task, substituindo o valor anterior
+    xTaskNotifyFromISR(ir_task_handle, sensor, eSetValueWithOverwrite, &high_task_wakeup);
 
     if(high_task_wakeup){
         portYIELD_FROM_ISR();
     }
 }
 
-static void sensor_task(void *arg)
-{
-    gpio_num_t sensor;
+static void sensor_task(void *arg){
+
+    uint32_t sensor_val;
     contexto_t *ctx = (contexto_t *)arg;
 
     while (1)
     {
-        if (xQueueReceive(
-                sensor_queue,
-                &sensor,
-                portMAX_DELAY))
+        // Espera bloqueada (sem gastar CPU) até a ISR enviar a notificação
+        if (xTaskNotifyWait(0x00, ULONG_MAX, &sensor_val, portMAX_DELAY) == pdTRUE)
         {
-            mouse_break(ctx->mR, ctx->mL);
+            gpio_num_t sensor = (gpio_num_t)sensor_val;
 
-            vTaskDelay(pdMS_TO_TICKS(50));
-
-            switch(sensor)
+            // TENTA PEGAR O CONTROLE DOS MOTORES (Timeout de 100ms)
+            // Impede que a main ou outra task use o motor enquanto o robô evade
+            if (xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) 
             {
-                
-                case IR_FRONT:
-                    if(gpio_get_level(IR_R) == 1){
-                        movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else if (gpio_get_level(IR_L)==1){
-                        movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-                    } else {
-                        mouse_movebwd(ctx->mR, ctx->mL);
+                motion_abort = true; // Avisa a main_task para sair do loop
+                mouse_break(ctx->mR, ctx->mL);
+                vTaskDelay(pdMS_TO_TICKS(50));
 
-                        vTaskDelay(pdMS_TO_TICKS(100));
+                switch(sensor)
+                {
+                    case IR_FR:
+
+                        mouse_coast(ctx->mR, ctx->mL);
+                        vTaskDelay(pdMS_TO_TICKS(300));
+
+                        //frente a uma parede e detectou passagem para a direita
+                        if(gpio_get_level(IR_FL)==0 && gpio_get_level(IR_R)==1){
+
+                            movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
                         
-                        mouse_break(ctx->mR, ctx->mL);
+                        //frente a uma parede e detectou passagem para a esquerda
+                        } else if (gpio_get_level(IR_FL)==0 && gpio_get_level(IR_L)==1){
 
-                        vTaskDelay(pdMS_TO_TICKS(100));
+                            movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
                         
-                        //GIRA 180 GRAUS
-                        movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-
-                        vTaskDelay(pdMS_TO_TICKS(50));
-
-                        movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                                                ctx->eL, ctx->p);
-
-                    }
-                    break;
-
-                case IR_FR:
-                    // if(gpio_get_level(IR_FL)==0 && gpio_get_level(IR_R)==1){
-                    //     movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                    //                             ctx->eL, ctx->p);
-                    // } else if (gpio_get_level(IR_FL)==0 && gpio_get_level(IR_L)==1){
-                    //     movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
-                    //                             ctx->eL, ctx->p);
-                    // } else {
-                    //     if(gpio_get_level(IR_FR) == 0){
-                    //         mouse_movebwd(ctx->mR, ctx->mL);
-
-                    //         vTaskDelay(pdMS_TO_TICKS(300));
-                            
-                    //         mouse_break(ctx->mR, ctx->mL);
-
-                    //         mouse_spin(ctx->mR, ctx->mL, 0);
-
-                    //         vTaskDelay(pdMS_TO_TICKS(300));
-                    //     }
-                    //     mouse_break(ctx->mR, ctx->mL);
-                    // }
-
-                    if(gpio_get_level(IR_FR) == 0){
+                        //apenas desviando de obstaculo diagonal
+                        } else {
+                            if(gpio_get_level(IR_FR) == 0){
+                                mouse_spin(ctx->mR, ctx->mL, 0);
+                                vTaskDelay(pdMS_TO_TICKS(200));
+                            }
                             mouse_break(ctx->mR, ctx->mL);
 
-                            vTaskDelay(pdMS_TO_TICKS(100));
-
-                            mouse_spin(ctx->mR, ctx->mL, 0);
-
-                            vTaskDelay(pdMS_TO_TICKS(300));
-                        }
-                        mouse_break(ctx->mR, ctx->mL);
-
-                    break;
-
-                case IR_FL:
-                    // if(gpio_get_level(IR_FR)==0 && gpio_get_level(IR_R)==1){
-                    //     movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR,
-                    //                             ctx->eL, ctx->p);
-                    // } else if (gpio_get_level(IR_FR)==0 && gpio_get_level(IR_L)==1){
-                    //     movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR,
-                    //                             ctx->eL, ctx->p);
-                    // } else {
-                    //     if(gpio_get_level(IR_FL) == 0){
-                    //         mouse_movebwd(ctx->mR, ctx->mL);
-
-                    //         vTaskDelay(pdMS_TO_TICKS(300));
+                            //como esse movimento foi feito utilizando as funcoes 'brutas'
+                            //e necessario limpar os encoders para evitar atrapalhar o controle.
+                            encoder_clean(ctx->eR);
+                            encoder_clean(ctx->eL);
                             
-                    //         mouse_break(ctx->mR, ctx->mL);
+                        }
+                        break;
 
-                    //         mouse_spin(ctx->mR, ctx->mL, 1);
+                    case IR_FL:
 
-                    //         vTaskDelay(pdMS_TO_TICKS(300));
-                    //     }
-                    //     mouse_break(ctx->mR, ctx->mL);
-                    // }
-
-                    if(gpio_get_level(IR_FL) == 0){
-                        mouse_break(ctx->mR, ctx->mL);
-
-                        vTaskDelay(pdMS_TO_TICKS(100));
-
-                        mouse_spin(ctx->mR, ctx->mL, 1);
-
+                        mouse_coast(ctx->mR, ctx->mL);
                         vTaskDelay(pdMS_TO_TICKS(300));
-                    }
-                    mouse_break(ctx->mR, ctx->mL);
 
-                    break;
+                        //frente a uma parede e detectou passagem para a direita
+                        if(gpio_get_level(IR_FR)==0 && gpio_get_level(IR_R)==1){
+                            
+                            movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                        
+                        //frente a uma parede e detectou passagem para a esquerda
+                        } else if (gpio_get_level(IR_FR)==0 && gpio_get_level(IR_L)==1){
+                            
+                            movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                        
+                        //apenas desviando de obstaculo diagonal
+                        } else {
+                            if(gpio_get_level(IR_FL) == 0){
+                                mouse_spin(ctx->mR, ctx->mL, 1);
+                                vTaskDelay(pdMS_TO_TICKS(200));
+                            }
+                            mouse_break(ctx->mR, ctx->mL);
+
+                            //como esse movimento foi feito utilizando as funcoes 'brutas'
+                            //e necessario limpar os encoders para evitar atrapalhar o controle.
+                            encoder_clean(ctx->eR);
+                            encoder_clean(ctx->eL);
+                        
+                        }
+                        break;
+                    
+                    default:
+                        break;
+                }
                 
-                default:
-                    break;
+                // DEVOLVE O CONTROLE DOS MOTORES PARA A MAIN
+                xSemaphoreGive(motor_mutex);
+            } else {
+                ESP_LOGW(TAG, "Falha ao obter controle dos motores para evasão!");
             }
-            // Aguarda estabilizar o sinal
+
+            // Aguarda estabilizar o sinal e o robô fisicamente
             vTaskDelay(pdMS_TO_TICKS(30));
 
-            // Reabilita a interrupção
+            // Reabilita a interrupção para este sensor
             gpio_intr_enable(sensor);
         }
     }
 }
 
 void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
+    // Cria o Mutex que protegerá os motores de acessos cruzados
+    if (motor_mutex == NULL) {
+    motor_mutex = xSemaphoreCreateMutex();
+    }
+
     gpio_config_t io_conf_front = {
         .pin_bit_mask =
-        (1ULL << IR_FRONT) |
         (1ULL << IR_FR) |
         (1ULL << IR_FL),
         .mode = GPIO_MODE_INPUT,
@@ -182,6 +166,7 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_NEGEDGE
     };
+
     gpio_config_t io_conf_side = {
         .pin_bit_mask =
         (1ULL << IR_R) |
@@ -190,7 +175,6 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_DISABLE
-        // .intr_type = GPIO_INTR_POSEDGE //ATIVAR QUANDO FOR TESTAR NO LABIRINTO
     };
 
     contexto.mR = mR;
@@ -202,22 +186,14 @@ void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){
     gpio_config(&io_conf_front);
     gpio_config(&io_conf_side);
 
-    sensor_queue = xQueueCreate(10, sizeof(gpio_num_t));
-
     xTaskCreate(
         sensor_task,
         "ir_sensor",
         4096,
         &contexto,
-        5,
-        NULL
+        8, // Prioridade alta, evasão crítica
+        &ir_task_handle
     );    
-
-    gpio_isr_handler_add(
-        IR_FRONT,
-        ir_isr,
-        (void *)IR_FRONT
-    );
 
     // gpio_isr_handler_add(
     //     IR_L,

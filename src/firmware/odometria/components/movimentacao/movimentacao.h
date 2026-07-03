@@ -5,6 +5,8 @@
 #include "odometria.h"
 #include "encoder.h"
 
+extern volatile bool motion_abort;
+
 void mouse_movefwd(motor_t *motorR, motor_t *motorL);
 
 void mouse_movebwd(motor_t *motorR, motor_t *motorL);

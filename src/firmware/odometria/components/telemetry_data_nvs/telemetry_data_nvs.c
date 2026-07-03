@@ -1,5 +1,3 @@
-//codigo todo gerado por IA, só para teste***
-
 #include "telemetry_data_nvs.h"
 #include "nvs_flash.h"
 #include "nvs.h"

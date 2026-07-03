@@ -13,29 +13,19 @@
 #include "movimentacao.h"
 #include "power_module.h"
 #include "infrared.h"
+#include "seletor_modo.h"
 
 #include "telemetry_data_nvs.h"
 
 static const char *TAG = "teste_navegacao";
 
-volatile bool busy = false;
-
-#define BOTAO_SELETOR   GPIO_NUM_25
-#define BUZZER_GPIO     GPIO_NUM_33
+extern SemaphoreHandle_t motor_mutex;
 
 #define A3_FREQ         440
 #define E4_FREQ         659
 #define A4_FREQ         880
 
 #define TEMPO           300
-
-// TIPO DE LABIRINTO
-typedef enum{
-    ID4X4 = 0,
-    ID8X8 = 1
-} lab_id_t;
-
-lab_id_t id_teste = ID4X4;
 
 pose_t pose;
 
@@ -49,146 +39,55 @@ static i2c_master_bus_handle_t bus_handle;
 motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
 motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
-TaskHandle_t mission_task_handle;
+// task que reage a interrupcao do botao
+static TaskHandle_t supervisor_handle = NULL;
 
-//INTERRUPCAO SINALIZA TASK DO BOTAO
-static void IRAM_ATTR button_isr_handler(void *arg)
-{
-    if (busy){
-        return;
-    }
-
-    busy = true;
-
-    BaseType_t high_task_wakeup = pdFALSE;
-
-    vTaskNotifyGiveFromISR(
-        mission_task_handle,
-        &high_task_wakeup
-    );
-
-    if (high_task_wakeup) {
-        portYIELD_FROM_ISR();
-    }
-}
-
-void telemetry_task(void *arg)
-{
+void telemetry_task(void *arg){
     float voltage_v = 0.0;
     float current_a = 0.0;
 
     while (1)
     {
-        // 1. Lemos os dados reais do sensor passando o endereço das variáveis (&)
+        // 1. Le os dados reais do sensor passando o endereço das variáveis (&)
         ina226_get_bus_voltage(&ina, &voltage_v);
         ina226_get_current(&ina, &current_a);
 
-        // 2. Convertemos os floats (Volts/Amperes) para inteiros (Milivolts/Miliamperes)
+        // 2. Converte os floats (Volts/Amperes) para inteiros (Milivolts/Miliamperes)
         // O "cast" (uint16_t) garante que o ESP32 descarte as casas decimais corretamente
         uint16_t voltage_mv = (uint16_t)(voltage_v * 1000.0f);
         int16_t current_ma = (int16_t)(current_a * 1000.0f);
 
-        // 3. Salvamos na memória NVS usando a função do Canvas
+        // 3. Salva na memória NVS usando a função do Canvas
         telemetry_save_sample(voltage_mv, current_ma);
 
-        // 4. Aguardamos 500ms antes de ler novamente (2 amostras por segundo)
+        // 4. Aguarda 500ms antes de ler novamente (2 amostras por segundo)
         // Isso evita encher a memória muito rápido
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
-void buzzer_init(){
-
-    ledc_timer_config_t timer = {
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .timer_num = LEDC_TIMER_0,
-        .duty_resolution = LEDC_TIMER_10_BIT,
-        .freq_hz = 1000,
-        .clk_cfg = LEDC_AUTO_CLK
-    };
-
-    ledc_channel_config_t channel = {
-        .gpio_num = BUZZER_GPIO,
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .channel = LEDC_CHANNEL_0,
-        .timer_sel = LEDC_TIMER_0,
-        .duty = 512,
-        .hpoint = 0
-    };
-
-    ledc_timer_config(&timer);
-    ledc_channel_config(&channel);
-
-    //iniciando desligado
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-}
-
-void play_tone(uint32_t freq, uint32_t duracao_ms){
-
-    ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_0, freq);
-
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 512);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-
-    vTaskDelay(pdMS_TO_TICKS(duracao_ms));
-
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-}
-
-void set_maze_id(uint8_t id){
-    if(id == ID8X8){
-        id = ID4X4;
-        play_tone(E4_FREQ, TEMPO);
-
-    } else {
-        id = ID8X8;
-        play_tone(A4_FREQ, TEMPO);
-        
-    }
-
-    busy = false;
-}
-
-//TASK REALIZADA AO RECEBER A INTERRUPCAO DO BOTAO
-void mission_task(void *arg)
+static void supervisor_task(void *arg)
 {
-    while (1)
-    {
+    while (1) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-        ESP_LOGI(TAG, "botao pressionado");
+        ESP_LOGI(TAG, "botao pressionado: interrompendo e trocando de modo");
 
-        set_maze_id(id_teste);
+        mouse_break(&motorR, &motorL);
 
+        modo_lab_t novo = seletor_modo_toggle();
+        seletor_modo_sinalizar(novo);
     }
 }
 
-void app_main(void)
-{
-    gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << BOTAO_SELETOR),
-        .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_NEGEDGE
-    };
+void app_main(void){
 
-    gpio_config(&io_conf);
+    ESP_LOGW(TAG, "motivo do ultimo reset: %d (1=PANIC 12=BROWNOUT)", esp_reset_reason());
 
     gpio_install_isr_service(0);
 
-    gpio_isr_handler_add(
-        BOTAO_SELETOR,
-        button_isr_handler,
-        NULL
-    );
-
-    buzzer_init();
+    // botao no GPIO 25 (interrupcao) + buzzer no GPIO 33
+    seletor_modo_init(supervisor_handle);    
 
     i2c_master_bus_config_t bus_config = {
         .i2c_port = I2C_PORT,
@@ -244,7 +143,7 @@ void app_main(void)
     motor_init(&motorL);
 
     IR_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
+    
     odometria_pos_init(&pose, 0, 0, NORTE);
 
     motorR = (motor_t){
@@ -265,15 +164,12 @@ void app_main(void)
         motorL.gen2
     };
 
-    //criacao da task sinalizada por interrupcao
-    xTaskCreate(
-    mission_task,
-    "mission_task",
-    4096,
-    NULL,
-    5,
-    &mission_task_handle
-    );
+    // o supervisor precisa existir antes de ligar a interrupcao do botao,
+    // pois e ele quem recebe a notificacao da ISR
+    xTaskCreate(supervisor_task, "supervisor_task", 4096, NULL, 4, &supervisor_handle);
+
+    // sinaliza o modo inicial e parte a primeira missao
+    seletor_modo_sinalizar(seletor_modo_get());
 
     // criacao da task que vai ficar lendo o INA226 e salvando em segundo plano
     xTaskCreate(
@@ -289,14 +185,16 @@ void app_main(void)
 
     ESP_ERROR_CHECK(telemetry_clear());
 
-    while(1){
-        vTaskDelay(pdMS_TO_TICKS(3000));
-
+    while(1) {
+        vTaskDelay(pdMS_TO_TICKS(1500));
         play_tone(A3_FREQ, TEMPO);
 
-        movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        // Tenta pegar a chave dos motores
+        if (motor_mutex != NULL && xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) {
+            movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+            
+            // Devolve a chave após terminar de mover a célula
+            xSemaphoreGive(motor_mutex);
+        }
     }
-
 }
