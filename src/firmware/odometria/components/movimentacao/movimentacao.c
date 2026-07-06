@@ -16,7 +16,7 @@ static const char *TAG = "movimentacao";
 volatile bool motion_abort = false;
 
 // Ganhos do Controlador PD (Sera ajustado experimentalmente)
-#define KP_RETA 5.0f
+#define KP_RETA 7.0f
 #define KD_RETA 2.0f
 
 // Ganhos para curva de 90 graus
@@ -24,7 +24,7 @@ volatile bool motion_abort = false;
 // PWM minimo para que o robo consiga vencer o atrito estatico e girar efetivamente
 #define MIN_PWM_CURVA 35
 
-//funcoes especificas
+//funcoes especificas 
 
 void mouse_movefwd(motor_t *motorR, motor_t *motorL){
     
@@ -128,6 +128,7 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         // Se a tarefa de IR detectou algo, aborta o movimento imediatamente
         if (motion_abort) {
             ESP_LOGW(TAG, "Movimento abortado pela tarefa de IR!");
+            mouse_coast(mtrR, mtrL);
             return; // Sai da função, parando o loop
         }
 

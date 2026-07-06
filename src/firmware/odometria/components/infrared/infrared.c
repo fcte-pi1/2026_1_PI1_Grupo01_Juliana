@@ -60,12 +60,13 @@ static void sensor_task(void *arg){
         {
             gpio_num_t sensor = (gpio_num_t)sensor_val;
 
+            motion_abort = true; // Avisa a main_task para sair do loop
+
             // TENTA PEGAR O CONTROLE DOS MOTORES (Timeout de 100ms)
             // Impede que a main ou outra task use o motor enquanto o robô evade
             if (xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) 
             {
-                motion_abort = true; // Avisa a main_task para sair do loop
-                mouse_break(ctx->mR, ctx->mL);
+                
                 vTaskDelay(pdMS_TO_TICKS(50));
 
                 switch(sensor)
