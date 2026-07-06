@@ -352,4 +352,6 @@ def test_telemetria_out_gera_dict_com_todos_os_campos():
         "posicao_y": 1,
         "nivel_bateria": 80.0,
         "velocidade": 2.0,
+        "orientacao": None,
+        "mensagem": None,
     }

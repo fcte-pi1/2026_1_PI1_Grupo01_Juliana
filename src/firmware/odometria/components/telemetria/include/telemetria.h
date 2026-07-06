@@ -26,8 +26,11 @@ bool telemetria_init(int labirinto_id);
 //   linha, coluna : posicao na grade (mapeadas para posicao_y, posicao_x).
 //   nivel_bateria : porcentagem 0-100.
 //   velocidade    : m/s (use valor negativo para omitir).
+//   orientacao    : texto livre (ex.: "NORTE"); NULL para omitir.
+//   mensagem      : log legivel para o dashboard; NULL para omitir.
 // No-op se a telemetria nao estiver conectada.
-void telemetria_envia(int linha, int coluna, float nivel_bateria, float velocidade);
+void telemetria_envia(int linha, int coluna, float nivel_bateria, float velocidade,
+                      const char *orientacao, const char *mensagem);
 
 // Encerra o cliente WebSocket (opcional).
 void telemetria_stop(void);

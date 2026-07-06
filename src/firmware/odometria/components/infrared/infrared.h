@@ -15,6 +15,12 @@
 //INCLUIR ESSA FUNCAO EM app_main() APOS INICIALIZAR MOTORES, ENCODERS E POSE
 void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p);
 
+// Tenta virar quando encostou na parede e ha abertura lateral (recuperacao de canto).
+bool infrared_recuperar_canto(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p);
+
+// Sequencia completa apos travamento: re + virada para sair da parede.
+bool infrared_recuperar_travamento(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p);
+
 // TAMBEM LEMBRAR DE INCLUIR EM app_main()
 // 'gpio_install_isr_service(0);'
 

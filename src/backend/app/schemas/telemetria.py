@@ -20,6 +20,8 @@ class TelemetriaIn(BaseModel):
     posicao_y: int = Field(ge=0)
     nivel_bateria: float = Field(ge=0.0, le=100.0)
     velocidade: Optional[float] = Field(default=None, ge=0.0)
+    orientacao: Optional[str] = Field(default=None, max_length=32)
+    mensagem: Optional[str] = Field(default=None, max_length=256)
 
     @model_validator(mode="after")
     def _exige_corrida_ou_labirinto(self) -> "TelemetriaIn":
@@ -38,3 +40,5 @@ class TelemetriaOut(BaseModel):
     posicao_y: int
     nivel_bateria: float
     velocidade: Optional[float] = None
+    orientacao: Optional[str] = None
+    mensagem: Optional[str] = None

@@ -66,13 +66,16 @@ describe('Telemetry', () => {
           data: JSON.stringify({
             id: 2, corrida_id: 1, posicao_x: 1, posicao_y: 1,
             nivel_bateria: 90, velocidade: 0.6, timestamp: '2026-05-10T12:00:02Z',
+            orientacao: 'LESTE', mensagem: 'Celula avancada com sucesso',
           }),
         })
       })
 
       expect(screen.getByText(/0\.50 m\/s/)).toBeInTheDocument() // média de 0.4 e 0.6
       expect(screen.getByText(/90%/)).toBeInTheDocument() // bateria do último evento
-      expect(screen.getByText(/\(1, 1\)/)).toBeInTheDocument() // posição atual
+      expect(screen.getByText(/^Posição:/)).toBeInTheDocument()
+      expect(screen.getByText('LESTE')).toBeInTheDocument()
+      expect(screen.getByText('Celula avancada com sucesso')).toBeInTheDocument()
       expect(screen.getByText('Sim')).toBeInTheDocument() // desafio cumprido
     } finally {
       vi.unstubAllGlobals()

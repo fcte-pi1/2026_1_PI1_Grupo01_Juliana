@@ -28,13 +28,13 @@
 // Rede Wi-Fi que a ESP usa. Dica: hotspot de celular costuma ser o mais
 // garantido para a demo (a rede da facul as vezes bloqueia dispositivo a
 // dispositivo). TODO: preencher com a rede do dia.
-#define WIFI_SSID   "COLOQUE_O_SSID"
-#define WIFI_PASS   "COLOQUE_A_SENHA"
+#define WIFI_SSID   "galaxy manu"
+#define WIFI_PASS   "linkstart"
 
 // Endereco do backend (uvicorn) na rede. Trocar o IP pelo da maquina que
 // estiver rodando o backend. A porta padrao do projeto e 8000.
 // TODO: ajustar o IP.
-#define BACKEND_WS_URI  "ws://192.168.1.8:8000/ws/telemetria"
+#define BACKEND_WS_URI  "ws://10.71.95.14:8000/ws/telemetria"
 
 // Quantos ms esperar pelo Wi-Fi e pelo WebSocket antes de desistir (best-effort).
 #define WIFI_TIMEOUT_MS   10000
@@ -249,7 +249,8 @@ bool telemetria_init(int labirinto_id)
     return true;
 }
 
-void telemetria_envia(int linha, int coluna, float nivel_bateria, float velocidade)
+void telemetria_envia(int linha, int coluna, float nivel_bateria, float velocidade,
+                      const char *orientacao, const char *mensagem)
 {
     if (!s_ws_conectado || s_ws == NULL) {
         return; // best-effort: sem conexao, nao faz nada
@@ -277,6 +278,12 @@ void telemetria_envia(int linha, int coluna, float nivel_bateria, float velocida
     cJSON_AddNumberToObject(pacote, "nivel_bateria", nivel_bateria);
     if (velocidade >= 0.0f) {
         cJSON_AddNumberToObject(pacote, "velocidade", velocidade);
+    }
+    if (orientacao != NULL && orientacao[0] != '\0') {
+        cJSON_AddStringToObject(pacote, "orientacao", orientacao);
+    }
+    if (mensagem != NULL && mensagem[0] != '\0') {
+        cJSON_AddStringToObject(pacote, "mensagem", mensagem);
     }
 
     char *texto = cJSON_PrintUnformatted(pacote);

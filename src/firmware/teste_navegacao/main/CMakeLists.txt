@@ -11,4 +11,5 @@ idf_component_register(SRCS "teste_navegacao.c"
                         telemetry_data_nvs
                         seletor_modo
                         telemetria
+                        robot_state
                         )

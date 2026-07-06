@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "esp_log.h"
+#include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/ledc.h"
@@ -17,6 +18,7 @@
 
 #include "telemetry_data_nvs.h"
 #include "telemetria.h"   // [TESTE #15] telemetria Wi-Fi + WebSocket para o frontend
+#include "robot_state.h"
 
 static const char *TAG = "teste_navegacao";
 
@@ -81,9 +83,23 @@ static void supervisor_task(void *arg)
     }
 }
 
+static const char *reset_motivo_str(void)
+{
+    switch (esp_reset_reason()) {
+        case ESP_RST_POWERON:   return "power-on";
+        case ESP_RST_PANIC:     return "panic";
+        case ESP_RST_INT_WDT:   return "watchdog-interrupt";
+        case ESP_RST_TASK_WDT:  return "watchdog-task";
+        case ESP_RST_WDT:       return "watchdog";
+        case ESP_RST_BROWNOUT:  return "brownout (bateria baixa)";
+        case ESP_RST_SW:        return "software";
+        default:                return "desconhecido";
+    }
+}
+
 void app_main(void){
 
-    ESP_LOGW(TAG, "motivo do ultimo reset: %d (1=PANIC 12=BROWNOUT)", esp_reset_reason());
+    ESP_LOGW(TAG, "motivo do ultimo reset: %s (%d)", reset_motivo_str(), (int)esp_reset_reason());
 
     gpio_install_isr_service(0);
 
@@ -193,9 +209,12 @@ void app_main(void){
     bool tele_ok = telemetria_init(1);
     ESP_LOGW(TAG, "[TESTE #15] telemetria Wi-Fi conectada: %s", tele_ok ? "SIM" : "NAO");
 
-    // [TESTE #15] posicao inteira na grade (celula), atualizada a cada move.
-    // Comeca em (0,0). linha <-> y (NORTE/SUL), coluna <-> x (LESTE/OESTE).
-    int t_linha = 0, t_coluna = 0;
+    robot_state_init(&pose);
+
+    char msg_inicio[80];
+    snprintf(msg_inicio, sizeof(msg_inicio),
+             "Robo iniciado (%s) — aguardando movimento", reset_motivo_str());
+    robot_state_publicar(100.0f, 0.0f, msg_inicio);
 
     while(1) {
         vTaskDelay(pdMS_TO_TICKS(1500));
@@ -203,25 +222,43 @@ void app_main(void){
 
         // Tenta pegar a chave dos motores
         if (motor_mutex != NULL && xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) {
-            movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+            movimentacao_status_t status = MOV_TRAVADO;
+            bool move_ok = movimentacao_move_cell(
+                &motorR, &motorL, &encoderR, &encoderL, &pose, &status);
+
+            const char *msg = "Falha ao avancar celula";
+
+            if (move_ok) {
+                msg = "Celula avancada com sucesso";
+            } else if (status == MOV_ABORTADO) {
+                // A tarefa de IR ja publicou a curva; evita mensagem duplicada de falha.
+                xSemaphoreGive(motor_mutex);
+                continue;
+            } else if (status == MOV_AJUSTE_PAREDE) {
+                msg = "Ajustando alinhamento na parede";
+            } else if (status == MOV_TRAVADO) {
+                if (infrared_recuperar_travamento(
+                        &motorR, &motorL, &encoderR, &encoderL, &pose)) {
+                    xSemaphoreGive(motor_mutex);
+                    vTaskDelay(pdMS_TO_TICKS(1000));
+                    continue;
+                }
+                msg = "Travado — recuperacao falhou";
+            }
+
+            const int linha = robot_state_linha();
+            const int coluna = robot_state_coluna();
+            if (linha >= 1 && linha <= 2 && coluna >= 1 && coluna <= 2) {
+                msg = "Chegada ao centro do labirinto";
+            }
+
+            robot_state_publicar(100.0f, pose.vm, msg);
 
             // Devolve a chave após terminar de mover a célula
             xSemaphoreGive(motor_mutex);
 
-            // [TESTE #15] avanca a celula na direcao atual e envia ao frontend.
-            switch (pose.orientacao) {
-                case NORTE: t_linha++;  break;
-                case SUL:   t_linha--;  break;
-                case LESTE: t_coluna++; break;
-                case OESTE: t_coluna--; break;
-                default: break;
-            }
-            // nivel_bateria: placeholder 100%% (o INA226 e lido pela telemetry_task
-            // via I2C; evitamos ler aqui para nao concorrer no barramento).
-            // velocidade: pose.vm (m/s) calculada pela odometria.
-            telemetria_envia(t_linha, t_coluna, 100.0f, pose.vm);
-            ESP_LOGI(TAG, "[TESTE #15] enviado -> linha=%d coluna=%d vel=%.2f m/s",
-                     t_linha, t_coluna, pose.vm);
+            ESP_LOGI(TAG, "[TESTE #15] %s -> linha=%d coluna=%d vel=%.2f m/s",
+                     msg, robot_state_linha(), robot_state_coluna(), pose.vm);
         }
     }
 }

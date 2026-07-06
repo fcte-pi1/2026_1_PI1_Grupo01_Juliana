@@ -5,7 +5,6 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "driver/gpio.h"
-
 #include "encoder.h"
 #include "m_driver.h"
 #include "odometria.h"
@@ -21,8 +20,9 @@ volatile bool motion_abort = false;
 
 // Ganhos para curva de 90 graus
 #define KP_CURVA 80.0f
-// PWM minimo para que o robo consiga vencer o atrito estatico e girar efetivamente
-#define MIN_PWM_CURVA 35
+// PWM reduzido nas curvas de recuperacao (evita brownout apos travamento).
+#define PWM_CURVA_REC 35
+#define MIN_PWM_CURVA_REC 28
 
 //funcoes especificas 
 
@@ -94,7 +94,56 @@ float mouse_get_linear_speed(encoder_t *encR, encoder_t *encL, int64_t dt){
 
 //funcoes de movimentacao
 
-void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
+#define CELULA_MIN_FRAC 0.70f
+#define DESLOC_AJUSTE_MIN 0.02f
+#define RE_DIST_M 0.07f
+#define RE_TEMPO_MIN_MS 450
+#define RE_TEMPO_MAX_MS 900
+
+bool movimentacao_re_curta(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL)
+{
+    float desloc = 0.0f;
+    float desloc_R = 0.0f;
+    float desloc_L = 0.0f;
+    uint32_t tempo_ms = 0;
+
+    gpio_set_level(SEL, 0);
+    motor_set_speed(mtrR, -MOTOR_RE_SPD);
+    motor_set_speed(mtrL, -MOTOR_RE_SPD);
+    ESP_LOGI(TAG, "re curta iniciada (pwm=%d)", MOTOR_RE_SPD);
+
+    while (tempo_ms < RE_TEMPO_MAX_MS) {
+        desloc_R += fabsf(encoder_get_deslocamento(encR, RAIO_R, NULL));
+        desloc_L += fabsf(encoder_get_deslocamento(encL, RAIO_R, NULL));
+        desloc = (desloc_R + desloc_L) / 2.0f;
+
+        if (desloc >= RE_DIST_M) {
+            break;
+        }
+        if (tempo_ms >= RE_TEMPO_MIN_MS && desloc >= (RE_DIST_M * 0.25f)) {
+            break;
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(10));
+        tempo_ms += 10;
+    }
+
+    mouse_break(mtrR, mtrL);
+    encoder_clean(encR);
+    encoder_clean(encL);
+
+    const bool ok = desloc >= (RE_DIST_M * 0.2f) || tempo_ms >= RE_TEMPO_MIN_MS;
+    ESP_LOGI(TAG, "re curta | desloc=%.3fm tempo=%lums ok=%s",
+             desloc, (unsigned long)tempo_ms, ok ? "SIM" : "NAO");
+    return ok;
+}
+
+bool movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL,
+                            pose_t *pos, movimentacao_status_t *status)
+{
+    if (status != NULL) {
+        *status = MOV_TRAVADO;
+    }
  
     float time, previoustime, meanspeed;
 
@@ -117,7 +166,15 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
 
     // Variáveis de proteção contra travamento (Stall Detection)
     uint32_t tempo_decorrido_ms = 0;
-    const uint32_t TIMEOUT_MAX_MS = 3500; // 3.5 segundos para percorrer 18 cm
+    const uint32_t TIMEOUT_MAX_MS = 2000;
+    const uint32_t SEM_PROGRESSO_MS = 700;
+    const float PROGRESSO_MIN_M = 0.008f;
+    bool stalled = false;
+    int pulsos_R_total = 0;
+    int pulsos_L_total = 0;
+    int pulsos_amostra = 0;
+    float ultimo_desloc = 0.0f;
+    uint32_t ms_sem_progresso = 0;
     
     motion_abort = false; // Reseta a flag ao iniciar
 
@@ -129,15 +186,37 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         if (motion_abort) {
             ESP_LOGW(TAG, "Movimento abortado pela tarefa de IR!");
             mouse_coast(mtrR, mtrL);
-            return; // Sai da função, parando o loop
+            ESP_LOGW(TAG, "celula FALHOU | desloc=%.3fm stall=NAO abort=SIM pulsos R=%d L=%d",
+                     desloc, pulsos_R_total, pulsos_L_total);
+            if (status != NULL) {
+                *status = MOV_ABORTADO;
+            }
+            return false;
         }
 
         // Atualiza a distância de cada roda
-        desloc_R += encoder_get_deslocamento(encR, RAIO_R);
-        desloc_L += encoder_get_deslocamento(encL, RAIO_R);
+        desloc_R += encoder_get_deslocamento(encR, RAIO_R, &pulsos_amostra);
+        pulsos_R_total += pulsos_amostra;
+        desloc_L += encoder_get_deslocamento(encL, RAIO_R, &pulsos_amostra);
+        pulsos_L_total += pulsos_amostra;
         
         // Calcula a média das rodas para saber o quanto o robô andou no total
         desloc = (desloc_R + desloc_L)/2.0f;
+
+        if (desloc >= (ultimo_desloc + PROGRESSO_MIN_M)) {
+            ultimo_desloc = desloc;
+            ms_sem_progresso = 0;
+        } else {
+            ms_sem_progresso += 10;
+        }
+
+        if (ms_sem_progresso >= SEM_PROGRESSO_MS && desloc < (target * 0.25f)) {
+            ESP_LOGW(TAG, "STALL: sem progresso por %lums — parando motores",
+                     (unsigned long)ms_sem_progresso);
+            mouse_coast(mtrR, mtrL);
+            stalled = true;
+            break;
+        }
 
         // --- CONTROLE PD PARA ALINHAMENTO EM LINHA RETA ---
         
@@ -176,6 +255,7 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         // PROTEÇÃO: Se exceder o tempo limite, desliga os motores e sai do loop
         if (tempo_decorrido_ms >= TIMEOUT_MAX_MS) {
             ESP_LOGW(TAG, "STALL DETECTED: Timeout de movimento atingido (motores desligados ou travados)!");
+            stalled = true;
             break;
         }
     }
@@ -186,14 +266,42 @@ void movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
 
     meanspeed = mouse_get_linear_speed(encR, encL, time);
 
-    pos->cell_count++;
+    const bool sucesso = desloc >= (target * CELULA_MIN_FRAC);
 
-    odometria_update_vm(pos, meanspeed);
+    if (sucesso) {
+        pos->cell_count++;
+        odometria_update_vm(pos, meanspeed);
+        odometria_update_xy(pos, desloc);
+        if (status != NULL) {
+            *status = MOV_OK;
+        }
+        ESP_LOGI(TAG, "celula OK | desloc=%.3fm tempo=%lums pulsos R=%d L=%d pos=(%.3f, %.3f)",
+                 desloc, (unsigned long)tempo_decorrido_ms, pulsos_R_total, pulsos_L_total,
+                 pos->x, pos->y);
+        return true;
+    }
 
-    odometria_update_xy(pos, desloc);
+    if (stalled) {
+        if (status != NULL) {
+            *status = MOV_TRAVADO;
+        }
+        ESP_LOGW(TAG, "celula TRAVOU | desloc=%.3fm pulsos R=%d L=%d pos=(%.3f, %.3f)",
+                 desloc, pulsos_R_total, pulsos_L_total, pos->x, pos->y);
+    } else if (desloc >= DESLOC_AJUSTE_MIN) {
+        if (status != NULL) {
+            *status = MOV_AJUSTE_PAREDE;
+        }
+        ESP_LOGW(TAG, "celula AJUSTE | desloc=%.3fm (correcao PD na parede) pulsos R=%d L=%d",
+                 desloc, pulsos_R_total, pulsos_L_total);
+    } else {
+        if (status != NULL) {
+            *status = MOV_TRAVADO;
+        }
+        ESP_LOGW(TAG, "celula FALHOU | desloc=%.3fm pulsos R=%d L=%d pos=(%.3f, %.3f)",
+                 desloc, pulsos_R_total, pulsos_L_total, pos->x, pos->y);
+    }
 
-    ESP_LOGI(TAG, "andou 1 celula, posicao: (%f, %f), desloc: %f, velocidade media (m/s):%f",pos->x, pos->y, desloc, meanspeed);
-
+    return false;
 }
 
 void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
@@ -211,8 +319,8 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
 
     while (theta < target_theta){
         // Usando fabs para garantir a soma absoluta, já que o encoder não tem direção
-        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R));
-        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R));
+        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R, NULL));
+        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R, NULL));
         
         theta = (desloc_R + desloc_L)/W_EIXOS;
         
@@ -223,8 +331,8 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         pwm = (int)(KP_CURVA * erro);
 
         // Saturação superior e inferior (Deadband)
-        if (pwm > MOTOR_BWD_SPD) pwm = MOTOR_BWD_SPD;
-        if (pwm < MIN_PWM_CURVA) pwm = MIN_PWM_CURVA;
+        if (pwm > PWM_CURVA_REC) pwm = PWM_CURVA_REC;
+        if (pwm < MIN_PWM_CURVA_REC) pwm = MIN_PWM_CURVA_REC;
 
         // Aplica PWM diretamente (Curva horária: R para trás, L para frente)
         motor_set_speed(mtrR, -pwm);
@@ -241,6 +349,8 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     }
 
     mouse_break(mtrR, mtrL);
+    encoder_clean(encR);
+    encoder_clean(encL);
 
     odometria_mudar_sentido(pos, 1);
     ESP_LOGI(TAG, "virou 90 graus para a direita. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
@@ -260,8 +370,8 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
     gpio_set_level(SEL, 0); // garantir que o freio esta desativado
 
     while (theta < target_theta){
-        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R));
-        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R));
+        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R, NULL));
+        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R, NULL));
         
         theta = (desloc_R + desloc_L)/W_EIXOS;
         
@@ -269,8 +379,8 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
 
         pwm = (int)(KP_CURVA * erro);
 
-        if (pwm > MOTOR_BWD_SPD) pwm = MOTOR_BWD_SPD;
-        if (pwm < MIN_PWM_CURVA) pwm = MIN_PWM_CURVA;
+        if (pwm > PWM_CURVA_REC) pwm = PWM_CURVA_REC;
+        if (pwm < MIN_PWM_CURVA_REC) pwm = MIN_PWM_CURVA_REC;
 
         // Aplica PWM diretamente (Curva anti-horária: R para frente, L para trás)
         motor_set_speed(mtrR, pwm);
@@ -287,6 +397,8 @@ void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, enc
     }
 
     mouse_break(mtrR, mtrL);
+    encoder_clean(encR);
+    encoder_clean(encL);
 
     odometria_mudar_sentido(pos, 0);
     ESP_LOGI(TAG, "virou 90 graus para a esquerda. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);

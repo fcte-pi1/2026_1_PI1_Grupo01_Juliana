@@ -11,6 +11,7 @@
 #include "odometria.h"
 #include "encoder.h"
 #include "infrared.h"
+#include "robot_state.h"
 
 static const char *TAG = "IR_CONTROL";
 
@@ -80,11 +81,13 @@ static void sensor_task(void *arg){
                         if(gpio_get_level(IR_FL)==0 && gpio_get_level(IR_R)==1){
 
                             movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                            robot_state_publicar(100.0f, ctx->p->vm, "Curva 90 horaria (sensor IR)");
                         
                         //frente a uma parede e detectou passagem para a esquerda
                         } else if (gpio_get_level(IR_FL)==0 && gpio_get_level(IR_L)==1){
 
                             movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                            robot_state_publicar(100.0f, ctx->p->vm, "Curva 90 anti-horaria (sensor IR)");
                         
                         //apenas desviando de obstaculo diagonal
                         } else {
@@ -111,11 +114,13 @@ static void sensor_task(void *arg){
                         if(gpio_get_level(IR_FR)==0 && gpio_get_level(IR_R)==1){
                             
                             movimentacao_turn_clws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                            robot_state_publicar(100.0f, ctx->p->vm, "Curva 90 horaria (sensor IR)");
                         
                         //frente a uma parede e detectou passagem para a esquerda
                         } else if (gpio_get_level(IR_FR)==0 && gpio_get_level(IR_L)==1){
                             
                             movimentacao_turn_ctclws(ctx->mR, ctx->mL, ctx->eR, ctx->eL, ctx->p);
+                            robot_state_publicar(100.0f, ctx->p->vm, "Curva 90 anti-horaria (sensor IR)");
                         
                         //apenas desviando de obstaculo diagonal
                         } else {
@@ -150,6 +155,71 @@ static void sensor_task(void *arg){
             gpio_intr_enable(sensor);
         }
     }
+}
+
+bool infrared_recuperar_canto(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p)
+{
+    const bool frente_dir = gpio_get_level(IR_FR) == 0;
+    const bool frente_esq = gpio_get_level(IR_FL) == 0;
+    const bool abertura_dir = gpio_get_level(IR_R) == 1;
+    const bool abertura_esq = gpio_get_level(IR_L) == 1;
+
+    if (!frente_dir && !frente_esq) {
+        return false;
+    }
+
+    if (abertura_dir) {
+        movimentacao_turn_clws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — direita (sensor IR)");
+        return true;
+    }
+
+    if (abertura_esq) {
+        movimentacao_turn_ctclws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — esquerda (sensor IR)");
+        return true;
+    }
+
+    return false;
+}
+
+bool infrared_recuperar_travamento(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p)
+{
+    movimentacao_re_curta(mR, mL, eR, eL);
+    vTaskDelay(pdMS_TO_TICKS(350));
+
+    const bool frente_dir = gpio_get_level(IR_FR) == 0;
+    const bool frente_esq = gpio_get_level(IR_FL) == 0;
+    const bool abertura_dir = gpio_get_level(IR_R) == 1;
+    const bool abertura_esq = gpio_get_level(IR_L) == 1;
+
+    if (abertura_dir) {
+        movimentacao_turn_clws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — direita (sensor IR)");
+        vTaskDelay(pdMS_TO_TICKS(400));
+        return true;
+    }
+
+    if (abertura_esq) {
+        movimentacao_turn_ctclws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — esquerda (sensor IR)");
+        vTaskDelay(pdMS_TO_TICKS(400));
+        return true;
+    }
+
+    if (frente_dir && !frente_esq) {
+        movimentacao_turn_ctclws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — esquerda (obstaculo a direita)");
+    } else if (frente_esq && !frente_dir) {
+        movimentacao_turn_clws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — direita (obstaculo a esquerda)");
+    } else {
+        movimentacao_turn_clws(mR, mL, eR, eL, p);
+        robot_state_publicar(100.0f, p->vm, "Curva de recuperacao — direita (padrao)");
+    }
+
+    vTaskDelay(pdMS_TO_TICKS(400));
+    return true;
 }
 
 void IR_init(motor_t *mR, motor_t *mL, encoder_t *eR, encoder_t *eL, pose_t *p){

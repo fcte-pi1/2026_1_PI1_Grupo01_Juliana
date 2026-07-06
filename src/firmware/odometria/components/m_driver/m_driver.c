@@ -172,7 +172,7 @@ static void set_pwm(
 }
 
 void motor_set_speed(motor_t *motor, int8_t speed){
-    ESP_LOGI(TAG, "velocidade do motor: %d", speed);
+    ESP_LOGD(TAG, "velocidade do motor: %d", speed);
         if(speed >= 25 && speed <= 100)
     {
         set_pwm(motor->comp1, speed);

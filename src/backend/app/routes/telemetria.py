@@ -70,6 +70,8 @@ def _persistir(db: Session, payload: TelemetriaIn) -> EventoTelemetria:
         posicao_y=payload.posicao_y,
         nivel_bateria=payload.nivel_bateria,
         velocidade=payload.velocidade,
+        orientacao=payload.orientacao,
+        mensagem=payload.mensagem,
     )
     db.add(evento)
     db.commit()

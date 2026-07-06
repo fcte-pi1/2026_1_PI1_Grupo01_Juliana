@@ -96,23 +96,23 @@ void encoder_clean(encoder_t *encoder){
     ESP_LOGI(TAG, "encoder resetado");
 }
 
+static int encoder_consume_count(encoder_t *encoder)
+{
+    int count = 0;
+
+    pcnt_unit_get_count(encoder->unit, &count);
+    pcnt_unit_clear_count(encoder->unit);
+
+    ESP_LOGD(TAG, "pulsos lidos: %d", count);
+    return count;
+}
+
 //movimento estimado do eixo do motor [rad]
 //baseado na condicao de que a leitura e feita
 //com o carrinho parado...
 float encoder_get_teta(encoder_t *encoder){
-    
-    int count = 0;
-
-    pcnt_unit_get_count(encoder->unit, &count);
-
-    pcnt_unit_clear_count(encoder->unit);
-
-    int pulsos = count;
-
-    float teta = (pulsos * M_PI)/10.0f;
-    
-    ESP_LOGI(TAG, "pulsos lidos: %d", pulsos);
-    return teta;
+    int pulsos = encoder_consume_count(encoder);
+    return (pulsos * M_PI) / 10.0f;
 }
 
 //velocidade angular media [rad/s]
@@ -134,10 +134,13 @@ float encoder_get_v(encoder_t *encoder, float dt, float raio){
 }
 
 //deslocamento estimado [m]
-float encoder_get_deslocamento(encoder_t *encoder, float raio){
+float encoder_get_deslocamento(encoder_t *encoder, float raio, int *pulsos_lidos){
 
-    float teta = encoder_get_teta(encoder);
-    float deslocamento = teta * raio;
+    int pulsos = encoder_consume_count(encoder);
+    if (pulsos_lidos != NULL) {
+        *pulsos_lidos = pulsos;
+    }
 
-    return deslocamento;
+    float teta = (pulsos * M_PI) / 10.0f;
+    return teta * raio;
 }
