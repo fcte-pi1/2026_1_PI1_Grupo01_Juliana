@@ -10,4 +10,5 @@ idf_component_register(SRCS "teste_navegacao.c"
                         esp_driver_ledc
                         telemetry_data_nvs
                         seletor_modo
+                        telemetria
                         )

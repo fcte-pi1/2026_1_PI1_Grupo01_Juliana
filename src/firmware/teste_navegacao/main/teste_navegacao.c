@@ -16,6 +16,7 @@
 #include "seletor_modo.h"
 
 #include "telemetry_data_nvs.h"
+#include "telemetria.h"   // [TESTE #15] telemetria Wi-Fi + WebSocket para o frontend
 
 static const char *TAG = "teste_navegacao";
 
@@ -185,6 +186,17 @@ void app_main(void){
 
     ESP_ERROR_CHECK(telemetry_clear());
 
+    // [TESTE #15] Sobe Wi-Fi + WebSocket e abre a corrida no backend.
+    // labirinto_id = 1 (4x4). Best-effort: se nao conectar, telemetria_envia
+    // vira no-op e a navegacao segue normal. Preencher SSID/senha/IP no topo
+    // de components/telemetria/telemetria.c antes de testar.
+    bool tele_ok = telemetria_init(1);
+    ESP_LOGW(TAG, "[TESTE #15] telemetria Wi-Fi conectada: %s", tele_ok ? "SIM" : "NAO");
+
+    // [TESTE #15] posicao inteira na grade (celula), atualizada a cada move.
+    // Comeca em (0,0). linha <-> y (NORTE/SUL), coluna <-> x (LESTE/OESTE).
+    int t_linha = 0, t_coluna = 0;
+
     while(1) {
         vTaskDelay(pdMS_TO_TICKS(1500));
         play_tone(A3_FREQ, TEMPO);
@@ -192,9 +204,24 @@ void app_main(void){
         // Tenta pegar a chave dos motores
         if (motor_mutex != NULL && xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) {
             movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
-            
+
             // Devolve a chave após terminar de mover a célula
             xSemaphoreGive(motor_mutex);
+
+            // [TESTE #15] avanca a celula na direcao atual e envia ao frontend.
+            switch (pose.orientacao) {
+                case NORTE: t_linha++;  break;
+                case SUL:   t_linha--;  break;
+                case LESTE: t_coluna++; break;
+                case OESTE: t_coluna--; break;
+                default: break;
+            }
+            // nivel_bateria: placeholder 100%% (o INA226 e lido pela telemetry_task
+            // via I2C; evitamos ler aqui para nao concorrer no barramento).
+            // velocidade: pose.vm (m/s) calculada pela odometria.
+            telemetria_envia(t_linha, t_coluna, 100.0f, pose.vm);
+            ESP_LOGI(TAG, "[TESTE #15] enviado -> linha=%d coluna=%d vel=%.2f m/s",
+                     t_linha, t_coluna, pose.vm);
         }
     }
 }
