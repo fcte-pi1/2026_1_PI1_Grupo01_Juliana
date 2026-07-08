@@ -1,4 +1,6 @@
 //codigo feito para testar integração odometria+sensores
+// FUNCOES RELACIONADAS AO SENSOR DE POTENCIA ESTAO COMENTADAS
+// POR ENQUANTO
 
 #include <stdio.h>
 
@@ -162,6 +164,11 @@ void app_main(void){
     IR_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
     
     odometria_pos_init(&pose, 0, 0, NORTE);
+
+    navigation_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
+
+    IR_init();
+
 
     motorR = (motor_t){
         PWM_R1,

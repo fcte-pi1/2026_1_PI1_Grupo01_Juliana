@@ -7,6 +7,7 @@ idf_component_register(SRCS "teste_navegacao.c"
                         m_driver
                         encoder
                         infrared
+                        navigation
                         esp_driver_ledc
                         telemetry_data_nvs
                         seletor_modo

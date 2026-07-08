@@ -98,6 +98,15 @@ float mouse_get_linear_speed(encoder_t *encR, encoder_t *encL, int64_t dt){
 
 }
 
+float mouse_get_linear_speed(encoder_t *encR, encoder_t *encL, float dt){
+    float   spdR = encoder_get_v(encR, dt, RAIO_R),
+            spdL = encoder_get_v(encL, dt, RAIO_R);
+        
+    float lin_spd = (spdR + spdL)/2;
+
+    return lin_spd;
+}
+
 //funcoes de movimentacao
 
 #define CELULA_MIN_FRAC 0.70f
