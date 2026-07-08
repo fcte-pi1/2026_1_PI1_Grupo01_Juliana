@@ -85,7 +85,7 @@ void start_mission(){
     play_tone(A4_FREQ, TEMPO);
 
     //step 1
-   movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+   movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose, NULL);
 
    play_tone(A4_FREQ, TEMPO);
 

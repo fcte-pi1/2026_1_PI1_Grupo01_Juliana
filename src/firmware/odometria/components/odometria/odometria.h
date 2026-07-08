@@ -1,9 +1,9 @@
 #ifndef ODOMETRIA_H
 #define ODOMETRIA_H
 
-#define L_CELULA_CM 0.156 // lado da celula do labirinto [m]
+#define L_CELULA_CM 0.180 // lado da celula do labirinto [m]
 #define RAIO_R 0.017 // raio das rodas [m]
-#define W_EIXOS 0.110 // distancia entre os eixos [m]
+#define W_EIXOS 0.100 // distancia entre os eixos [m]
 
 typedef enum{
     NORTE = 0,

@@ -12,8 +12,9 @@
 
 
 //talvez mudar para BASE_SPD
-#define MOTOR_FWD_SPD 50 
-#define MOTOR_BWD_SPD 50
+#define MOTOR_FWD_SPD 40
+#define MOTOR_BWD_SPD 40
+#define MOTOR_RE_SPD  30
 
 #include<stdint.h>
 #include<stdbool.h>

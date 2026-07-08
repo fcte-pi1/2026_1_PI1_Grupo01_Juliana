@@ -27,6 +27,6 @@ float encoder_get_w(encoder_t *encoder, float dt);
 
 float encoder_get_v(encoder_t *encoder, float dt, float raio);
 
-float encoder_get_deslocamento(encoder_t *encoder, float raio);
+float encoder_get_deslocamento(encoder_t *encoder, float raio, int *pulsos_lidos);
 
 #endif

@@ -5,24 +5,26 @@
 #include <stdio.h>
 
 #include "esp_log.h"
+#include "esp_system.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/ledc.h"
-
+ 
 #include "m_driver.h"
 #include "encoder.h"
 #include "odometria.h"
 #include "movimentacao.h"
 #include "power_module.h"
 #include "infrared.h"
-#include "navigation.h"
+#include "seletor_modo.h"
+
+#include "telemetry_data_nvs.h"
+#include "telemetria.h"   // [TESTE #15] telemetria Wi-Fi + WebSocket para o frontend
+#include "robot_state.h"
 
 static const char *TAG = "teste_navegacao";
 
-volatile bool busy = false;
-
-#define BOTAO_SELETOR   GPIO_NUM_25
-#define BUZZER_GPIO     GPIO_NUM_33
+extern SemaphoreHandle_t motor_mutex;
 
 #define A3_FREQ         440
 #define E4_FREQ         659
@@ -30,149 +32,90 @@ volatile bool busy = false;
 
 #define TEMPO           300
 
-// TIPO DE LABIRINTO
-typedef enum{
-    ID4X4 = 0,
-    ID8X8 = 1
-} lab_id_t;
-
-lab_id_t id = ID4X4;
-
 pose_t pose;
 
 encoder_t encoderR;
 encoder_t encoderL;
 
-// ina226_t ina;
+ina226_t ina;
 
-// static i2c_master_bus_handle_t bus_handle;
+static i2c_master_bus_handle_t bus_handle;
 
 motor_t motorR = { .pwm_gpio1 = PWM_R1, .pwm_gpio2 = PWM_R2};
 motor_t motorL = { .pwm_gpio1 = PWM_L1, .pwm_gpio2 = PWM_L2};
 
-TaskHandle_t mission_task_handle;
+// task que reage a interrupcao do botao
+static TaskHandle_t supervisor_handle = NULL;
 
-//INTERRUPCAO SINALIZA TASK DO BOTAO
-static void IRAM_ATTR button_isr_handler(void *arg)
-{
-    if (busy){
-        return;
-    }
+void telemetry_task(void *arg){
+    float voltage_v = 0.0;
+    float current_a = 0.0;
 
-    busy = true;
-
-    BaseType_t high_task_wakeup = pdFALSE;
-
-    vTaskNotifyGiveFromISR(
-        mission_task_handle,
-        &high_task_wakeup
-    );
-
-    if (high_task_wakeup) {
-        portYIELD_FROM_ISR();
-    }
-}
-
-void buzzer_init(){
-
-    ledc_timer_config_t timer = {
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .timer_num = LEDC_TIMER_0,
-        .duty_resolution = LEDC_TIMER_10_BIT,
-        .freq_hz = 1000,
-        .clk_cfg = LEDC_AUTO_CLK
-    };
-
-    ledc_channel_config_t channel = {
-        .gpio_num = BUZZER_GPIO,
-        .speed_mode = LEDC_LOW_SPEED_MODE,
-        .channel = LEDC_CHANNEL_0,
-        .timer_sel = LEDC_TIMER_0,
-        .duty = 512,
-        .hpoint = 0
-    };
-
-    ledc_timer_config(&timer);
-    ledc_channel_config(&channel);
-
-    //iniciando desligado
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-}
-
-void play_tone(uint32_t freq, uint32_t duracao_ms){
-
-    ledc_set_freq(LEDC_LOW_SPEED_MODE, LEDC_TIMER_0, freq);
-
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 512);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-
-    vTaskDelay(pdMS_TO_TICKS(duracao_ms));
-
-    ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, 0);
-
-    ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-}
-
-void set_maze_id(uint8_t id){
-    if(id == ID8X8){
-        id--;
-        play_tone(E4_FREQ, TEMPO);
-
-    } else {
-        id++;
-        play_tone(A4_FREQ, TEMPO);
-        
-    }
-}
-
-//TASK REALIZADA AO RECEBER A INTERRUPCAO DO BOTAO
-void mission_task(void *arg)
-{
     while (1)
     {
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        // 1. Le os dados reais do sensor passando o endereço das variáveis (&)
+        ina226_get_bus_voltage(&ina, &voltage_v);
+        ina226_get_current(&ina, &current_a);
 
-        ESP_LOGI(TAG, "botao pressionado");
+        // 2. Converte os floats (Volts/Amperes) para inteiros (Milivolts/Miliamperes)
+        // O "cast" (uint16_t) garante que o ESP32 descarte as casas decimais corretamente
+        uint16_t voltage_mv = (uint16_t)(voltage_v * 1000.0f);
+        int16_t current_ma = (int16_t)(current_a * 1000.0f);
 
-        set_maze_id(id);
+        // 3. Salva na memória NVS usando a função do Canvas
+        telemetry_save_sample(voltage_mv, current_ma);
 
-        busy = false;
+        // 4. Aguarda 500ms antes de ler novamente (2 amostras por segundo)
+        // Isso evita encher a memória muito rápido
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 
-void app_main(void)
+static void supervisor_task(void *arg)
 {
-    gpio_config_t io_conf = {
-        .pin_bit_mask = (1ULL << BOTAO_SELETOR),
-        .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_NEGEDGE
-    };
+    while (1) {
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-    gpio_config(&io_conf);
+        ESP_LOGI(TAG, "botao pressionado: interrompendo e trocando de modo");
+
+        mouse_break(&motorR, &motorL);
+
+        modo_lab_t novo = seletor_modo_toggle();
+        seletor_modo_sinalizar(novo);
+    }
+}
+
+static const char *reset_motivo_str(void)
+{
+    switch (esp_reset_reason()) {
+        case ESP_RST_POWERON:   return "power-on";
+        case ESP_RST_PANIC:     return "panic";
+        case ESP_RST_INT_WDT:   return "watchdog-interrupt";
+        case ESP_RST_TASK_WDT:  return "watchdog-task";
+        case ESP_RST_WDT:       return "watchdog";
+        case ESP_RST_BROWNOUT:  return "brownout (bateria baixa)";
+        case ESP_RST_SW:        return "software";
+        default:                return "desconhecido";
+    }
+}
+
+void app_main(void){
+
+    ESP_LOGW(TAG, "motivo do ultimo reset: %s (%d)", reset_motivo_str(), (int)esp_reset_reason());
 
     gpio_install_isr_service(0);
 
-    gpio_isr_handler_add(
-        BOTAO_SELETOR,
-        button_isr_handler,
-        NULL
-    );
+    // botao no GPIO 25 (interrupcao) + buzzer no GPIO 33
+    seletor_modo_init(supervisor_handle);    
 
-    buzzer_init();
-
-    // i2c_master_bus_config_t bus_config = {
-    //     .i2c_port = I2C_PORT,
-    //     .sda_io_num = I2C_SDA,
-    //     .scl_io_num = I2C_SCL,
-    //     .clk_source = I2C_CLK_SRC_DEFAULT
-    // };
+    i2c_master_bus_config_t bus_config = {
+        .i2c_port = I2C_PORT,
+        .sda_io_num = I2C_SDA,
+        .scl_io_num = I2C_SCL,
+        .clk_source = I2C_CLK_SRC_DEFAULT
+    };
     
-    // ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &bus_handle));
+    ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, &bus_handle));
     
     play_tone(A4_FREQ, TEMPO);
 
@@ -185,31 +128,41 @@ void app_main(void)
 
     play_tone(A3_FREQ, 50);
 
-    // esp_err_t err = ina226_init(
-    //     &ina, 
-    //     bus_handle,
-    //     INA_ADDRESS, 
-    //     SHUNT, 
-    //     MAX_CURRENT
-    // );
+    esp_err_t err = ina226_init(
+        &ina, 
+        bus_handle,
+        INA_ADDRESS, 
+        SHUNT, 
+        MAX_CURRENT
+    );
     
-    // if (err == ESP_OK) {
-    //     ESP_LOGI(TAG, "INA226 inicializado com sucesso!");
-    // } else {
-    //     ESP_LOGE(TAG, "Falha ao inicializar INA226");
-    // }   
+    if (err == ESP_OK) {
+        ESP_LOGI(TAG, "INA226 inicializado com sucesso!");
+    } else {
+        ESP_LOGE(TAG, "Falha ao inicializar INA226");
+    }   
 
-    // play_tone(E4_FREQ, TEMPO);
+    play_tone(E4_FREQ, TEMPO);
 
     vTaskDelay(pdMS_TO_TICKS(1000));
 
     play_tone(E4_FREQ, 50);
+
+    vTaskDelay(pdMS_TO_TICKS(100));
+
+    play_tone(E4_FREQ, 50);
+
+    ESP_ERROR_CHECK(telemetry_init());
+
+    play_tone(A4_FREQ, TEMPO);
 
     driver_init();
 
     motor_init(&motorR);
     motor_init(&motorL);
 
+    IR_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
+    
     odometria_pos_init(&pose, 0, 0, NORTE);
 
     navigation_init(&motorR, &motorL, &encoderR, &encoderL, &pose);
@@ -235,24 +188,84 @@ void app_main(void)
         motorL.gen2
     };
 
-    //criacao da task sinalizada por interrupcao
+    // o supervisor precisa existir antes de ligar a interrupcao do botao,
+    // pois e ele quem recebe a notificacao da ISR
+    xTaskCreate(supervisor_task, "supervisor_task", 4096, NULL, 4, &supervisor_handle);
+
+    // sinaliza o modo inicial e parte a primeira missao
+    seletor_modo_sinalizar(seletor_modo_get());
+
+    // criacao da task que vai ficar lendo o INA226 e salvando em segundo plano
     xTaskCreate(
-    mission_task,
-    "mission_task",
-    4096,
-    NULL,
-    5,
-    &mission_task_handle
+        telemetry_task,
+        "telemetry_task",
+        4096,
+        NULL,
+        2, // Prioridade baixa, para não atrapalhar os motores e sensores
+        NULL
     );
 
-    while(1){
-        vTaskDelay(pdMS_TO_TICKS(3000));
+    telemetry_print_all();
 
+    ESP_ERROR_CHECK(telemetry_clear());
+
+    // [TESTE #15] Sobe Wi-Fi + WebSocket e abre a corrida no backend.
+    // labirinto_id = 1 (4x4). Best-effort: se nao conectar, telemetria_envia
+    // vira no-op e a navegacao segue normal. Preencher SSID/senha/IP no topo
+    // de components/telemetria/telemetria.c antes de testar.
+    bool tele_ok = telemetria_init(1);
+    ESP_LOGW(TAG, "[TESTE #15] telemetria Wi-Fi conectada: %s", tele_ok ? "SIM" : "NAO");
+
+    robot_state_init(&pose);
+
+    char msg_inicio[80];
+    snprintf(msg_inicio, sizeof(msg_inicio),
+             "Robo iniciado (%s) — aguardando movimento", reset_motivo_str());
+    robot_state_publicar(100.0f, 0.0f, msg_inicio);
+
+    while(1) {
+        vTaskDelay(pdMS_TO_TICKS(1500));
         play_tone(A3_FREQ, TEMPO);
 
-        movimentacao_move_cell(&motorR, &motorL, &encoderR, &encoderL, &pose);
+        // Tenta pegar a chave dos motores
+        if (motor_mutex != NULL && xSemaphoreTake(motor_mutex, portMAX_DELAY) == pdTRUE) {
+            movimentacao_status_t status = MOV_TRAVADO;
+            bool move_ok = movimentacao_move_cell(
+                &motorR, &motorL, &encoderR, &encoderL, &pose, &status);
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+            const char *msg = "Falha ao avancar celula";
+
+            if (move_ok) {
+                msg = "Celula avancada com sucesso";
+            } else if (status == MOV_ABORTADO) {
+                // A tarefa de IR ja publicou a curva; evita mensagem duplicada de falha.
+                xSemaphoreGive(motor_mutex);
+                continue;
+            } else if (status == MOV_AJUSTE_PAREDE) {
+                msg = "Ajustando alinhamento na parede";
+            } else if (status == MOV_TRAVADO) {
+                if (infrared_recuperar_travamento(
+                        &motorR, &motorL, &encoderR, &encoderL, &pose)) {
+                    xSemaphoreGive(motor_mutex);
+                    vTaskDelay(pdMS_TO_TICKS(1000));
+                    continue;
+                }
+                msg = "Travado — recuperacao falhou";
+            }
+
+            const int linha = robot_state_linha();
+            const int coluna = robot_state_coluna();
+            if (linha >= 1 && linha <= 2 && coluna >= 1 && coluna <= 2) {
+                msg = "Chegada ao centro do labirinto";
+            }
+
+            robot_state_publicar(100.0f, pose.vm, msg);
+
+            // Devolve a chave após terminar de mover a célula
+            xSemaphoreGive(motor_mutex);
+
+            ESP_LOGI(TAG, "[TESTE #15] %s -> linha=%d coluna=%d vel=%.2f m/s",
+                     msg, robot_state_linha(), robot_state_coluna(), pose.vm);
+        }
     }
-
 }

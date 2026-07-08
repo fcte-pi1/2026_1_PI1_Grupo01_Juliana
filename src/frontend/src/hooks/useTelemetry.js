@@ -8,6 +8,22 @@ const WS_URL =
   `ws://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:8000/ws/telemetria`;
 
 const RECONEXAO_MS = 2000;
+const MAX_LOGS = 50;
+
+function mensagemDoEvento(evento) {
+  if (typeof evento.mensagem === 'string' && evento.mensagem.trim()) {
+    return evento.mensagem.trim();
+  }
+  const pos = `(${evento.posicao_x}, ${evento.posicao_y})`;
+  const ori = evento.orientacao ? ` · ${evento.orientacao}` : '';
+  return `Posição ${pos}${ori}`;
+}
+
+function formatarHorarioLog(timestamp) {
+  const data = Date.parse(timestamp);
+  if (Number.isNaN(data)) return '--:--:--';
+  return new Date(data).toLocaleTimeString('pt-BR', { hour12: false });
+}
 
 export const STATUS = {
   conectando: 'conectando',
@@ -131,11 +147,19 @@ export default function useTelemetry(size) {
     return {
       trajeto,
       posicaoAtual: ultimo ? { x: ultimo.posicao_x, y: ultimo.posicao_y } : null,
+      orientacao: ultimo?.orientacao ?? null,
       bateria: ultimo ? ultimo.nivel_bateria : null,
       velocidadeMedia,
       tempo: formatarTempo(segundos),
       desafioCumprido: trajeto.some((p) => ehChegada(p.x, p.y, size)),
       totalEventos: eventos.length,
+      logs: eventos.slice(-MAX_LOGS).map((evento, idx) => ({
+        id: evento.id ?? `${evento.timestamp}-${idx}`,
+        horario: formatarHorarioLog(evento.timestamp),
+        mensagem: mensagemDoEvento(evento),
+        orientacao: evento.orientacao ?? null,
+        posicao: { x: evento.posicao_x, y: evento.posicao_y },
+      })),
     };
   }, [eventos, size]);
 
