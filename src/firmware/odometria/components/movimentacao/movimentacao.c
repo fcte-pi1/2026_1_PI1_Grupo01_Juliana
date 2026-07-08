@@ -14,15 +14,21 @@ static const char *TAG = "movimentacao";
 
 volatile bool motion_abort = false;
 
-// Ganhos do Controlador PD (Sera ajustado experimentalmente)
-#define KP_RETA 7.0f
-#define KD_RETA 2.0f
+// --- Ganhos do controlador PD do trecho reto ---
+// IMPORTANTE: o erro de alinhamento (desloc_R - desloc_L) e convertido para
+// CENTIMETROS antes de multiplicar pelos ganhos. O encoder devolve o
+// deslocamento em METROS (~0,0107 m/pulso); sem essa conversao o erro ficava
+// ~100x menor e a correcao (int) era truncada para 0 — o PD nao atuava.
+// Ajuste experimental: aumente KP se o robo abrir/derivar, reduza se oscilar.
+#define KP_RETA 6.0f   // PWM por cm de diferenca entre as rodas
+#define KD_RETA 2.0f   // PWM por (cm/amostra) de variacao do erro
 
-// Ganhos para curva de 90 graus
-#define KP_CURVA 80.0f
-// PWM reduzido nas curvas de recuperacao (evita brownout apos travamento).
-#define PWM_CURVA_REC 35
-#define MIN_PWM_CURVA_REC 28
+// --- Curva de 90 graus (controle P com perfil trapezoidal) ---
+#define KP_CURVA           100.0f // PWM por rad de erro angular restante
+#define PWM_CURVA_MAX      50      // teto de PWM (inicio da curva, vence o atrito)
+#define PWM_CURVA_MIN      30      // piso de PWM (acima do deadband 25 do driver)
+#define THETA_CURVA_MARGIN 0.10f   // rad (~6 graus) reservados p/ a inercia pos-freio
+#define TIMEOUT_CURVA_MS   2000    // aborta a curva se travar
 
 //funcoes especificas 
 
@@ -178,6 +184,12 @@ bool movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     
     motion_abort = false; // Reseta a flag ao iniciar
 
+    // Zera os contadores para o deslocamento comecar do zero. Sem isso, pulsos
+    // residuais de manobras anteriores entram na primeira leitura e corrompem
+    // tanto a distancia quanto o erro do PD.
+    encoder_clean(encR);
+    encoder_clean(encL);
+
     mouse_movefwd(mtrR, mtrL);
 
     while(desloc < target){
@@ -219,32 +231,36 @@ bool movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
         }
 
         // --- CONTROLE PD PARA ALINHAMENTO EM LINHA RETA ---
-        
-        // O erro é a diferença de deslocamento entre as rodas. 
-        // Se erro > 0, a roda R andou mais (robô curvando pra esquerda)
-        // Se erro < 0, a roda L andou mais (robô curvando pra direita)
-        erro = desloc_R - desloc_L;
-        
-        // Calcula a taxa de variação do erro (derivada)
+
+        // O erro é a diferença de deslocamento entre as rodas, em CENTIMETROS.
+        // erro > 0: a roda R andou mais (robô desviando para a esquerda)
+        // erro < 0: a roda L andou mais (robô desviando para a direita)
+        erro = (desloc_R - desloc_L) * 100.0f;
+
+        // Calcula a taxa de variação do erro (derivada discreta)
         derivativo = erro - erro_anterior;
-        
-        // Calcula o esforço de controle
+
+        // Calcula o esforço de controle (PD)
         correcao = (KP_RETA * erro) + (KD_RETA * derivativo);
-        
-        // Aplica a correção nos motores.
-        // Se R está na frente (erro positivo, correção positiva), freia R e acelera L.
-        int pwmL = motor_speed + (int)correcao;
-        int pwmR = motor_speed - (int)correcao;
-        
-        // Limita o PWM para não ultrapassar 100% ou inverter a polaridade
+
+        // Aplica a correção: freia a roda adiantada e acelera a atrasada.
+        // Arredonda (lroundf) em vez de truncar para não perder autoridade
+        // quando a correção é pequena.
+        const int corr = (int)lroundf(correcao);
+        int pwmL = motor_speed + corr;
+        int pwmR = motor_speed - corr;
+
+        // Limita ao intervalo válido de PWM (0..100). Obs.: o driver tem
+        // deadband de 25 — valores 1..24 apenas fazem a roda "coast" (desacelera
+        // livre), o que ainda contribui para corrigir a trajetória.
         if (pwmL > 100) pwmL = 100;
-        if (pwmL < 0) pwmL = 0;
+        if (pwmL < 0)   pwmL = 0;
         if (pwmR > 100) pwmR = 100;
-        if (pwmR < 0) pwmR = 0;
+        if (pwmR < 0)   pwmR = 0;
 
         motor_set_speed(mtrL, pwmL);
         motor_set_speed(mtrR, pwmR);
-        
+
         // Atualiza o erro anterior
         erro_anterior = erro;
 
@@ -304,46 +320,51 @@ bool movimentacao_move_cell(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     return false;
 }
 
-void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
+// Rotina única de curva de 90 graus.
+//   dir = +1  -> horária      (R para trás, L para frente)
+//   dir = -1  -> anti-horária (R para frente, L para trás)
+// Controle P: o PWM cai proporcionalmente ao ângulo restante (desacelera antes
+// de parar), saturado entre PWM_CURVA_MIN e PWM_CURVA_MAX. O laço termina um
+// pouco antes de 90° (THETA_CURVA_MARGIN) para compensar a inércia após o freio.
+static void movimentacao_turn(motor_t *mtrR, motor_t *mtrL,
+                              encoder_t *encR, encoder_t *encL,
+                              pose_t *pos, int dir)
+{
+    const float target_theta = (float)M_PI / 2.0f;
+    const float alvo_loop = target_theta - THETA_CURVA_MARGIN;
 
-    float target_theta = M_PI/2.0f;
-    float theta = 0, desloc_R = 0, desloc_L = 0;
-    float erro = target_theta;
-    int pwm = MOTOR_BWD_SPD;
-
-    // Proteção contra travamento na curva (limite de 2 segundos para 90 graus)
+    float theta = 0.0f, desloc_R = 0.0f, desloc_L = 0.0f;
     uint32_t tempo_decorrido_ms = 0;
-    const uint32_t TIMEOUT_CURVA_MS = 2000;
 
     gpio_set_level(SEL, 0); // garantir que o freio esta desativado
 
-    while (theta < target_theta){
-        // Usando fabs para garantir a soma absoluta, já que o encoder não tem direção
-        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R, NULL));
-        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R, NULL));
-        
-        theta = (desloc_R + desloc_L)/W_EIXOS;
-        
-        // Calcula o erro restante para chegar a 90 graus
-        erro = target_theta - theta;
+    // Zera os contadores: a curva começa do repouso, sem pulsos residuais da
+    // manobra anterior (que dariam um salto no primeiro cálculo de theta).
+    encoder_clean(encR);
+    encoder_clean(encL);
 
-        // Diminui o PWM proporcionalmente à medida que se aproxima do alvo
-        pwm = (int)(KP_CURVA * erro);
+    while (theta < alvo_loop) {
+        // fabsf: o encoder não distingue sentido e as rodas giram opostas.
+        desloc_R += fabsf(encoder_get_deslocamento(encR, RAIO_R, NULL));
+        desloc_L += fabsf(encoder_get_deslocamento(encL, RAIO_R, NULL));
 
-        // Saturação superior e inferior (Deadband)
-        if (pwm > PWM_CURVA_REC) pwm = PWM_CURVA_REC;
-        if (pwm < MIN_PWM_CURVA_REC) pwm = MIN_PWM_CURVA_REC;
+        theta = (desloc_R + desloc_L) / W_EIXOS;
 
-        // Aplica PWM diretamente (Curva horária: R para trás, L para frente)
-        motor_set_speed(mtrR, -pwm);
-        motor_set_speed(mtrL, pwm);
+        // Erro angular restante -> quanto menor, menor o PWM (desacelera no fim).
+        const float erro = alvo_loop - theta;
+        int pwm = (int)(KP_CURVA * erro);
+        if (pwm > PWM_CURVA_MAX) pwm = PWM_CURVA_MAX;
+        if (pwm < PWM_CURVA_MIN) pwm = PWM_CURVA_MIN;
 
-        vTaskDelay(pdMS_TO_TICKS(10)); // Amostragem rápida para não perder o ponto
+        motor_set_speed(mtrR, (dir > 0) ? -pwm :  pwm);
+        motor_set_speed(mtrL, (dir > 0) ?  pwm : -pwm);
 
+        vTaskDelay(pdMS_TO_TICKS(10)); // amostragem rápida p/ não perder o alvo
         tempo_decorrido_ms += 10;
 
         if (tempo_decorrido_ms >= TIMEOUT_CURVA_MS) {
-            ESP_LOGW(TAG, "STALL DETECTED: Timeout na curva direita!");
+            ESP_LOGW(TAG, "STALL DETECTED: timeout na curva %s!",
+                     (dir > 0) ? "horaria" : "anti-horaria");
             break;
         }
     }
@@ -352,55 +373,16 @@ void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encod
     encoder_clean(encR);
     encoder_clean(encL);
 
-    odometria_mudar_sentido(pos, 1);
-    ESP_LOGI(TAG, "virou 90 graus para a direita. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
+    odometria_mudar_sentido(pos, (dir > 0) ? 1 : 0);
+    ESP_LOGI(TAG, "virou 90 graus (%s). orientacao atual: %s, angulo(rad): %f",
+             (dir > 0) ? "horario" : "anti-horario",
+             odometria_orientacao_string(pos->orientacao), theta);
+}
 
+void movimentacao_turn_clws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
+    movimentacao_turn(mtrR, mtrL, encR, encL, pos, +1);
 }
 
 void movimentacao_turn_ctclws(motor_t *mtrR, motor_t *mtrL, encoder_t *encR, encoder_t *encL, pose_t *pos){
-
-    float target_theta = M_PI/2.0f;
-    float theta = 0, desloc_R = 0, desloc_L = 0;
-    float erro = target_theta;
-    int pwm = MOTOR_BWD_SPD;
-
-    uint32_t tempo_decorrido_ms = 0;
-    const uint32_t TIMEOUT_CURVA_MS = 2000;
-
-    gpio_set_level(SEL, 0); // garantir que o freio esta desativado
-
-    while (theta < target_theta){
-        desloc_R += fabs(encoder_get_deslocamento(encR, RAIO_R, NULL));
-        desloc_L += fabs(encoder_get_deslocamento(encL, RAIO_R, NULL));
-        
-        theta = (desloc_R + desloc_L)/W_EIXOS;
-        
-        erro = target_theta - theta;
-
-        pwm = (int)(KP_CURVA * erro);
-
-        if (pwm > PWM_CURVA_REC) pwm = PWM_CURVA_REC;
-        if (pwm < MIN_PWM_CURVA_REC) pwm = MIN_PWM_CURVA_REC;
-
-        // Aplica PWM diretamente (Curva anti-horária: R para frente, L para trás)
-        motor_set_speed(mtrR, pwm);
-        motor_set_speed(mtrL, -pwm);
-
-        vTaskDelay(pdMS_TO_TICKS(10));
-
-        tempo_decorrido_ms += 10;
-
-        if (tempo_decorrido_ms >= TIMEOUT_CURVA_MS) {
-            ESP_LOGW(TAG, "STALL DETECTED: Timeout na curva esquerda!");
-            break;
-        }
-    }
-
-    mouse_break(mtrR, mtrL);
-    encoder_clean(encR);
-    encoder_clean(encL);
-
-    odometria_mudar_sentido(pos, 0);
-    ESP_LOGI(TAG, "virou 90 graus para a esquerda. orientacao atual: %s, angulo(rad): %f", odometria_orientacao_string(pos->orientacao), theta);
-
+    movimentacao_turn(mtrR, mtrL, encR, encL, pos, -1);
 }
