@@ -4,7 +4,7 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/diagrama_micromouse_v2.drawio.png}
+    \includegraphics[width=0.5\linewidth]{figuras/diagrama_micromouse_final.drawio(1).png}
     \caption{Diagrama de blocos dos componentes eletrônicos do \textit{micromouse}}
     \label{fig:diag_hw}
 \end{figure}
@@ -13,28 +13,28 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/SCH_topmodule_1-P1_2026-06-08.png}
+    \includegraphics[width=0.5\linewidth]{figuras/SCH_topmodule_1-P1_2026-07-08.png}
     \caption{Representação da Ligação dos Componentes no Microcontrolador}
     \label{fig:esq_topmodule}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/SCH_sensores_1-P1_2026-06-08.png}
+    \includegraphics[width=0.5\linewidth]{figuras/SCH_sensores_1-P1_2026-07-08.png}
     \caption{Representação Esquemática dos Sensores}
     \label{fig:esq_sensores}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/SCH_motores_driver_1-P1_2026-06-08.png}
+    \includegraphics[width=0.5\linewidth]{figuras/SCH_motores_driver_1-P1_2026-07-08.png}
     \caption{Representação Esquemática do Driver e Motores}
     \label{fig:esq_motores}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-06-08.png}
+    \includegraphics[width=0.5\linewidth]{figuras/SCH_modulo_de_alimentacao_1-P1_2026-07-08.png}
     \caption{Representação Esquemática da Alimentação do \textit{Micromouse}}
     \label{fig:esq_alimentacao}
 \end{figure}
@@ -65,32 +65,17 @@ Artigo base: \cite{lima2025_micromouse_lm393}
 
 % Fonte: \cite{eletrogate_bussola}
 
-\subsection{Giroscópio e Acelerômetro (MPU6050)}
-O módulo MPU6050 foi escolhido por sua praticidade na identifica\c{c}\~ao da orienta\c{c}\~ao relativa do rob\^o durante a navega\c{c}\~ao. No contexto do Micromouse, esse tipo de sensor pode ser usado como apoio para ajustar a virada do rob\^o ap\'os manobras de 90\textdegree\ ou 180\textdegree, ajudando a reduzir desvios acumulados e a confirmar se a mudan\c{c}a de dire\c{c}\~ao ocorreu de forma consistente com o comando enviado aos motores. Para este projeto, o sensor atuará como uma camada de redundância às informações obtidas pelos Encoders. Al\'em disso, por se tratar de um m\'odulo pequeno, de f\'acil integra\c{c}\~ao via I\textsuperscript{2}C e baixo consumo, sua utiliza\c{c}\~ao favorece a montagem do sistema embarcado sem aumento significativo de complexidade.
-
 \subsection{Driver Ponte H (DRV8833)}
 
 O driver DRV8833 foi escolhido por permitir o controle independente de dois motores DC, oferecendo controle de velocidade e direção através de PWM. O componente apresenta baixo consumo energético, suporte a tensões compatíveis com o ESP32 e mecanismos internos de proteção contra sobrecorrente e superaquecimento, aumentando a segurança do sistema. Conforme descrito na documentação técnica da Texas Instruments e em aplicações embarcadas similares, o DRV8833 é amplamente utilizado em robôs móveis compactos devido à sua eficiência energética e tamanho reduzido.
 
 Artigo base: \cite{oliveira2024_esp32_roboticar}
 
-\subsection{Conversor Analógico-Digital (ADS1115)}
-
-O ADC interno do ESP32, apesar de dispon\'ivel, apresenta caracter\'isticas limitantes que comprometem a precis\~ao das medi\c{c}\~oes: n\~ao linearidade pronunciada, grande erro nas leituras fora da faixa recomendada, ru\'ido excessivo quando o Wi-Fi est\'a ativo e varia\c{c}\~ao significativa entre chips individuais. Portanto, foi escolhido o conversor anal\'ogico-digital externo ADS1115, que oferece resolu\c{c}\~ao de 16 bits (64 vezes superior aos 10 bits internos), linearidade consistente e m\'inimo ru\'ido intr\'inseco. Essa maior precis\~ao \'e essencial para a leitura confi\'avel de sensores anal\'ogicos como o sensor de corrente ACS712 (monitoramento do consumo energ\'etico) e o divisor de tens\~ao para aferimento do n\'ivel de bateria, permitindo detec\c{c}\~ao de varia\c{c}\~oes pequenas sem a degrada\c{c}\~ao causada pelo Wi-Fi. O ADS1115 oferece comunica\c{c}\~ao I2C, permitindo endere\c{c}amento m\'ultiplo e liga\c{c}\~ao simples ao ESP32, al\'em de PGA (Programmable Gain Amplifier) program\'avel por software para otimizar o ganho conforme o range de tens\~ao de cada sensor. Com amostragem de at\'e 860 amostras por segundo, o ADS1115 atende aos requisitos de taxa de coleta do projeto sem comprometer a precis\~ao das leituras.
-
-Fontes: \cite{makerhero_ads1115}, \cite{embarcados_esp32_adc}
-
 \subsection{Regulador de Tensão Step-Down (LM2596)}
 
 O módulo regulador LM2596 foi adotado para garantir estabilidade na alimentação elétrica do sistema, realizando a conversão eficiente da tensão fornecida pela bateria para níveis adequados aos demais componentes eletrônicos. De acordo com o artigo do CONICT do IFSP, o LM2596 é amplamente empregado em sistemas embarcados por apresentar boa eficiência energética, baixo custo e facilidade de integração. Sua utilização contribui para a proteção dos circuitos e para o funcionamento estável do microcontrolador e dos sensores.
 
 Artigo base: \cite{oliveira2024_esp32_roboticar}
-
-\subsection{Sensor de Tensão 0--25V (FZ0430)}
-
-O sensor de tens\~ao FZ0430 foi escolhido para o monitoramento do n\'ivel de bateria do sistema, funcionando como divisor de tens\~ao com resist\^encia de 30~k$\Omega$ e 7,5~k$\Omega$. Sua capacidade de medir tens\~oes de at\'e 25 V em corrente direta torna-o adequado para a leitura da bateria do Micromouse, permitindo que o sistema embarcado detecte varia\c{c}\~oes no n\'ivel de carga e dispare alertas de bateria baixa antes que o rob\^o sofra desliga\c{c}\~oes inesperadas. Ao conectar-se diretamente entre o positivo e o negativo da bateria, o sensor fornece uma medi\c{c}\~ao simples, direta e confi\'avel que, quando condicionada pelo ADS1115, possibilita uma est\'imativa precisa do percentual de carga dispon\'ivel para comunica\c{c}\~ao ao operador e ao painel web de telemetria.
-
-Artigo base:~\cite{valdovinos2019instrumentacion}
 
 \subsection{Chave Óptica para Encoder (MOCH22A)}
 
@@ -100,11 +85,13 @@ Embora a refer\^encia base utilize Arduino, o princ\'ipio de funcionamento \^e d
 
 Fontes:~\cite{makerhero_moch22a}, \cite{petercorke}
 
-\subsection{Sensor de Corrente (ACS712)}
+\subsection{Sensor de Potência (INA226)}
 
-O sensor ACS712 foi escolhido para o monitoramento do consumo energ\'etico do Micromouse, utilizando efeito Hall para detectar o campo magn\'etico produzido pela indu\c{c}\~ao de corrente nos circuitos de pot\^encia. A vers\~ao ACS712-05A, capaz de medir correntes de at\'e 5 A, \`e apropriada para o consumo esperado dos motores DC e dos demais componentes da plataforma. Ao ser inserido entre o positivo da bateria e os circuitos consumidores, o sensor fornece uma leitura cont\'inua e precisa do fluxo de corrente, possibilitando ao sistema embarcado calcular a pot\^encia instant\^anea consumida, estimar a autonomia restante baseada no consumo real e identificar anomalias ou consumos excessivos. Integrado ao ADS1115 para melhor resolu\c{c}\~ao das medi\c{c}\~oes, esse sensor contribui para a intelig\^encia energ\'etica do rob\^o e para o envio de dados de consumo ao painel de telemetria.
+O sensor de potência INA226 foi escolhido para substituir os sensores individuais de tensão e corrente e realizar o monitoramento do consumo energético com mais precisão e economia de espaço. Este sensor realiza suas leituras e as armazena em registradores próprios no chip do sensor, bastando apenas selecionar o registrador da grandeza desejada para obter a sua leitura. Isso é um fator decisivo para a gestão de processamento do projeto. Além disso, o sensor trabalha com comunicação I²C, possibilitando comunicação rápida e robusta com a ESP32.
 
-Artigo base:~\cite{valdovinos2019instrumentacion}
+\subsection{Porta Lógica 74HC32 (OU lógico)}
+
+Este Circuito Integrado foi escolhido com a finalidade de realizar a multiplexação das entradas do driver DRV8833, visto que, para obter o freio ativo deste, era necessário que as entradas fossem 1 lógico (ou "high"). Assim, multiplexando as entradas da ponte H, evita-se que os GPIOs da ESP tenham de ser reconfigurados frequentemente entre GPIOs PWM e GPIOs comuns, economizando processamento e linhas de código desnecessárias. 
 
 \subsection{Buzzer Passivo}
 
