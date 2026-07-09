@@ -2,7 +2,7 @@
 
 \section{Características gerais}
 
-O projeto tem como foco o desenvolvimento de um robô autônomo capaz de mapear e solucionar labirintos desconhecidos de dimensões 4 x 4, 8 x 8 e 16 x 16 células no menor tempo possível. O sistema integra um chassi, hardware de controle baseado em ESP32, algoritmos de navegação e um sistema web para transmissão de telemetria em tempo real. A seguir, a figura \ref{fig:eap_micromouse} representa a EAP do projeto que detalha a subdivisão de pacotes de trabalho nas frentes de Estrutura, Hardware, Energia e Software.
+O projeto tem como foco o desenvolvimento de um robô autônomo capaz de mapear e solucionar labirintos desconhecidos de dimensões 4x4 e 8x8 células no menor tempo possível. O sistema integra um chassi, hardware de controle baseado em ESP32, algoritmos de navegação e um sistema web para transmissão de telemetria em tempo real. A seguir, a figura \ref{fig:eap_micromouse} representa a EAP do projeto que detalha a subdivisão de pacotes de trabalho nas frentes de Estrutura, Hardware, Energia e Software.
 
 \begin{landscape}
     \begin{figure}[htpb]
@@ -125,84 +125,84 @@ fabricação do chassi pelos seguintes motivos, considerando suas propriedades m
 % \end{table}
 
 
-\subsection{Labirinto Modular de Testes (4×4)}
+% \subsection{Labirinto Modular de Testes (4×4)}
 
-O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da competição, permitindo a calibração de sensores e o aprimoramento do algoritmo de navegação do robô. 
-Trata-se de um ambiente físico que reproduz fielmente as medidas e características oficiais do torneio: malhas de células quadradas com $18\text{ cm}$ de lado cada, delimitadas por paredes de
- $5\text{ cm}$ de altura por $1,2\text{ cm}$ de espessura. Visualmente, o labirinto adota o padrão da categoria, com piso fosco na cor preta, paredes brancas com ótima refletividade para o sensoriamento
-  \textit{infravermelho} e topos pintados na cor vermelha, criando um contraste e respeitando o regulamento. 
+% O labirinto de testes 4×4 foi projetado para simular o ambiente rigoroso da competição, permitindo a calibração de sensores e o aprimoramento do algoritmo de navegação do robô. 
+% Trata-se de um ambiente físico que reproduz fielmente as medidas e características oficiais do torneio: malhas de células quadradas com $18\text{ cm}$ de lado cada, delimitadas por paredes de
+%  $5\text{ cm}$ de altura por $1,2\text{ cm}$ de espessura. Visualmente, o labirinto adota o padrão da categoria, com piso fosco na cor preta, paredes brancas com ótima refletividade para o sensoriamento
+%   \textit{infravermelho} e topos pintados na cor vermelha, criando um contraste e respeitando o regulamento. 
 
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/visao_geral.jpeg}
-    \caption{Labirinto modular 4×4 de testes. Dimensões externas:
-             72 cm × 72 cm. Paredes brancas com topos vermelhos;
-             piso preto.}
-    \label{fig:labirinto_completo}
-\end{figure}
-
-% ------------------------------------------------------------------
-% FIGURA — Detalhe do sistema de encaixe entre módulos
-% ------------------------------------------------------------------
 
 % \begin{figure}[htbp]
 %     \centering
-%     \includegraphics[width=0.8\linewidth]{figuras/labirinto_encaixe}
-%     \caption{Detalhe do sistema de encaixe entre os módulos de parede.
-%              A folga projetada (tipicamente na ordem de 0,3 a 0,5 mm) garante montagem sem ferramentas
-%              e desmontagem rápida para reconfiguração do labirinto.}
-%     \label{fig:labirinto_encaixe}
+%     \includegraphics[width=0.8\linewidth]{figuras/visao_geral.jpeg}
+%     \caption{Labirinto modular 4×4 de testes. Dimensões externas:
+%              72 cm × 72 cm. Paredes brancas com topos vermelhos;
+%              piso preto.}
+%     \label{fig:labirinto_completo}
 % \end{figure}
 
+% % ------------------------------------------------------------------
+% % FIGURA — Detalhe do sistema de encaixe entre módulos
+% % ------------------------------------------------------------------
 
-\begin{table}[htbp]
-    \centering
-    \caption{Dimensões do labirinto de testes e correspondência com
-             as regras da competição.}
-    \label{tab:dimensoes_labirinto}
-    \begin{tabular}{lccc}
-        \hline
-        \textbf{Parâmetro}            & \textbf{Regra (competição)} & \textbf{Projetado} & \textbf{Tolerância} \\ \hline
-        Lado da célula                & 180 mm                       & 180 mm              & ±0 mm              \\
-        Altura da parede              & 50 mm                        & 50 mm              & ±0 mm              \\
-        Espessura da parede           & 12 mm                        & 12 mm              & ±0 mm              \\
-        Dimensão total do labirinto   & 720 mm × 720 mm              & 720 mm × 720 mm     & ±0 mm              \\
-        \hline
-    \end{tabular}
-\end{table}
+% % \begin{figure}[htbp]
+% %     \centering
+% %     \includegraphics[width=0.8\linewidth]{figuras/labirinto_encaixe}
+% %     \caption{Detalhe do sistema de encaixe entre os módulos de parede.
+% %              A folga projetada (tipicamente na ordem de 0,3 a 0,5 mm) garante montagem sem ferramentas
+% %              e desmontagem rápida para reconfiguração do labirinto.}
+% %     \label{fig:labirinto_encaixe}
+% % \end{figure}
 
-\subsubsection{Decisões de Modularidade}
 
-O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos
-cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
+% \begin{table}[htbp]
+%     \centering
+%     \caption{Dimensões do labirinto de testes e correspondência com
+%              as regras da competição.}
+%     \label{tab:dimensoes_labirinto}
+%     \begin{tabular}{lccc}
+%         \hline
+%         \textbf{Parâmetro}            & \textbf{Regra (competição)} & \textbf{Projetado} & \textbf{Tolerância} \\ \hline
+%         Lado da célula                & 180 mm                       & 180 mm              & ±0 mm              \\
+%         Altura da parede              & 50 mm                        & 50 mm              & ±0 mm              \\
+%         Espessura da parede           & 12 mm                        & 12 mm              & ±0 mm              \\
+%         Dimensão total do labirinto   & 720 mm × 720 mm              & 720 mm × 720 mm     & ±0 mm              \\
+%         \hline
+%     \end{tabular}
+% \end{table}
 
-A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dimensões da competição, é essencial para transferir rigidez à estrutura de cada módulo.
+% \subsubsection{Decisões de Modularidade}
 
-Essa abordagem de separação célula a célula oferece total liberdade na criação dos trajetos. A constante possibilidade de reconfigurar o layout do labirinto atende à necessidade da equipe de software de validar diferentes hipóteses para os algoritmos de mapeamento e navegação de maneira fácil. Ao finalizar os testes, a desmontagem resulta em peças de pequeno porte, garantindo total facilidade de transporte e armazenamento compacto do projeto.
+% O projeto do labirinto foi concebido com foco na modularidade, permitindo a rápida construção e reconfiguração de diversos
+% cenários para testes. Para isso, cada parede de cada célula foi fabricada como uma peça individual, dispondo de um sistema de encaixe (\textit{press-fit} ou por pinos/ranhuras) direto nos módulos de chão.
 
-\subsubsection{Justificativa do Material — Madeira (MDF)}
+% A espessura de $12\text{ mm}$ adotada para as paredes, além de respeitar as dimensões da competição, é essencial para transferir rigidez à estrutura de cada módulo.
 
-O material selecionado para as paredes e base do labirinto de testes
-foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\text{ mm}$ pelos seguintes motivos, com forte apelo às decisões de modularidade do projeto:
+% Essa abordagem de separação célula a célula oferece total liberdade na criação dos trajetos. A constante possibilidade de reconfigurar o layout do labirinto atende à necessidade da equipe de software de validar diferentes hipóteses para os algoritmos de mapeamento e navegação de maneira fácil. Ao finalizar os testes, a desmontagem resulta em peças de pequeno porte, garantindo total facilidade de transporte e armazenamento compacto do projeto.
 
-\begin{itemize}
-    \item \textbf{Baixo custo e disponibilidade:}
-          O MDF é facilmente encontrado em qualquer marcenaria ou móveis não utilizados, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
+% \subsubsection{Justificativa do Material — Madeira (MDF)}
 
-    \item \textbf{Rigidez e estabilidade dimensional:}
-          Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado, o que favorece um comportamento estrutural mais uniforme e compatível com aplicações que exigem rigidez e resistência mecânica \cite{sliseris2014mdf_strength}.
+% O material selecionado para as paredes e base do labirinto de testes
+% foi o \textbf{MDF (\textit{Medium Density Fiberboard})} de $12\text{ mm}$ e $6\text{ mm}$ pelos seguintes motivos, com forte apelo às decisões de modularidade do projeto:
 
-    \item \textbf{Facilidade de fabricação e acabamento:}
-          Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, é facilmente cortado e usinado com ferramentas comuns, facilitando a produção em série dos módulos de parede e chão.
+% \begin{itemize}
+%     \item \textbf{Baixo custo e disponibilidade:}
+%           O MDF é facilmente encontrado em qualquer marcenaria ou móveis não utilizados, possuindo um custo-benefício excelente para a construção de dezenas de módulos de parede idênticos, viabilizando o projeto de um labirinto versátil.
 
-    \item \textbf{Massa e praticidade:}
-          Os blocos modulares em MDF possuem massa confortável para o manuseio rápido, visto que um dos focos da modularidade é permitir a rápida reconfiguração.
-\end{itemize}
+%     \item \textbf{Rigidez e estabilidade dimensional:}
+%           Sendo um painel de fibras de média densidade, ele não apresenta veios direcionais como a madeira maciça ou compensado, o que favorece um comportamento estrutural mais uniforme e compatível com aplicações que exigem rigidez e resistência mecânica \cite{sliseris2014mdf_strength}.
 
-\subsubsection{Acabamento Superficial}
+%     \item \textbf{Facilidade de fabricação e acabamento:}
+%           Por possuir uma superfície lisa, o MDF permite um excelente acabamento em pintura (necessário para a leitura do sensor IR nas cores branco e vermelho). Além disso, é facilmente cortado e usinado com ferramentas comuns, facilitando a produção em série dos módulos de parede e chão.
 
-Para satisfazer o regulamento, está previsto que as faces laterais das paredes modulares recebam pintura em esmalte ou tinta acrílica branca, garantindo reflectância para os emissores infravermelhos. O topo das paredes deverá ser pintado de vermelho, demarcando visualmente os limites. Por fim, planeja-se que o tabuleiro (piso) principal receba um acabamento em preto fosco para absorver a radiação IR, de modo a criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
+%     \item \textbf{Massa e praticidade:}
+%           Os blocos modulares em MDF possuem massa confortável para o manuseio rápido, visto que um dos focos da modularidade é permitir a rápida reconfiguração.
+% \end{itemize}
+
+% \subsubsection{Acabamento Superficial}
+
+% Para satisfazer o regulamento, está previsto que as faces laterais das paredes modulares recebam pintura em esmalte ou tinta acrílica branca, garantindo reflectância para os emissores infravermelhos. O topo das paredes deverá ser pintado de vermelho, demarcando visualmente os limites. Por fim, planeja-se que o tabuleiro (piso) principal receba um acabamento em preto fosco para absorver a radiação IR, de modo a criar o contraste de leitura adequado aos sensores descendentes (quando presentes) e mitigar o espalhamento de luz horizontal.
 
 % ------------------------------------------------------------------
 % TEXTO — Roteiro de testes do labirinto (para PC2)
@@ -531,7 +531,7 @@ Ao final da corrida, o sistema calcula as estatísticas finais, registra o resul
 
 \subsection{Descrição da arquitetura da solução de \textit{software} proposta}
 
-A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:arquitetura_sistema} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
+A arquitetura do sistema Micromouse foi concebida segundo o padrão em camadas (\textit{layered architecture}), que promove separação de responsabilidades, facilita a manutenção e permite a evolução independente de cada componente. A Fig.~\ref{fig:diagrama_arquitetura} apresenta o diagrama de arquitetura preliminar, evidenciando as cinco camadas principais: embarcada, comunicação, \textit{backend}, banco de dados e \textit{frontend} web.
 
 \par
 \begin{center}
